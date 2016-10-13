@@ -1,6 +1,4 @@
-package test;
-
-import java.util.ArrayList;
+package sound;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
@@ -8,17 +6,19 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-public class Concentrateur {
+import sound.waveMix.WaveAdder;
+
+public class Concentrator {
 	// Temps de référence en nombre de sample depuis le debut du stream
 	int time = 0;
-
-	private final ArrayList<Generateur> generateurs;
 
 	final SourceDataLine soundLine;
 	final int bufferSize;
 	final byte[] buffer;
 
-	public Concentrateur() throws LineUnavailableException {
+	WaveAdder mainPlayer;
+
+	public Concentrator() throws LineUnavailableException {
 		System.out.println("Starting new Concentrateur : ");
 		System.out.println(Sample.bytesPerSec + " Bytes/s");
 		System.out.println(Sample.samplePerSec + " Sample/s");
@@ -35,13 +35,11 @@ public class Concentrateur {
 		System.out.println(
 				"Buffer length : " + bufferSize + " samples, " + 1000 * bufferSize / Sample.bytesPerSec + "ms");
 
-		generateurs = new ArrayList<>();
+		mainPlayer = new WaveAdder();
 	}
 
-	public void addGenerateur(Generateur g) {
-		synchronized (generateurs) {
-			generateurs.add(g);
-		}
+	public void addGenerator(Generator g) {
+		mainPlayer.add(g);
 	}
 
 	public double getMsTime() {
@@ -53,30 +51,19 @@ public class Concentrateur {
 			public void run() {
 				System.out.println("Concentrateur on-air");
 
-				ArrayList<Generateur> toRemove = new ArrayList<>();
-
 				while (true) {
 					int sizeToWrite = Math.max(soundLine.available(), bufferSize);
 					for (int i = 0; i < sizeToWrite; i++) {
 						buffer[i] = 0;
 					}
 
-					synchronized (generateurs) {
-						generateurs.removeAll(toRemove);
-						toRemove.clear();
-					}
-
 					int i = 0;
 					while (i + Sample.byteLength - 1 < sizeToWrite) {
-						Sample s = new Sample();
-						synchronized (generateurs) {
-							for (Generateur g : generateurs) {
-								if (g.hasNext())
-									s.add(g.next());
-								else
-									toRemove.add(g);
-							}
-						}
+						Sample s;
+						if (mainPlayer.hasNext())
+							s = mainPlayer.next();
+						else
+							s = new Sample();
 						for (int j = 0; j < Sample.byteLength; j++) {
 							buffer[i + j] += s.toBytes()[j];
 						}

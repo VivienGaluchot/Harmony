@@ -1,6 +1,9 @@
-package test;
+package sound.waveGen;
 
-public class SquareWave extends Generateur {
+import sound.Generator;
+import sound.Sample;
+
+public class SquareWave implements Generator {
 	float freq = 0;
 
 	int current;
@@ -8,15 +11,13 @@ public class SquareWave extends Generateur {
 
 	float currentTime; // second
 	short intensity; // absolute value
-	float duration; // second
 
-	public SquareWave(float freq, int intensity, float duration) {
+	public SquareWave(float freq) {
 		current = 0;
 		currentTime = 0;
+		intensity = Short.MAX_VALUE;
 		this.freq = freq;
 		tresh = (int) (Sample.sampleRate / freq);
-		this.intensity = (short) (Short.MAX_VALUE * intensity / 100);
-		this.duration = duration;
 	}
 
 	@Override
@@ -33,9 +34,6 @@ public class SquareWave extends Generateur {
 
 	@Override
 	public boolean hasNext() {
-		if (duration == 0 || currentTime < duration)
-			return true;
-		else
-			return false;
+		return true;
 	}
 }
