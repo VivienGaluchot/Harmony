@@ -1,4 +1,4 @@
-package sound;
+package sound.generation;
 
 public interface Generator {
 
@@ -7,7 +7,7 @@ public interface Generator {
 	 * 
 	 * @return the next sound's sample
 	 */
-	public Sample next();
+	public double next();
 
 	/**
 	 * @return true if the generator can give more samples, false if the

@@ -6,7 +6,8 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-import sound.waveMix.WaveAdder;
+import sound.generation.Generator;
+import sound.generation.SampleGenerator;
 
 public class Concentrator {
 	// Temps de référence en nombre de sample depuis le debut du stream
@@ -16,9 +17,15 @@ public class Concentrator {
 	final int bufferSize;
 	final byte[] buffer;
 
-	WaveAdder mainPlayer;
+	SampleGenerator generator;
+	
+	public Concentrator(Generator generator) throws LineUnavailableException{
+		this(new SampleGenerator(generator, generator));
+	}
 
-	public Concentrator() throws LineUnavailableException {
+	public Concentrator(SampleGenerator generator) throws LineUnavailableException {
+		this.generator = generator;
+		
 		System.out.println("Starting new Concentrateur : ");
 		System.out.println(Sample.bytesPerSec + " Bytes/s");
 		System.out.println(Sample.samplePerSec + " Sample/s");
@@ -34,12 +41,6 @@ public class Concentrator {
 		buffer = new byte[bufferSize];
 		System.out.println(
 				"Buffer length : " + bufferSize + " samples, " + 1000 * bufferSize / Sample.bytesPerSec + "ms");
-
-		mainPlayer = new WaveAdder();
-	}
-
-	public void addGenerator(Generator g) {
-		mainPlayer.add(g);
 	}
 
 	public double getMsTime() {
@@ -49,7 +50,7 @@ public class Concentrator {
 	public void listen() {
 		Thread thread = new Thread() {
 			public void run() {
-				System.out.println("Concentrateur on-air");
+				System.out.println("Concentrator on-air");
 
 				while (true) {
 					int sizeToWrite = Math.max(soundLine.available(), bufferSize);
@@ -59,11 +60,14 @@ public class Concentrator {
 
 					int i = 0;
 					while (i + Sample.byteLength - 1 < sizeToWrite) {
+						// Creating sample
 						Sample s;
-						if (mainPlayer.hasNext())
-							s = mainPlayer.next();
+						if (generator.hasNext())
+							s = generator.next();
 						else
 							s = new Sample();
+						
+						// Copying sample's bytes to buffer
 						for (int j = 0; j < Sample.byteLength; j++) {
 							buffer[i + j] += s.toBytes()[j];
 						}

@@ -1,9 +1,8 @@
-package sound.waveMix;
+package sound.generation.mix;
 
 import java.util.ArrayList;
 
-import sound.Generator;
-import sound.Sample;
+import sound.generation.Generator;
 
 /**
  * Allow to add generic generators
@@ -13,19 +12,19 @@ import sound.Sample;
  * 
  * @author Vivien
  */
-public class WaveAdder extends ArrayList<Generator>implements Generator {
+public class Adder extends ArrayList<Generator>implements Generator {
 	private static final long serialVersionUID = 1L;
-	
+
 	@Override
-	synchronized public boolean add(Generator g){
+	synchronized public boolean add(Generator g) {
 		return super.add(g);
 	}
 
 	@Override
-	synchronized public Sample next() {
-		Sample s = new Sample();
+	synchronized public double next() {
+		double s = 0;
 		for (Generator g : this) {
-			s.add(g.next());
+			s += g.next();
 		}
 		return s;
 	}
@@ -41,7 +40,7 @@ public class WaveAdder extends ArrayList<Generator>implements Generator {
 		ArrayList<Generator> toRemove = new ArrayList<>();
 
 		for (Generator g : this) {
-			if (g!= null && g.hasNext()) {
+			if (g != null && g.hasNext()) {
 				hasNext = true;
 			} else {
 				toRemove.add(g);

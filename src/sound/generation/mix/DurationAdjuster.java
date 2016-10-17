@@ -1,22 +1,22 @@
-package sound.waveMix;
+package sound.generation.mix;
 
-import sound.Generator;
 import sound.Sample;
+import sound.generation.Generator;
 
 public class DurationAdjuster implements Generator {
 
 	private Generator source;
 
-	private float duration; // second
+	private double duration; // second
 	private float currentTime; // second
 
-	public DurationAdjuster(Generator source, float duration) {
+	public DurationAdjuster(double duration, Generator source) {
 		this.source = source;
 		this.duration = duration;
 	}
 
 	@Override
-	public Sample next() {
+	public double next() {
 		currentTime += Sample.samplePeriod;
 		return source.next();
 	}
