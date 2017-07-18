@@ -18,14 +18,14 @@ public class Concentrator {
 	final byte[] buffer;
 
 	SampleGenerator generator;
-	
-	public Concentrator(WaveGenerator generator) throws LineUnavailableException{
+
+	public Concentrator(WaveGenerator generator) throws LineUnavailableException {
 		this(new SampleGenerator(generator, generator));
 	}
 
 	public Concentrator(SampleGenerator generator) throws LineUnavailableException {
 		this.generator = generator;
-		
+
 		System.out.println("Starting new Concentrateur : ");
 		System.out.println(Sample.bytesPerSec + " Bytes/s");
 		System.out.println(Sample.samplePerSec + " Sample/s");
@@ -49,6 +49,7 @@ public class Concentrator {
 
 	public void listen() {
 		Thread thread = new Thread() {
+			@Override
 			public void run() {
 				System.out.println("Concentrator on-air");
 
@@ -66,7 +67,7 @@ public class Concentrator {
 							s = generator.next();
 						else
 							s = new Sample();
-						
+
 						// Copying sample's bytes to buffer
 						for (int j = 0; j < Sample.byteLength; j++) {
 							buffer[i + j] += s.toBytes()[j];

@@ -11,12 +11,12 @@ public class Sin implements WaveGenerator {
 	public Sin(double freq) {
 		this(new Const(freq));
 	}
-	
-	public Sin(WaveGenerator freq){
+
+	public Sin(WaveGenerator freq) {
 		if (freq == this || freq == null)
 			throw new IllegalArgumentException();
 		currAngle = 0;
-		this.freq = freq;		
+		this.freq = freq;
 	}
 
 	@Override

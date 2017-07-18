@@ -13,7 +13,7 @@ public class Sample {
 	public final static boolean bigEndian = true;
 
 	public final static double samplePeriod = 1 / sampleRate;
-	public final static int byteLength = (int) sampleSizeInBits / 8 * channels;
+	public final static int byteLength = sampleSizeInBits / 8 * channels;
 	public final static int bytesPerSec = (int) (sampleRate * byteLength);
 	public final static int samplePerSec = (int) (sampleRate * channels);
 
@@ -33,15 +33,15 @@ public class Sample {
 	 */
 	public Sample(double left, double right) {
 		// Saturation
-		if(left > 1)
+		if (left > 1)
 			left = 1;
-		else if(left < -1)
+		else if (left < -1)
 			left = -1;
-		if(right > 1)
+		if (right > 1)
 			right = 1;
-		else if(right < -1)
+		else if (right < -1)
 			right = -1;
-		
+
 		this.left = (short) (left * Short.MAX_VALUE);
 		this.right = (short) (right * Short.MAX_VALUE);
 	}

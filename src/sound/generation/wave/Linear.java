@@ -8,7 +8,7 @@ public class Linear implements WaveGenerator {
 	private double initValue;
 	private double endValue;
 	private double duration; // second
-	
+
 	private double currentTime; // second
 
 	public Linear(double initValue, double endValue, double duration) {

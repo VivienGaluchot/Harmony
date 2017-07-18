@@ -1,7 +1,7 @@
 package sound.generation;
 
 public interface WaveGenerator {
-	
+
 	/**
 	 * Reset the sound module
 	 */

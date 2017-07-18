@@ -6,9 +6,9 @@ import sound.generation.wave.Const;
 public class Multiplier implements WaveGenerator {
 
 	private WaveGenerator source;
-	
+
 	private WaveGenerator volume;
-	
+
 	public Multiplier(double volume, WaveGenerator source) {
 		this(new Const(volume), source);
 	}
