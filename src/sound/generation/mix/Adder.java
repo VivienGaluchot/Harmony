@@ -2,7 +2,7 @@ package sound.generation.mix;
 
 import java.util.ArrayList;
 
-import sound.generation.Generator;
+import sound.generation.WaveGenerator;
 
 /**
  * Allow to add generic generators
@@ -12,19 +12,29 @@ import sound.generation.Generator;
  * 
  * @author Vivien
  */
-public class Adder extends ArrayList<Generator>implements Generator {
+public class Adder extends ArrayList<WaveGenerator> implements WaveGenerator {
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	synchronized public boolean add(Generator g) {
+	synchronized public boolean add(WaveGenerator g) {
+		if (g == this || g == null)
+			throw new IllegalArgumentException();
 		return super.add(g);
+	}
+
+	@Override
+	public void reset() {
+		for (WaveGenerator g : this) {
+			g.reset();
+		}
 	}
 
 	@Override
 	synchronized public double next() {
 		double s = 0;
-		for (Generator g : this) {
-			s += g.next();
+		for (WaveGenerator g : this) {
+			if (g.hasNext())
+				s += g.next();
 		}
 		return s;
 	}
@@ -37,10 +47,10 @@ public class Adder extends ArrayList<Generator>implements Generator {
 	synchronized public boolean hasNext() {
 		boolean hasNext = false;
 
-		ArrayList<Generator> toRemove = new ArrayList<>();
+		ArrayList<WaveGenerator> toRemove = new ArrayList<>();
 
-		for (Generator g : this) {
-			if (g != null && g.hasNext()) {
+		for (WaveGenerator g : this) {
+			if (g.hasNext()) {
 				hasNext = true;
 			} else {
 				toRemove.add(g);

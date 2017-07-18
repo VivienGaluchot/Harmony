@@ -1,21 +1,28 @@
 package sound.generation.mix;
 
-import sound.generation.Generator;
+import sound.generation.WaveGenerator;
 import sound.generation.wave.Const;
 
-public class Multiplier implements Generator {
+public class Multiplier implements WaveGenerator {
 
-	private Generator source;
+	private WaveGenerator source;
 	
-	private Generator volume;
+	private WaveGenerator volume;
 	
-	public Multiplier(double volume, Generator source) {
+	public Multiplier(double volume, WaveGenerator source) {
 		this(new Const(volume), source);
 	}
 
-	public Multiplier(Generator volume, Generator source) {
+	public Multiplier(WaveGenerator volume, WaveGenerator source) {
+		if (source == this || source == null)
+			throw new IllegalArgumentException();
 		this.source = source;
 		this.volume = volume;
+	}
+
+	@Override
+	public void reset() {
+		source.reset();
 	}
 
 	@Override

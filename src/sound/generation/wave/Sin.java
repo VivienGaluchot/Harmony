@@ -1,10 +1,10 @@
 package sound.generation.wave;
 
 import sound.Sample;
-import sound.generation.Generator;
+import sound.generation.WaveGenerator;
 
-public class Sin implements Generator {
-	private Generator freq;
+public class Sin implements WaveGenerator {
+	private WaveGenerator freq;
 
 	private double currAngle;
 
@@ -12,9 +12,17 @@ public class Sin implements Generator {
 		this(new Const(freq));
 	}
 	
-	public Sin(Generator freq){
+	public Sin(WaveGenerator freq){
+		if (freq == this || freq == null)
+			throw new IllegalArgumentException();
 		currAngle = 0;
 		this.freq = freq;		
+	}
+
+	@Override
+	public void reset() {
+		currAngle = 0;
+		freq.reset();
 	}
 
 	@Override

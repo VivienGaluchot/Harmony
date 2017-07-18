@@ -1,13 +1,18 @@
 package sound.generation.wave;
 
-import sound.generation.Generator;
+import sound.generation.WaveGenerator;
 
-public class Const implements Generator {
-	
+public class Const implements WaveGenerator {
+
 	double value;
-	
-	public Const(double value){
+
+	public Const(double value) {
 		this.value = value;
+	}
+
+	@Override
+	public void reset() {
+
 	}
 
 	@Override

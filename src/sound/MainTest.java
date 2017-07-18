@@ -8,7 +8,9 @@ import javax.swing.JLabel;
 
 import sound.generation.mix.DurationAdjuster;
 import sound.generation.mix.Multiplier;
+import sound.generation.mix.Repeater;
 import sound.generation.mix.Adder;
+import sound.generation.wave.Linear;
 import sound.generation.wave.Sin;
 import sound.generation.wave.Square;
 
@@ -22,16 +24,10 @@ public class MainTest {
 		frame.setVisible(true);
 
 		Adder mainPlayer = new Adder();
+		mainPlayer.add(new Repeater(2, new Multiplier(new Multiplier(0.3, new Sin(3)), new Sin(new Linear(50,80,2)))));
+		mainPlayer.add(new DurationAdjuster(10, new Multiplier(new Multiplier(0.05, new Sin(2)), new Square(80))));
 
 		Concentrator c = new Concentrator(mainPlayer);
 		c.listen();
-
-		mainPlayer.add(new Multiplier(new Multiplier(0.3f, new Sin(2)), new Sin(50)));
-		while (true) {
-			Thread.sleep(300);
-			mainPlayer.add(new DurationAdjuster(0.1f, new Multiplier(0.2f, new Sin(110))));
-			Thread.sleep(100);
-			mainPlayer.add(new DurationAdjuster(0.05f, new Multiplier(0.05f, new Square(315))));
-		}
 	}
 }

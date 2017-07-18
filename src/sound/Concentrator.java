@@ -6,7 +6,7 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-import sound.generation.Generator;
+import sound.generation.WaveGenerator;
 import sound.generation.SampleGenerator;
 
 public class Concentrator {
@@ -19,7 +19,7 @@ public class Concentrator {
 
 	SampleGenerator generator;
 	
-	public Concentrator(Generator generator) throws LineUnavailableException{
+	public Concentrator(WaveGenerator generator) throws LineUnavailableException{
 		this(new SampleGenerator(generator, generator));
 	}
 

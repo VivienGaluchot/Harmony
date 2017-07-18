@@ -1,6 +1,11 @@
 package sound.generation;
 
-public interface Generator {
+public interface WaveGenerator {
+	
+	/**
+	 * Reset the sound module
+	 */
+	public void reset();
 
 	/**
 	 * Sound generating function

@@ -4,10 +4,10 @@ import sound.Sample;
 
 public class SampleGenerator {
 
-	Generator left;
-	Generator right;
+	WaveGenerator left;
+	WaveGenerator right;
 
-	public SampleGenerator(Generator left, Generator right) {
+	public SampleGenerator(WaveGenerator left, WaveGenerator right) {
 		this.left = left;
 		this.right = right;
 	}

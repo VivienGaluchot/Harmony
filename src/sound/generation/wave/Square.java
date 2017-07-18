@@ -1,22 +1,31 @@
 package sound.generation.wave;
 
 import sound.Sample;
-import sound.generation.Generator;
+import sound.generation.WaveGenerator;
 
-public class Square implements Generator {
-	private Generator freq;
+public class Square implements WaveGenerator {
+	private WaveGenerator freq;
 
 	private int counter;
 	private double output;
-	
+
 	public Square(double freq) {
 		this(new Const(freq));
 	}
 
-	public Square(Generator freq) {
+	public Square(WaveGenerator freq) {
+		if (freq == this || freq == null)
+			throw new IllegalArgumentException();
 		counter = 0;
 		output = 1;
 		this.freq = freq;
+	}
+
+	@Override
+	public void reset() {
+		counter = 0;
+		output = 1;
+		freq.reset();
 	}
 
 	@Override

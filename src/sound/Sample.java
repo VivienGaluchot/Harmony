@@ -12,7 +12,7 @@ public class Sample {
 	// Allowable true,false
 	public final static boolean bigEndian = true;
 
-	public final static float samplePeriod = 1 / sampleRate;
+	public final static double samplePeriod = 1 / sampleRate;
 	public final static int byteLength = (int) sampleSizeInBits / 8 * channels;
 	public final static int bytesPerSec = (int) (sampleRate * byteLength);
 	public final static int samplePerSec = (int) (sampleRate * channels);

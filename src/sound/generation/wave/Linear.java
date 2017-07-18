@@ -1,17 +1,19 @@
-package sound.generation.mix;
+package sound.generation.wave;
 
 import sound.Sample;
 import sound.generation.WaveGenerator;
 
-public class DurationAdjuster implements WaveGenerator {
+public class Linear implements WaveGenerator {
 
-	private WaveGenerator source;
-
+	private double initValue;
+	private double endValue;
 	private double duration; // second
+	
 	private double currentTime; // second
 
-	public DurationAdjuster(double duration, WaveGenerator source) {
-		this.source = source;
+	public Linear(double initValue, double endValue, double duration) {
+		this.initValue = initValue;
+		this.endValue = endValue;
 		this.duration = duration;
 		currentTime = 0;
 	}
@@ -19,18 +21,17 @@ public class DurationAdjuster implements WaveGenerator {
 	@Override
 	public void reset() {
 		currentTime = 0;
-		source.reset();
 	}
 
 	@Override
 	public double next() {
 		currentTime += Sample.samplePeriod;
-		return source.next();
+		return (currentTime / duration) * (endValue - initValue) + initValue;
 	}
 
 	@Override
 	public boolean hasNext() {
-		if (source.hasNext() && currentTime < duration)
+		if (currentTime < duration)
 			return true;
 		else
 			return false;
