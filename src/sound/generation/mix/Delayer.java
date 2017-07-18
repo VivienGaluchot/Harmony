@@ -3,14 +3,14 @@ package sound.generation.mix;
 import sound.Sample;
 import sound.generation.WaveGenerator;
 
-public class DurationAdjuster implements WaveGenerator {
+public class Delayer implements WaveGenerator {
 
 	private WaveGenerator source;
 
 	private double duration; // second
 	private double currentTime; // second
 
-	public DurationAdjuster(double duration, WaveGenerator source) {
+	public Delayer(double duration, WaveGenerator source) {
 		this.source = source;
 		this.duration = duration;
 		currentTime = 0;
@@ -24,19 +24,17 @@ public class DurationAdjuster implements WaveGenerator {
 
 	@Override
 	public double next() {
-		currentTime += Sample.samplePeriod;
-		if (source.hasNext())
-			return source.next();
-		else
+		if (currentTime < duration) {
+			currentTime += Sample.samplePeriod;
 			return 0;
+		} else {
+			return source.next();
+		}
 	}
 
 	@Override
 	public boolean hasNext() {
-		if (currentTime < duration)
-			return true;
-		else
-			return false;
+		return source.hasNext();
 	}
 
 }

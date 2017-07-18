@@ -40,24 +40,17 @@ public class Adder extends ArrayList<WaveGenerator> implements WaveGenerator {
 	}
 
 	/**
-	 * Return true if there is at least one Generator playing. When a generator
-	 * stops, it is removed from the list
+	 * Return true if there is at least one Generator playing.
 	 */
 	@Override
 	synchronized public boolean hasNext() {
 		boolean hasNext = false;
 
-		ArrayList<WaveGenerator> toRemove = new ArrayList<>();
-
 		for (WaveGenerator g : this) {
 			if (g.hasNext()) {
 				hasNext = true;
-			} else {
-				toRemove.add(g);
 			}
 		}
-
-		this.removeAll(toRemove);
 
 		return hasNext;
 	}
