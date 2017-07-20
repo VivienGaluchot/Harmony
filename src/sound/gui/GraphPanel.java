@@ -18,7 +18,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
@@ -52,7 +51,6 @@ public class GraphPanel extends JPanel
 		super();
 
 		space = new GraphSpace();
-		space.add(new GraphObject());
 
 		currentTransform = new AffineTransform();
 		initMousePos = null;
@@ -233,12 +231,8 @@ public class GraphPanel extends JPanel
 			}
 		}
 
-		g2d.setStroke(new BasicStroke(0.03f));
-		for (GraphObject go : space) {
-			g2d.setColor(Color.gray);
-			g2d.fill(new Rectangle2D.Double(go.pos.x, go.pos.y, go.size.x, go.size.y));
-			g2d.setColor(Color.white);
-			g2d.draw(new Rectangle2D.Double(go.pos.x, go.pos.y, go.size.x, go.size.y));
+		for (int i = space.size() - 1; i >= 0; i--) {
+			space.get(i).paint(g2d);
 		}
 
 		g2d.dispose();
@@ -250,7 +244,15 @@ public class GraphPanel extends JPanel
 	public void mouseDragged(MouseEvent e) {
 		if (initMousePos != null) {
 			Vector2D vecMouse = transformMousePosition(e.getPoint());
-			setTranslate(afterTranslate.add(vecMouse.subtract(initMousePos)));
+			if (clicked == null){
+				afterTranslate = afterTranslate.add(vecMouse.subtract(initMousePos));
+				setTranslate(afterTranslate);
+			}
+			else if(clicked instanceof GraphObject) {
+				GraphObject go = (GraphObject) clicked;
+				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
+				initMousePos = vecMouse;
+			}
 			repaint();
 		}
 	}
@@ -264,9 +266,6 @@ public class GraphPanel extends JPanel
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Vector2D vecMouse = transformMousePosition(e.getPoint());
-		setClicked(space.getPointedObject(vecMouse));
-		repaint();
 	}
 
 	@Override
@@ -282,8 +281,7 @@ public class GraphPanel extends JPanel
 		Vector2D vecMouse = transformMousePosition(e.getPoint());
 		HCS hcs = space.getPointedObject(vecMouse);
 		setClicked(hcs);
-		if (hcs == null)
-			initMousePos = transformMousePosition(e.getPoint());
+		initMousePos = transformMousePosition(e.getPoint());
 		repaint();
 	}
 
@@ -294,6 +292,7 @@ public class GraphPanel extends JPanel
 		HCS hcs = space.getPointedObject(vecMouse);
 		if (hcs != null && hcs.isClicked())
 			setSelected(hcs);
+		setClicked(null);
 		mouseMoved(e);
 		repaint();
 	}

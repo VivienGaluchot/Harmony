@@ -27,6 +27,6 @@ public class MainTest {
 		mainPlayer.add(new Repeater(4, subAdder));
 
 		Concentrator c = new Concentrator(mainPlayer);
-		c.listen();
+		// c.listen();
 	}
 }
