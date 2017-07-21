@@ -2,7 +2,9 @@ package sound.gui;
 
 import java.awt.Color;
 
-public class HCS {
+import sound.math.Vector2D;
+
+public abstract class HCS {
 	
 	public Color backgroundColor;
 	public Color color;
@@ -16,13 +18,17 @@ public class HCS {
 	private boolean hovered;
 	private boolean clicked;
 	private boolean selected;
-
+	
 	public HCS() {
-		backgroundColor = Color.white;
-		color = Color.red.darker();
+		this(Color.white, Color.red.darker());
+	}
+
+	public HCS(Color backgroundColor, Color color2) {
+		this.backgroundColor = backgroundColor;
+		this.color = color2;
 		
 		hoveredBackgroundColor = backgroundColor.darker();
-		hoveredColor = color.darker();
+		hoveredColor = color2.darker();
 		
 		clickedBackgroundColor = hoveredBackgroundColor.darker();
 		clickedColor = hoveredColor.darker();
@@ -31,6 +37,8 @@ public class HCS {
 		clicked = false;
 		selected = false;
 	}
+	
+	public abstract boolean contains(Vector2D p);
 	
 	public Color getColor() {
 		if (isClicked())

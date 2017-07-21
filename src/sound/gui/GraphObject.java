@@ -18,8 +18,8 @@ public class GraphObject extends HCS {
 	public Vector2D size;
 	public String name;
 
-	public ArrayList<DataPort> inPorts;
-	public ArrayList<DataPort> outPorts;
+	private ArrayList<DataPort> inPorts;
+	private ArrayList<DataPort> outPorts;
 
 	public GraphObject() {
 		super();
@@ -30,9 +30,11 @@ public class GraphObject extends HCS {
 		inPorts = new ArrayList<>();
 		outPorts = new ArrayList<>();
 
-		inPorts.add(new DataPort(this, DataType.INTEGER, "in1"));
-		inPorts.add(new DataPort(this, DataType.INTEGER, "in2"));
-		inPorts.add(new DataPort(this, DataType.INTEGER, "in3"));
+		inPorts.add(new DataPort(this, Types.Data.INTEGER, Types.IO.IN, "in1"));
+		inPorts.add(new DataPort(this, Types.Data.FLOAT, Types.IO.IN, "in2"));
+		inPorts.add(new DataPort(this, Types.Data.DOUBLE, Types.IO.IN, "in3"));
+		outPorts.add(new DataPort(this, Types.Data.INTEGER, Types.IO.OUT, "out1"));
+		outPorts.add(new DataPort(this, Types.Data.FLOAT, Types.IO.OUT, "out2"));
 	}
 
 	public boolean contains(Vector2D p) {
@@ -52,19 +54,23 @@ public class GraphObject extends HCS {
 
 		id = outPorts.indexOf(port);
 		if (id >= 0) {
-			return pos.add(new Vector2D(size.x, id));
+			return pos.add(new Vector2D(size.x - 0.2, 1 + id * 0.4));
 		}
 
 		return null;
 	}
 
 	public HCS getPointedObject(Vector2D p) {
-		for (DataPort dp : inPorts)
-			if (dp.contains(p))
+		for (DataPort dp : inPorts) {
+			HCS hcs = dp.getPointedObject(p);
+			if (hcs != null)
 				return dp;
-		for (DataPort dp : outPorts)
-			if (dp.contains(p))
+		}
+		for (DataPort dp : outPorts) {
+			HCS hcs = dp.getPointedObject(p);
+			if (hcs != null)
 				return dp;
+		}
 		if (contains(p))
 			return this;
 		return null;
@@ -91,7 +97,7 @@ public class GraphObject extends HCS {
 
 		newFont = currentFont.deriveFont(0.2f);
 		g2d.setFont(newFont);
-		
+
 		for (DataPort p : inPorts)
 			p.paint(g2d);
 		for (DataPort p : outPorts)

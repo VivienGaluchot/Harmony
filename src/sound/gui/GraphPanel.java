@@ -47,6 +47,8 @@ public class GraphPanel extends JPanel
 	private HCS clicked = null;
 	private HCS selected = null;
 
+	private GraphLink draggedLink = null;
+
 	public GraphPanel() {
 		super();
 
@@ -234,6 +236,8 @@ public class GraphPanel extends JPanel
 		for (int i = space.size() - 1; i >= 0; i--) {
 			space.get(i).paint(g2d);
 		}
+		if (draggedLink != null)
+			draggedLink.paint(g2d);
 
 		g2d.dispose();
 	}
@@ -251,6 +255,16 @@ public class GraphPanel extends JPanel
 				GraphObject go = (GraphObject) clicked;
 				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
 				initMousePos = vecMouse;
+			} else if (clicked instanceof DataPort) {
+				DataPort dp = (DataPort) clicked;
+				if (draggedLink == null) {
+					if (dp.ioType == Types.IO.OUT)
+						draggedLink = new GraphLink(dp.dataType, dp, null);
+					else if (dp.ioType == Types.IO.IN)
+						draggedLink = new GraphLink(dp.dataType, null, dp);
+				}
+				draggedLink.setLoosePoint(vecMouse);
+
 			}
 		}
 		setHovered(space.getPointedObject(vecMouse));
@@ -299,6 +313,20 @@ public class GraphPanel extends JPanel
 		HCS hcs = space.getPointedObject(vecMouse);
 		if (hcs != null && hcs.isClicked())
 			setSelected(hcs);
+		if (draggedLink != null) {
+			if (hcs != null && hcs instanceof DataPort) {
+				DataPort dp = (DataPort) hcs;
+				if (draggedLink.start == null && dp.ioType == Types.IO.OUT && dp.dataType == draggedLink.dataType) {
+					draggedLink.start = dp;
+				} else if (draggedLink.end == null && dp.ioType == Types.IO.IN) {
+					draggedLink.end = dp;
+				}
+				if(draggedLink.start != null && draggedLink.end != null && dp.dataType == draggedLink.dataType) {
+					draggedLink.start.connectedLinks.add(draggedLink);
+				}
+			}
+			draggedLink = null;
+		}
 		setClicked(null);
 		mouseMoved(e);
 		repaint();
