@@ -16,10 +16,12 @@ public class GraphSpace extends ArrayList<GraphObject>{
 		add(g2);		
 	}
 	
-	public GraphObject getPointedObject(Vector2D p) {
-		for(GraphObject go : this)
-			if(go.contains(p))
-				return go;
+	public HCS getPointedObject(Vector2D p) {
+		for(GraphObject go : this) {
+			HCS hcs = go.getPointedObject(p);
+			if(hcs != null)
+				return hcs;
+		}
 		return null;
 	}
 

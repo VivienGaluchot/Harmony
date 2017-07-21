@@ -179,7 +179,7 @@ public class GraphPanel extends JPanel
 
 		g2d.transform(currentTransform);
 
-		Font currentFont = new Font("Consolas", Font.PLAIN, 1);
+		Font currentFont = new Font("Arial", Font.PLAIN, 1);
 		Font newFont = currentFont.deriveFont(0.8f);
 		g2d.setFont(newFont);
 		g2d.setStroke(new BasicStroke(0.06f));
@@ -242,19 +242,19 @@ public class GraphPanel extends JPanel
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+		Vector2D vecMouse = transformMousePosition(e.getPoint());
 		if (initMousePos != null) {
-			Vector2D vecMouse = transformMousePosition(e.getPoint());
-			if (clicked == null){
+			if (clicked == null) {
 				afterTranslate = afterTranslate.add(vecMouse.subtract(initMousePos));
 				setTranslate(afterTranslate);
-			}
-			else if(clicked instanceof GraphObject) {
+			} else if (clicked instanceof GraphObject) {
 				GraphObject go = (GraphObject) clicked;
 				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
 				initMousePos = vecMouse;
 			}
-			repaint();
 		}
+		setHovered(space.getPointedObject(vecMouse));
+		repaint();
 	}
 
 	@Override
@@ -280,9 +280,16 @@ public class GraphPanel extends JPanel
 	public void mousePressed(MouseEvent e) {
 		Vector2D vecMouse = transformMousePosition(e.getPoint());
 		HCS hcs = space.getPointedObject(vecMouse);
-		setClicked(hcs);
-		initMousePos = transformMousePosition(e.getPoint());
-		repaint();
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			setClicked(hcs);
+			initMousePos = transformMousePosition(e.getPoint());
+			repaint();
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			if (hcs instanceof GraphObject) {
+				GraphObject go = (GraphObject) hcs;
+				go.showOpt(this);
+			}
+		}
 	}
 
 	@Override

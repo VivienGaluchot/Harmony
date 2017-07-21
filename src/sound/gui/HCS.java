@@ -24,12 +24,30 @@ public class HCS {
 		hoveredBackgroundColor = backgroundColor.darker();
 		hoveredColor = color.darker();
 		
-		clickedBackgroundColor = hoveredBackgroundColor;
+		clickedBackgroundColor = hoveredBackgroundColor.darker();
 		clickedColor = hoveredColor.darker();
 		
 		hovered = false;
 		clicked = false;
 		selected = false;
+	}
+	
+	public Color getColor() {
+		if (isClicked())
+			return clickedColor;
+		else if (isHovered())
+			return hoveredColor;
+		else
+			return color;
+	}
+	
+	public Color getBackgroundColor() {
+		if (isClicked())
+			return clickedBackgroundColor;
+		else if (isHovered())
+			return hoveredBackgroundColor;
+		else
+			return backgroundColor;
 	}
 
 	public void setHovered(boolean hovered) {
