@@ -1,6 +1,7 @@
 package sound.gui;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import sound.math.Vector2D;
 
@@ -20,7 +21,7 @@ public abstract class HCS {
 	private boolean selected;
 	
 	public HCS() {
-		this(Color.white, Color.red.darker());
+		this(Color.white, Color.black);
 	}
 
 	public HCS(Color backgroundColor, Color color2) {
@@ -39,6 +40,7 @@ public abstract class HCS {
 	}
 	
 	public abstract boolean contains(Vector2D p);
+	public abstract void paint(Graphics g);
 	
 	public Color getColor() {
 		if (isClicked())

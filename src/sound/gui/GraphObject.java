@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -37,6 +39,7 @@ public class GraphObject extends HCS {
 		outPorts.add(new DataPort(this, Types.Data.FLOAT, Types.IO.OUT, "out2"));
 	}
 
+	@Override
 	public boolean contains(Vector2D p) {
 		return pos.x <= p.x && pos.x + size.x >= p.x && pos.y <= p.y && pos.y + size.y >= p.y;
 	}
@@ -45,41 +48,32 @@ public class GraphObject extends HCS {
 		JOptionPane.showMessageDialog(parent, "Defaul object");
 	}
 
+	public List<DataPort> getInPorts() {
+		return Collections.unmodifiableList(inPorts);
+	}
+
+	public List<DataPort> getOutPorts() {
+		return Collections.unmodifiableList(outPorts);
+	}
+
 	public Vector2D getPortPos(DataPort port) {
 		int id;
 		id = inPorts.indexOf(port);
 		if (id >= 0) {
-			return pos.add(new Vector2D(0.2, 1 + id * 0.4));
+			return pos.add(new Vector2D(0, 1 + id * 0.4));
 		}
 
 		id = outPorts.indexOf(port);
 		if (id >= 0) {
-			return pos.add(new Vector2D(size.x - 0.2, 1 + id * 0.4));
+			return pos.add(new Vector2D(size.x, 1 + id * 0.4));
 		}
 
 		return null;
 	}
 
-	public HCS getPointedObject(Vector2D p) {
-		for (DataPort dp : inPorts) {
-			HCS hcs = dp.getPointedObject(p);
-			if (hcs != null)
-				return dp;
-		}
-		for (DataPort dp : outPorts) {
-			HCS hcs = dp.getPointedObject(p);
-			if (hcs != null)
-				return dp;
-		}
-		if (contains(p))
-			return this;
-		return null;
-	}
-
+	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
-
-		g2d.setStroke(new BasicStroke(0.03f));
 
 		g2d.setColor(getBackgroundColor());
 		g2d.fill(new Rectangle2D.Double(pos.x, pos.y, size.x, size.y));
@@ -91,17 +85,13 @@ public class GraphObject extends HCS {
 		Font newFont = currentFont.deriveFont(0.3f);
 		g2d.setFont(newFont);
 		g2d.drawString(name, (float) pos.x + 0.1f, (float) pos.y + 0.5f);
-
-		// if(isSelected())
-		// g2d.draw(new Rectangle2D.Double(pos.x, pos.y, size.x, size.y));
-
-		newFont = currentFont.deriveFont(0.2f);
-		g2d.setFont(newFont);
-
-		for (DataPort p : inPorts)
-			p.paint(g2d);
-		for (DataPort p : outPorts)
-			p.paint(g2d);
+		if (isSelected()) {
+			float dash1[] = { 0.1f };
+			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1,
+					0.0f);
+			g2d.setStroke(dashed);
+			g2d.draw(new Rectangle2D.Double(pos.x - 0.1, pos.y - 0.1, size.x + 0.2, size.y + 0.2));
+		}
 
 		g2d.dispose();
 	}

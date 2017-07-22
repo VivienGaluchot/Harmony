@@ -16,9 +16,9 @@ public class DataPort extends HCS  {
 	public Types.IO ioType;
 	public String name;
 	
-	private static Double radius = 0.1;
+	public Double radius;
 	
-	public ArrayList<GraphLink> connectedLinks;
+	public ArrayList<DataLink> links;
 
 	public DataPort(GraphObject father, Types.Data dataType, Types.IO ioType, String name) {
 		super(Types.getDataColor(dataType), Types.getDataColor(dataType).darker());
@@ -26,28 +26,22 @@ public class DataPort extends HCS  {
 		this.name = name;
 		this.dataType = dataType;
 		this.ioType = ioType;
-		connectedLinks = new ArrayList<>();
+		radius = 0.1;
+		links = new ArrayList<>();
 	}
 
 	public Vector2D getPos() {
 		return father.getPortPos(this);
 	}
 	
+	@Override
 	public boolean contains(Vector2D p) {
 		Vector2D pos = getPos();
 		Ellipse2D el = new Ellipse2D.Double(pos.x - radius, pos.y - radius, 2 * radius, 2 * radius);
 		return el.contains(p.x, p.y);
 	}
 	
-	public HCS getPointedObject(Vector2D p) {
-		for (GraphLink gl : connectedLinks)
-			if (gl.contains(p))
-				return gl;
-		if (contains(p))
-			return this;
-		return null;
-	}
-
+	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
 		
@@ -67,7 +61,7 @@ public class DataPort extends HCS  {
 		else
 			g2d.drawString(name, (float) pos.x + 0.2f, (float) pos.y + 0.07f);
 		
-		for(GraphLink gl : connectedLinks)
+		for(DataLink gl : links)
 			gl.paint(g2d);
 
 		g2d.dispose();

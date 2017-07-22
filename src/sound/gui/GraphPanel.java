@@ -40,14 +40,15 @@ public class GraphPanel extends JPanel
 
 	private int graphicSize;
 
-	private Color mainGridColor = new Color(10, 15, 20);
-	private Color subGridColor = new Color(15, 22, 30);
+	private Color mainGridColor = new Color(230, 230, 230);
+	private Color subGridColor = new Color(240, 240, 240);
+	private Color backgroundColor = new Color(250, 250, 250);
 
 	private HCS hovered = null;
 	private HCS clicked = null;
 	private HCS selected = null;
 
-	private GraphLink draggedLink = null;
+	private DataLink draggedLink = null;
 
 	public GraphPanel() {
 		super();
@@ -64,13 +65,14 @@ public class GraphPanel extends JPanel
 		displayGrid = true;
 		gridSize = 5;
 
+		setBackground(backgroundColor);
+
 		setFocusable(true);
 		requestFocus();
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
 		addComponentListener(this);
-		setBackground(new Color(20, 30, 40));
 	}
 
 	public boolean isDisplayGrid() {
@@ -182,9 +184,7 @@ public class GraphPanel extends JPanel
 		g2d.transform(currentTransform);
 
 		Font currentFont = new Font("Arial", Font.PLAIN, 1);
-		Font newFont = currentFont.deriveFont(0.8f);
-		g2d.setFont(newFont);
-		g2d.setStroke(new BasicStroke(0.06f));
+		g2d.setFont(currentFont.deriveFont(0.8f));
 
 		if (displayGrid) {
 			Point2D.Float topLeft = new Point2D.Float(0, 0);
@@ -203,6 +203,7 @@ public class GraphPanel extends JPanel
 				x = Math.round(x / littleGridSize) * littleGridSize;
 				y = Math.round(y / littleGridSize) * littleGridSize;
 				g2d.setColor(subGridColor);
+				g2d.setStroke(new BasicStroke(0.03f));
 				while (x < botRight.x) {
 					Line2D line = new Line2D.Float(x, topLeft.y, x, botRight.y);
 					g2d.draw(line);
@@ -219,6 +220,7 @@ public class GraphPanel extends JPanel
 				x = Math.round(x / gridSize) * gridSize;
 				y = Math.round(y / gridSize) * gridSize;
 				g2d.setColor(mainGridColor);
+				g2d.setStroke(new BasicStroke(0.04f));
 				while (x < botRight.x) {
 					Line2D line = new Line2D.Float(x, topLeft.y, x, botRight.y);
 					g2d.draw(line);
@@ -233,9 +235,10 @@ public class GraphPanel extends JPanel
 			}
 		}
 
-		for (int i = space.size() - 1; i >= 0; i--) {
-			space.get(i).paint(g2d);
-		}
+		g2d.setStroke(new BasicStroke(0.03f));
+		g2d.setFont(currentFont.deriveFont(0.2f));
+		space.paint(g2d);
+
 		if (draggedLink != null)
 			draggedLink.paint(g2d);
 
@@ -259,10 +262,11 @@ public class GraphPanel extends JPanel
 				DataPort dp = (DataPort) clicked;
 				if (draggedLink == null) {
 					if (dp.ioType == Types.IO.OUT)
-						draggedLink = new GraphLink(dp.dataType, dp, null);
+						draggedLink = new DataLink(dp.dataType, dp, null);
 					else if (dp.ioType == Types.IO.IN)
-						draggedLink = new GraphLink(dp.dataType, null, dp);
+						draggedLink = new DataLink(dp.dataType, null, dp);
 				}
+				draggedLink.setClicked(true);
 				draggedLink.setLoosePoint(vecMouse);
 
 			}
@@ -313,6 +317,9 @@ public class GraphPanel extends JPanel
 		HCS hcs = space.getPointedObject(vecMouse);
 		if (hcs != null && hcs.isClicked())
 			setSelected(hcs);
+		else
+			setSelected(null);
+		setClicked(null);
 		if (draggedLink != null) {
 			if (hcs != null && hcs instanceof DataPort) {
 				DataPort dp = (DataPort) hcs;
@@ -321,13 +328,14 @@ public class GraphPanel extends JPanel
 				} else if (draggedLink.end == null && dp.ioType == Types.IO.IN) {
 					draggedLink.end = dp;
 				}
-				if(draggedLink.start != null && draggedLink.end != null && dp.dataType == draggedLink.dataType) {
-					draggedLink.start.connectedLinks.add(draggedLink);
+				if (draggedLink.start != null && draggedLink.end != null && dp.dataType == draggedLink.dataType) {
+					draggedLink.setClicked(false);
+					draggedLink.start.links.add(draggedLink);
+					draggedLink.end.links.add(draggedLink);
 				}
 			}
 			draggedLink = null;
 		}
-		setClicked(null);
 		mouseMoved(e);
 		repaint();
 	}
