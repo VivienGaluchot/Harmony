@@ -34,6 +34,7 @@ public class GraphPanel extends JPanel
 	private boolean displayGrid;
 	private float gridSize;
 
+	private boolean didDrag;
 	private Vector2D initMousePos;
 	private Vector2D afterTranslate;
 	private float afterScale;
@@ -272,6 +273,7 @@ public class GraphPanel extends JPanel
 			}
 		}
 		setHovered(space.getPointedObject(vecMouse));
+		didDrag = true;
 		repaint();
 	}
 
@@ -308,6 +310,7 @@ public class GraphPanel extends JPanel
 				go.showOpt(this);
 			}
 		}
+		didDrag = false;
 	}
 
 	@Override
@@ -315,7 +318,7 @@ public class GraphPanel extends JPanel
 		initMousePos = null;
 		Vector2D vecMouse = transformMousePosition(e.getPoint());
 		HCS hcs = space.getPointedObject(vecMouse);
-		if (hcs != null && hcs.isClicked())
+		if (hcs != null && hcs.isClicked() && didDrag == false)
 			setSelected(hcs);
 		else
 			setSelected(null);
