@@ -7,10 +7,6 @@ public class Types {
 		INTEGER, FLOAT, DOUBLE
 	}
 	
-	public static enum IO {
-		IN, OUT
-	}
-	
 	public static enum Command {
 		DELETE
 	}

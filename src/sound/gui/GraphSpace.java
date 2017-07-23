@@ -13,10 +13,13 @@ public class GraphSpace extends ArrayList<GraphObject> {
 	public GraphSpace() {
 		GraphObject g1 = new GraphObject(this);
 		g1.pos = g1.pos.add(new Vector2D(-2, 0));
+		add(g1);
 		GraphObject g2 = new GraphObject(this);
 		g2.pos = g2.pos.add(new Vector2D(2, 0));
-		add(g1);
 		add(g2);
+		GraphObject g3 = new GraphObject(this);
+		g3.pos = g3.pos.add(new Vector2D(0, 3));
+		add(g3);
 	}
 
 	public Deque<HCS> getObjectDeque() {
@@ -30,9 +33,9 @@ public class GraphSpace extends ArrayList<GraphObject> {
 		}
 
 		for (GraphObject go : this) {
-			for (DataPort dp : go.getInPorts())
-				for (DataLink dl : dp.links)
-					deque.add(dl);
+			for (InPort dp : go.getInPorts())
+				if (dp.getLink() != null)
+					deque.add(dp.getLink());
 		}
 		return deque;
 	}

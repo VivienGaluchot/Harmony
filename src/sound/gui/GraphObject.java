@@ -23,8 +23,8 @@ public class GraphObject extends HCS {
 	public Vector2D size;
 	public String name;
 
-	private ArrayList<DataPort> inPorts;
-	private ArrayList<DataPort> outPorts;
+	private ArrayList<InPort> inPorts;
+	private ArrayList<OutPort> outPorts;
 
 	public GraphObject(GraphSpace space) {
 		super();
@@ -36,20 +36,25 @@ public class GraphObject extends HCS {
 		inPorts = new ArrayList<>();
 		outPorts = new ArrayList<>();
 
-		inPorts.add(new DataPort(this, Types.Data.INTEGER, Types.IO.IN, "in1"));
-		inPorts.add(new DataPort(this, Types.Data.FLOAT, Types.IO.IN, "in2"));
-		inPorts.add(new DataPort(this, Types.Data.DOUBLE, Types.IO.IN, "in3"));
-		outPorts.add(new DataPort(this, Types.Data.INTEGER, Types.IO.OUT, "out1"));
-		outPorts.add(new DataPort(this, Types.Data.FLOAT, Types.IO.OUT, "out2"));
+		inPorts.add(new InPort(this, Types.Data.INTEGER, "in1"));
+		inPorts.add(new InPort(this, Types.Data.FLOAT, "in2"));
+		inPorts.add(new InPort(this, Types.Data.DOUBLE, "in3"));
+		outPorts.add(new OutPort(this, Types.Data.INTEGER, "out1"));
+		outPorts.add(new OutPort(this, Types.Data.FLOAT, "out2"));
+
+		adjustSize();
+	}
+
+	public void adjustSize() {
+		size.y = Math.max(1 + (inPorts.size() * 0.4), 1 + (outPorts.size() * 0.4));
 	}
 
 	public void remove() {
 		space.remove(this);
-		for (DataPort dp : inPorts)
-			for(DataLink dl : dp.links)
-				dl.remove();
-		for (DataPort dp : outPorts)
-			for(DataLink dl : dp.links)
+		for (InPort dp : inPorts)
+			dp.removeLink();
+		for (OutPort dp : outPorts)
+			for (DataLink dl : dp.getLinks())
 				dl.remove();
 	}
 
@@ -62,11 +67,11 @@ public class GraphObject extends HCS {
 		JOptionPane.showMessageDialog(parent, "Defaul object");
 	}
 
-	public List<DataPort> getInPorts() {
+	public List<InPort> getInPorts() {
 		return Collections.unmodifiableList(inPorts);
 	}
 
-	public List<DataPort> getOutPorts() {
+	public List<OutPort> getOutPorts() {
 		return Collections.unmodifiableList(outPorts);
 	}
 

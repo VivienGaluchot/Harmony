@@ -12,14 +12,14 @@ import sound.math.Vector2D;
 public class DataLink extends HCS {
 
 	public Vector2D loosePoint;
-	public DataPort start;
-	public DataPort end;
+	public OutPort start;
+	public InPort end;
 
 	public Types.Data dataType;
 
 	private Shape shape;
 
-	public DataLink(Types.Data dataType, DataPort start, DataPort end) {
+	public DataLink(Types.Data dataType, OutPort start, InPort end) {
 		super(Types.getDataColor(dataType), Types.getDataColor(dataType));
 		this.dataType = dataType;
 		if (start == null && end == null)
@@ -45,8 +45,8 @@ public class DataLink extends HCS {
 	}
 
 	public void remove() {
-		start.links.remove(this);
-		end.links.remove(this);
+		start.removeLink(this);
+		end.removeLink();
 	}
 
 	public void setLoosePoint(Vector2D p) {

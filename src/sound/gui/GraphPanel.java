@@ -262,17 +262,19 @@ public class GraphPanel extends JPanel
 				GraphObject go = (GraphObject) clicked;
 				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
 				initMousePos = vecMouse;
-			} else if (clicked instanceof DataPort) {
-				DataPort dp = (DataPort) clicked;
-				if (draggedLink == null) {
-					if (dp.ioType == Types.IO.OUT)
-						draggedLink = new DataLink(dp.dataType, dp, null);
-					else if (dp.ioType == Types.IO.IN)
-						draggedLink = new DataLink(dp.dataType, null, dp);
-				}
+			} else if (clicked instanceof InPort) {
+				InPort inPort = (InPort) clicked;
+				if (draggedLink == null)
+					draggedLink = new DataLink(inPort.dataType, null, inPort);
 				draggedLink.setClicked(true);
 				draggedLink.setLoosePoint(vecMouse);
 
+			} else if (clicked instanceof OutPort) {
+				OutPort outPort = (OutPort) clicked;
+				if (draggedLink == null)
+					draggedLink = new DataLink(outPort.dataType, outPort, null);
+				draggedLink.setClicked(true);
+				draggedLink.setLoosePoint(vecMouse);
 			}
 		}
 		setHovered(space.getPointedObject(vecMouse));
@@ -327,17 +329,23 @@ public class GraphPanel extends JPanel
 			setSelected(null);
 		setClicked(null);
 		if (draggedLink != null) {
-			if (hcs != null && hcs instanceof DataPort) {
-				DataPort dp = (DataPort) hcs;
-				if (draggedLink.start == null && dp.ioType == Types.IO.OUT && dp.dataType == draggedLink.dataType) {
-					draggedLink.start = dp;
-				} else if (draggedLink.end == null && dp.ioType == Types.IO.IN) {
-					draggedLink.end = dp;
-				}
-				if (draggedLink.start != null && draggedLink.end != null && dp.dataType == draggedLink.dataType) {
+			if (hcs != null && hcs instanceof InPort) {
+				InPort inPort = (InPort) hcs;
+				if (draggedLink.end == null && inPort.dataType == draggedLink.dataType)
+					draggedLink.end = inPort;
+				if (draggedLink.start != null && draggedLink.end != null) {
 					draggedLink.setClicked(false);
-					draggedLink.start.links.add(draggedLink);
-					draggedLink.end.links.add(draggedLink);
+					draggedLink.start.addLink(draggedLink);
+					draggedLink.end.setLink(draggedLink);
+				}
+			} else if (hcs != null && hcs instanceof OutPort) {
+				OutPort outPort = (OutPort) hcs;
+				if (draggedLink.start == null && outPort.dataType == draggedLink.dataType)
+					draggedLink.start = outPort;
+				if (draggedLink.start != null && draggedLink.end != null) {
+					draggedLink.setClicked(false);
+					draggedLink.start.addLink(draggedLink);
+					draggedLink.end.setLink(draggedLink);
 				}
 			}
 			draggedLink = null;
