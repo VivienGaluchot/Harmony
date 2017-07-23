@@ -9,6 +9,8 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -24,7 +26,7 @@ import javax.swing.JPanel;
 import sound.math.Vector2D;
 
 public class GraphPanel extends JPanel
-		implements MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener {
+		implements MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 
 	private GraphSpace space;
@@ -74,6 +76,7 @@ public class GraphPanel extends JPanel
 		addMouseMotionListener(this);
 		addMouseWheelListener(this);
 		addComponentListener(this);
+		addKeyListener(this);
 	}
 
 	public boolean isDisplayGrid() {
@@ -375,5 +378,25 @@ public class GraphPanel extends JPanel
 	public void componentShown(ComponentEvent arg0) {
 		computeTransform();
 		repaint();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		if (e.getKeyChar() == KeyEvent.VK_DELETE)
+			if (selected != null)
+				selected.handleCommand(Types.Command.DELETE);
+		repaint();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }

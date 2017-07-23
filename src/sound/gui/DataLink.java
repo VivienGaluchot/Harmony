@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.CubicCurve2D;
+
+import sound.gui.Types.Command;
 import sound.math.Vector2D;
 
 public class DataLink extends HCS {
@@ -14,7 +16,7 @@ public class DataLink extends HCS {
 	public DataPort end;
 
 	public Types.Data dataType;
-	
+
 	private Shape shape;
 
 	public DataLink(Types.Data dataType, DataPort start, DataPort end) {
@@ -25,6 +27,26 @@ public class DataLink extends HCS {
 		this.start = start;
 		this.end = end;
 		shape = null;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof DataLink) {
+			DataLink dl = (DataLink) o;
+			if (dl.start == this.start && dl.end == this.end)
+				return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode(){
+		return start.hashCode() ^ end.hashCode();
+	}
+
+	public void remove() {
+		start.links.remove(this);
+		end.links.remove(this);
 	}
 
 	public void setLoosePoint(Vector2D p) {
@@ -60,9 +82,22 @@ public class DataLink extends HCS {
 		g2d.setStroke(new BasicStroke(0.04f));
 		g2d.setColor(getColor());
 		g2d.draw(cubicCurve);
-		g2d.setStroke(new BasicStroke(0.08f));
+		g2d.setStroke(new BasicStroke(0.1f));
 		shape = g2d.getStroke().createStrokedShape(cubicCurve);
 
+		if (isSelected()) {
+			float dash1[] = { 0.1f };
+			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1, 0.0f);
+			g2d.setStroke(dashed);
+			g2d.draw(shape);
+		}
+
 		g2d.dispose();
+	}
+
+	@Override
+	public void handleCommand(Command c) {
+		if (c == Types.Command.DELETE)
+			remove();
 	}
 }

@@ -6,8 +6,9 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.util.HashSet;
 
+import sound.gui.Types.Command;
 import sound.math.Vector2D;
 
 public class DataPort extends HCS  {
@@ -18,7 +19,7 @@ public class DataPort extends HCS  {
 	
 	public Double radius;
 	
-	public ArrayList<DataLink> links;
+	public HashSet<DataLink> links;
 
 	public DataPort(GraphObject father, Types.Data dataType, Types.IO ioType, String name) {
 		super(Types.getDataColor(dataType), Types.getDataColor(dataType).darker());
@@ -27,7 +28,7 @@ public class DataPort extends HCS  {
 		this.dataType = dataType;
 		this.ioType = ioType;
 		radius = 0.1;
-		links = new ArrayList<>();
+		links = new HashSet<>();
 	}
 
 	public Vector2D getPos() {
@@ -60,10 +61,12 @@ public class DataPort extends HCS  {
 			g2d.drawString(name, (float) pos.x - 0.2f - (float) nameRect.getWidth(), (float) pos.y + 0.07f);
 		else
 			g2d.drawString(name, (float) pos.x + 0.2f, (float) pos.y + 0.07f);
-		
-		for(DataLink gl : links)
-			gl.paint(g2d);
 
 		g2d.dispose();
+	}
+
+	@Override
+	public void handleCommand(Command c) {
+		return;
 	}
 }

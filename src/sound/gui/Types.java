@@ -11,6 +11,10 @@ public class Types {
 		IN, OUT
 	}
 	
+	public static enum Command {
+		DELETE
+	}
+	
 	public static Color getDataColor(Data d){
 		if (d == Data.INTEGER)
 			return Color.RED;

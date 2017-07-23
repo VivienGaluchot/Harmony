@@ -41,6 +41,7 @@ public abstract class HCS {
 	
 	public abstract boolean contains(Vector2D p);
 	public abstract void paint(Graphics g);
+	public abstract void handleCommand(Types.Command c);
 	
 	public Color getColor() {
 		if (isClicked())

@@ -12,9 +12,12 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import sound.gui.Types.Command;
 import sound.math.Vector2D;
 
 public class GraphObject extends HCS {
+
+	public GraphSpace space;
 
 	public Vector2D pos;
 	public Vector2D size;
@@ -23,8 +26,9 @@ public class GraphObject extends HCS {
 	private ArrayList<DataPort> inPorts;
 	private ArrayList<DataPort> outPorts;
 
-	public GraphObject() {
+	public GraphObject(GraphSpace space) {
 		super();
+		this.space = space;
 		name = "Default";
 		pos = new Vector2D(-3. / 2, -1);
 		size = new Vector2D(3, 2);
@@ -37,6 +41,16 @@ public class GraphObject extends HCS {
 		inPorts.add(new DataPort(this, Types.Data.DOUBLE, Types.IO.IN, "in3"));
 		outPorts.add(new DataPort(this, Types.Data.INTEGER, Types.IO.OUT, "out1"));
 		outPorts.add(new DataPort(this, Types.Data.FLOAT, Types.IO.OUT, "out2"));
+	}
+
+	public void remove() {
+		space.remove(this);
+		for (DataPort dp : inPorts)
+			for(DataLink dl : dp.links)
+				dl.remove();
+		for (DataPort dp : outPorts)
+			for(DataLink dl : dp.links)
+				dl.remove();
 	}
 
 	@Override
@@ -87,12 +101,17 @@ public class GraphObject extends HCS {
 		g2d.drawString(name, (float) pos.x + 0.1f, (float) pos.y + 0.5f);
 		if (isSelected()) {
 			float dash1[] = { 0.1f };
-			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1,
-					0.0f);
+			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1, 0.0f);
 			g2d.setStroke(dashed);
 			g2d.draw(new Rectangle2D.Double(pos.x - 0.1, pos.y - 0.1, size.x + 0.2, size.y + 0.2));
 		}
 
 		g2d.dispose();
+	}
+
+	@Override
+	public void handleCommand(Command c) {
+		if (c == Types.Command.DELETE)
+			remove();
 	}
 }
