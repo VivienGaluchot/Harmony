@@ -6,20 +6,20 @@ import java.awt.Graphics;
 import sound.math.Vector2D;
 
 public abstract class HCS {
-	
+
 	public Color backgroundColor;
 	public Color color;
-	
+
 	public Color hoveredBackgroundColor;
 	public Color hoveredColor;
-	
+
 	public Color clickedBackgroundColor;
 	public Color clickedColor;
-	
+
 	private boolean hovered;
 	private boolean clicked;
 	private boolean selected;
-	
+
 	public HCS() {
 		this(Color.white, Color.black);
 	}
@@ -27,22 +27,24 @@ public abstract class HCS {
 	public HCS(Color backgroundColor, Color color2) {
 		this.backgroundColor = backgroundColor;
 		this.color = color2;
-		
+
 		hoveredBackgroundColor = backgroundColor.darker();
 		hoveredColor = color2.darker();
-		
+
 		clickedBackgroundColor = hoveredBackgroundColor.darker();
 		clickedColor = hoveredColor.darker();
-		
+
 		hovered = false;
 		clicked = false;
 		selected = false;
 	}
-	
+
 	public abstract boolean contains(Vector2D p);
+
 	public abstract void paint(Graphics g);
+
 	public abstract void handleCommand(Types.Command c);
-	
+
 	public Color getColor() {
 		if (isClicked())
 			return clickedColor;
@@ -51,7 +53,7 @@ public abstract class HCS {
 		else
 			return color;
 	}
-	
+
 	public Color getBackgroundColor() {
 		if (isClicked())
 			return clickedBackgroundColor;

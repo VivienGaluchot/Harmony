@@ -38,9 +38,9 @@ public class DataLink extends HCS {
 		}
 		return false;
 	}
-	
+
 	@Override
-	public int hashCode(){
+	public int hashCode() {
 		return start.hashCode() ^ end.hashCode();
 	}
 

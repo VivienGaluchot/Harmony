@@ -6,12 +6,12 @@ public class Types {
 	public static enum Data {
 		INTEGER, FLOAT, DOUBLE
 	}
-	
+
 	public static enum Command {
 		DELETE
 	}
-	
-	public static Color getDataColor(Data d){
+
+	public static Color getDataColor(Data d) {
 		if (d == Data.INTEGER)
 			return Color.RED;
 		else if (d == Data.FLOAT)
