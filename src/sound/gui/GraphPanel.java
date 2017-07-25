@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import sound.math.Vector2D;
 
 public class GraphPanel extends JPanel
-		implements MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener, KeyListener {
+		implements ComponentListener, MouseWheelListener, MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 
 	private GraphSpace space;
@@ -36,30 +36,23 @@ public class GraphPanel extends JPanel
 	private boolean displayGrid;
 	private float gridSize;
 
-	private boolean didDrag;
-	private Vector2D initMousePos;
 	private Vector2D afterTranslate;
 	private float afterScale;
 
 	private int graphicSize;
 
+	private Vector2D initMousePos;
+
 	private Color mainGridColor = new Color(230, 230, 230);
 	private Color subGridColor = new Color(240, 240, 240);
 	private Color backgroundColor = new Color(250, 250, 250);
 
-	private HCS hovered = null;
-	private HCS clicked = null;
-	private HCS selected = null;
-
-	private DataLink draggedLink = null;
-
 	public GraphPanel() {
 		super();
 
-		space = new GraphSpace();
+		space = new GraphSpace(this);
 
 		currentTransform = new AffineTransform();
-		initMousePos = null;
 		afterTranslate = new Vector2D(0, 0);
 		afterScale = 1;
 
@@ -74,9 +67,9 @@ public class GraphPanel extends JPanel
 		requestFocus();
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		addKeyListener(this);
 		addMouseWheelListener(this);
 		addComponentListener(this);
-		addKeyListener(this);
 	}
 
 	public boolean isDisplayGrid() {
@@ -145,38 +138,6 @@ public class GraphPanel extends JPanel
 		return transformMousePosition(new Vector2D(position));
 	}
 
-	private void setHovered(HCS hovered) {
-		if (this.hovered != null) {
-			this.hovered.setHovered(false);
-		}
-		this.hovered = hovered;
-		if (this.hovered != null) {
-			this.hovered.setHovered(true);
-		}
-	}
-
-	private void setClicked(HCS clicked) {
-		if (this.clicked != null) {
-			this.clicked.setClicked(false);
-		}
-		this.clicked = clicked;
-		if (this.clicked != null) {
-			this.clicked.setClicked(true);
-		}
-	}
-
-	private void setSelected(HCS selected) {
-		if (this.selected != null) {
-			this.selected.setSelected(false);
-		}
-		this.selected = selected;
-		if (this.selected != null) {
-			this.selected.setSelected(true);
-		}
-	}
-
-	// Animable
-
 	@Override
 	public synchronized void paint(Graphics g) {
 		super.paintComponent(g);
@@ -243,168 +204,116 @@ public class GraphPanel extends JPanel
 		g2d.setFont(currentFont.deriveFont(0.2f));
 		space.paint(g2d);
 
-		if (draggedLink != null)
-			draggedLink.paint(g2d);
-
 		g2d.dispose();
 	}
 
-	// Mouse
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		Vector2D vecMouse = transformMousePosition(e.getPoint());
-		if (initMousePos != null) {
-			if (clicked == null) {
-				afterTranslate = afterTranslate.add(vecMouse.subtract(initMousePos));
-				setTranslate(afterTranslate);
-			} else if (clicked instanceof GraphObject) {
-				GraphObject go = (GraphObject) clicked;
-				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
-				initMousePos = vecMouse;
-			} else if (clicked instanceof InPort) {
-				InPort inPort = (InPort) clicked;
-				if (draggedLink == null)
-					draggedLink = new DataLink(inPort.dataType, null, inPort);
-				draggedLink.setClicked(true);
-				draggedLink.setLoosePoint(vecMouse);
-
-			} else if (clicked instanceof OutPort) {
-				OutPort outPort = (OutPort) clicked;
-				if (draggedLink == null)
-					draggedLink = new DataLink(outPort.dataType, outPort, null);
-				draggedLink.setClicked(true);
-				draggedLink.setLoosePoint(vecMouse);
-			}
-		}
-		setHovered(space.getPointedObject(vecMouse));
-		didDrag = true;
-		repaint();
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		Vector2D vecMouse = transformMousePosition(e.getPoint());
-		setHovered(space.getPointedObject(vecMouse));
-		repaint();
-	}
-
-	@Override
-	public void mouseClicked(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		Vector2D vecMouse = transformMousePosition(e.getPoint());
-		HCS hcs = space.getPointedObject(vecMouse);
-		if (e.getButton() == MouseEvent.BUTTON1) {
-			setClicked(hcs);
-			initMousePos = transformMousePosition(e.getPoint());
-			repaint();
-		} else if (e.getButton() == MouseEvent.BUTTON3) {
-			if (hcs instanceof GraphObject) {
-				GraphObject go = (GraphObject) hcs;
-				go.showOpt(this);
-			}
-		}
-		didDrag = false;
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		initMousePos = null;
-		Vector2D vecMouse = transformMousePosition(e.getPoint());
-		HCS hcs = space.getPointedObject(vecMouse);
-		if (hcs != null && hcs.isClicked() && didDrag == false)
-			setSelected(hcs);
-		else
-			setSelected(null);
-		setClicked(null);
-		if (draggedLink != null) {
-			if (hcs != null && hcs instanceof InPort) {
-				InPort inPort = (InPort) hcs;
-				if (draggedLink.end == null && inPort.dataType == draggedLink.dataType)
-					draggedLink.end = inPort;
-				if (draggedLink.start != null && draggedLink.end != null) {
-					draggedLink.setClicked(false);
-					draggedLink.start.addLink(draggedLink);
-					draggedLink.end.setLink(draggedLink);
-				}
-			} else if (hcs != null && hcs instanceof OutPort) {
-				OutPort outPort = (OutPort) hcs;
-				if (draggedLink.start == null && outPort.dataType == draggedLink.dataType)
-					draggedLink.start = outPort;
-				if (draggedLink.start != null && draggedLink.end != null) {
-					draggedLink.setClicked(false);
-					draggedLink.start.addLink(draggedLink);
-					draggedLink.end.setLink(draggedLink);
-				}
-			}
-			draggedLink = null;
-		}
-		mouseMoved(e);
-		repaint();
-	}
+	// MouseWheel Listener
 
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int rotation = e.getWheelRotation();
 		zoom(rotation);
-		mouseMoved(e);
+		space.mouseMoved(e);
 		repaint();
 	}
 
 	// Component Listener
 
 	@Override
-	public void componentHidden(ComponentEvent arg0) {
+	public void componentHidden(ComponentEvent e) {
 		computeTransform();
 		repaint();
 	}
 
 	@Override
-	public void componentMoved(ComponentEvent arg0) {
+	public void componentMoved(ComponentEvent e) {
 		computeTransform();
 		repaint();
 	}
 
 	@Override
-	public void componentResized(ComponentEvent arg0) {
+	public void componentResized(ComponentEvent e) {
 		computeTransform();
 		repaint();
 	}
 
 	@Override
-	public void componentShown(ComponentEvent arg0) {
+	public void componentShown(ComponentEvent e) {
 		computeTransform();
+		repaint();
+	}
+
+	// KeyListener
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		space.keyPressed(e);
+		repaint();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		space.keyReleased(e);
 		repaint();
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if (e.getKeyChar() == KeyEvent.VK_DELETE)
-			if (selected != null)
-				selected.handleCommand(Types.Command.DELETE);
+		space.keyTyped(e);
+		repaint();
+	}
+
+	// MouseListener
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		Vector2D vecMouse = transformMousePosition(e.getPoint());
+		if (initMousePos != null) {
+			afterTranslate = afterTranslate.add(vecMouse.subtract(initMousePos));
+			setTranslate(afterTranslate);
+		}
+		space.mouseDragged(e);
 		repaint();
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+	public void mouseMoved(MouseEvent e) {
+		space.mouseMoved(e);
+		repaint();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		space.mouseClicked(e);
+		repaint();
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		space.mouseEntered(e);
+		repaint();
 
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+	public void mouseExited(MouseEvent e) {
+		space.mouseExited(e);
+		repaint();
+	}
 
+	@Override
+	public void mousePressed(MouseEvent e) {
+		Vector2D vecMouse = transformMousePosition(e.getPoint());
+		if ((e.getButton() == MouseEvent.BUTTON1) && (space.getPointedObject(vecMouse) == null))
+			initMousePos = vecMouse;
+		space.mousePressed(e);
+		repaint();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		initMousePos = null;
+		space.mouseReleased(e);
+		repaint();
 	}
 }

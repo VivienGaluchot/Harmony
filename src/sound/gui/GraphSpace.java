@@ -1,16 +1,37 @@
 package sound.gui;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 
 import sound.math.Vector2D;
 
-public class GraphSpace extends ArrayList<GraphObject> {
+public class GraphSpace extends ArrayList<GraphObject>
+		implements MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 
-	public GraphSpace() {
+	private GraphPanel panel;
+
+	private DataLink draggedLink = null;
+	
+	private boolean didDrag;
+	private Vector2D initMousePos;
+
+	private HCS hovered = null;
+	private HCS clicked = null;
+	private HCS selected = null;
+
+	public GraphSpace(GraphPanel panel) {
+		this.panel = panel;
+
+		initMousePos = null;
+		
 		GraphObject g1 = new GraphObject(this);
 		g1.pos = g1.pos.add(new Vector2D(-2, 0));
 		add(g1);
@@ -54,6 +75,158 @@ public class GraphSpace extends ArrayList<GraphObject> {
 	public synchronized void paint(Graphics g) {
 		for (HCS hcs : getObjectDeque())
 			hcs.paint(g);
+
+		if (draggedLink != null)
+			draggedLink.paint(g);
+	}
+
+	private void setHovered(HCS hovered) {
+		if (this.hovered != null) {
+			this.hovered.setHovered(false);
+		}
+		this.hovered = hovered;
+		if (this.hovered != null) {
+			this.hovered.setHovered(true);
+		}
+	}
+
+	private void setClicked(HCS clicked) {
+		if (this.clicked != null) {
+			this.clicked.setClicked(false);
+		}
+		this.clicked = clicked;
+		if (this.clicked != null) {
+			this.clicked.setClicked(true);
+		}
+	}
+
+	private void setSelected(HCS selected) {
+		if (this.selected != null) {
+			this.selected.setSelected(false);
+		}
+		this.selected = selected;
+		if (this.selected != null) {
+			this.selected.setSelected(true);
+		}
+	}
+
+	// Listeners
+
+	// Mouse
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		if (initMousePos != null) {
+			if (clicked instanceof GraphObject) {
+				GraphObject go = (GraphObject) clicked;
+				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
+				initMousePos = vecMouse;
+			} else if (clicked instanceof InPort) {
+				InPort inPort = (InPort) clicked;
+				if (draggedLink == null)
+					draggedLink = new DataLink(inPort.dataType, null, inPort);
+				draggedLink.setClicked(true);
+				draggedLink.setLoosePoint(vecMouse);
+
+			} else if (clicked instanceof OutPort) {
+				OutPort outPort = (OutPort) clicked;
+				if (draggedLink == null)
+					draggedLink = new DataLink(outPort.dataType, outPort, null);
+				draggedLink.setClicked(true);
+				draggedLink.setLoosePoint(vecMouse);
+			}
+		}
+		setHovered(getPointedObject(vecMouse));
+		didDrag = true;
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		setHovered(getPointedObject(vecMouse));
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		HCS hcs = getPointedObject(vecMouse);
+		if (e.getButton() == MouseEvent.BUTTON1) {
+			setClicked(hcs);
+			initMousePos = panel.transformMousePosition(e.getPoint());
+		} else if (e.getButton() == MouseEvent.BUTTON3) {
+			if (hcs instanceof GraphObject) {
+				GraphObject go = (GraphObject) hcs;
+				go.showOpt(panel);
+			}
+		}
+		didDrag = false;
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		initMousePos = null;
+		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		HCS hcs = getPointedObject(vecMouse);
+		if (hcs != null && hcs.isClicked() && didDrag == false)
+			setSelected(hcs);
+		else
+			setSelected(null);
+		setClicked(null);
+		if (draggedLink != null) {
+			if (hcs != null && hcs instanceof InPort) {
+				InPort inPort = (InPort) hcs;
+				if (draggedLink.end == null && inPort.dataType == draggedLink.dataType)
+					draggedLink.end = inPort;
+				if (draggedLink.start != null && draggedLink.end != null) {
+					draggedLink.setClicked(false);
+					draggedLink.start.addLink(draggedLink);
+					draggedLink.end.setLink(draggedLink);
+				}
+			} else if (hcs != null && hcs instanceof OutPort) {
+				OutPort outPort = (OutPort) hcs;
+				if (draggedLink.start == null && outPort.dataType == draggedLink.dataType)
+					draggedLink.start = outPort;
+				if (draggedLink.start != null && draggedLink.end != null) {
+					draggedLink.setClicked(false);
+					draggedLink.start.addLink(draggedLink);
+					draggedLink.end.setLink(draggedLink);
+				}
+			}
+			draggedLink = null;
+		}
+		mouseMoved(e);
+	}
+	
+	// KeyListener
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		if (e.getKeyChar() == KeyEvent.VK_DELETE)
+			if (selected != null)
+				selected.handleCommand(Types.Command.DELETE);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
 	}
 
 }
