@@ -1,4 +1,4 @@
-package sound.gui;
+package sound.gui.graph;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics;
@@ -6,7 +6,10 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.CubicCurve2D;
 
+import sound.gui.HCS;
+import sound.gui.Types;
 import sound.gui.Types.Command;
+import sound.gui.Types.DataType;
 import sound.math.Vector2D;
 
 public class DataLink extends HCS {
@@ -15,11 +18,11 @@ public class DataLink extends HCS {
 	public OutPort start;
 	public InPort end;
 
-	public Types.Data dataType;
+	public Types.DataType dataType;
 
 	private Shape shape;
 
-	public DataLink(Types.Data dataType, OutPort start, InPort end) {
+	public DataLink(Types.DataType dataType, OutPort start, InPort end) {
 		super(Types.getDataColor(dataType), Types.getDataColor(dataType));
 		this.dataType = dataType;
 		if (start == null && end == null)

@@ -1,4 +1,4 @@
-package sound.gui;
+package sound.gui.graph;
 
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -10,6 +10,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 
+import sound.gui.HCS;
+import sound.gui.Types;
+import sound.gui.Types.Command;
 import sound.math.Vector2D;
 
 public class GraphSpace extends ArrayList<GraphObject>

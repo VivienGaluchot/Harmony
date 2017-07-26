@@ -1,4 +1,4 @@
-package sound.gui;
+package sound.gui.graph;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
@@ -12,7 +12,10 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import sound.gui.HCS;
+import sound.gui.Types;
 import sound.gui.Types.Command;
+import sound.gui.Types.DataType;
 import sound.math.Vector2D;
 
 public class GraphObject extends HCS {
@@ -36,11 +39,11 @@ public class GraphObject extends HCS {
 		inPorts = new ArrayList<>();
 		outPorts = new ArrayList<>();
 
-		inPorts.add(new InPort(this, Types.Data.INTEGER, "in1"));
-		inPorts.add(new InPort(this, Types.Data.FLOAT, "in2"));
-		inPorts.add(new InPort(this, Types.Data.DOUBLE, "in3"));
-		outPorts.add(new OutPort(this, Types.Data.INTEGER, "out1"));
-		outPorts.add(new OutPort(this, Types.Data.FLOAT, "out2"));
+		inPorts.add(new InPort(this, Types.DataType.INTEGER, "in1"));
+		inPorts.add(new InPort(this, Types.DataType.FLOAT, "in2"));
+		inPorts.add(new InPort(this, Types.DataType.DOUBLE, "in3"));
+		outPorts.add(new OutPort(this, Types.DataType.INTEGER, "out1"));
+		outPorts.add(new OutPort(this, Types.DataType.FLOAT, "out2"));
 
 		adjustSize();
 	}

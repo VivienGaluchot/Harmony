@@ -8,8 +8,8 @@ import sound.generation.mix.Delayer;
 import sound.generation.wave.Linear;
 import sound.generation.wave.Sin;
 import sound.generation.wave.Square;
-import sound.gui.GraphPanel;
 import sound.gui.MainFrame;
+import sound.gui.graph.GraphPanel;
 
 public class MainTest {
 	public static void main(String[] args) throws Exception {

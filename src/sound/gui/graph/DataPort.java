@@ -1,21 +1,24 @@
-package sound.gui;
+package sound.gui.graph;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
+import sound.gui.HCS;
+import sound.gui.Types;
 import sound.gui.Types.Command;
+import sound.gui.Types.DataType;
 import sound.math.Vector2D;
 
 public class DataPort extends HCS {
 	public GraphObject father;
-	public Types.Data dataType;
+	public Types.DataType dataType;
 	public String name;
 
 	public Double radius;
 
-	public DataPort(GraphObject father, Types.Data dataType, String name) {
+	public DataPort(GraphObject father, Types.DataType dataType, String name) {
 		super(Types.getDataColor(dataType), Types.getDataColor(dataType).darker());
 		this.father = father;
 		this.name = name;

@@ -3,7 +3,7 @@ package sound.gui;
 import java.awt.Color;
 
 public class Types {
-	public static enum Data {
+	public static enum DataType {
 		INTEGER, FLOAT, DOUBLE
 	}
 
@@ -11,10 +11,10 @@ public class Types {
 		DELETE
 	}
 
-	public static Color getDataColor(Data d) {
-		if (d == Data.INTEGER)
+	public static Color getDataColor(DataType d) {
+		if (d == DataType.INTEGER)
 			return Color.RED;
-		else if (d == Data.FLOAT)
+		else if (d == DataType.FLOAT)
 			return Color.GREEN;
 		else
 			return Color.BLUE;

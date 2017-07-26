@@ -1,4 +1,4 @@
-package sound.gui;
+package sound.gui.graph;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -8,14 +8,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-import sound.gui.Types.Data;
+import sound.gui.Types.DataType;
 import sound.math.Vector2D;
 
 public class OutPort extends DataPort {
 
 	private HashSet<DataLink> links;
 
-	public OutPort(GraphObject father, Data dataType, String name) {
+	public OutPort(GraphObject father, DataType dataType, String name) {
 		super(father, dataType, name);
 		links = new HashSet<>();
 	}

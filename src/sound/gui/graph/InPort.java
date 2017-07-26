@@ -1,15 +1,17 @@
-package sound.gui;
+package sound.gui.graph;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import sound.gui.Types.Data;
+
+import sound.gui.Types;
+import sound.gui.Types.DataType;
 import sound.math.Vector2D;
 
 public class InPort extends DataPort {
 
 	private DataLink link;
 
-	public InPort(GraphObject father, Data dataType, String name) {
+	public InPort(GraphObject father, DataType dataType, String name) {
 		super(father, dataType, name);
 		link = null;
 	}

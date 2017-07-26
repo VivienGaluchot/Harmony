@@ -1,4 +1,4 @@
-package sound.gui;
+package sound.gui.graph;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
