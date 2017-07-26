@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -23,10 +22,12 @@ import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
 import harmony.math.Vector2D;
 
-public class Space implements MouseListener, MouseMotionListener, KeyListener {
+public class Space implements Recordable, MouseListener, MouseMotionListener, KeyListener {
 	private DrawPanel panel;
 
+	private ArrayList<Node> lastRecordedNodes;
 	private ArrayList<Node> nodes;
+	private ArrayList<Link> lastRecordedLinks;
 	private ArrayList<Link> links;
 
 	private Link draggedLink = null;
@@ -39,38 +40,60 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 	private GuiElement selected = null;
 
 	private RecordQueue recordQueue;
-	private HashMap<Recordable, ChangeRecord> currentStateRecords;
 
 	public Space(DrawPanel panel) {
 		this.panel = panel;
 
+		lastRecordedNodes = new ArrayList<>();
 		nodes = new ArrayList<>();
+		lastRecordedLinks = new ArrayList<>();
 		links = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
-		currentStateRecords = new HashMap<>();
 
+		Set<ChangeRecord> set = new HashSet<>();
+		
 		Node g1 = new Node(this);
 		g1.pos = g1.pos.add(new Vector2D(-2, 0));
-		addNode(g1);
+		set.add(g1.getCurrentRecord());
+		addNodeOffRecord(g1);
+		
 		Node g2 = new Node(this);
 		g2.pos = g2.pos.add(new Vector2D(2, 0));
-		addNode(g2);
+		set.add(g2.getCurrentRecord());
+		addNodeOffRecord(g2);
+		
 		Node g3 = new Node(this);
 		g3.pos = g3.pos.add(new Vector2D(0, 3));
-		addNode(g3);
-
-		trackChanges();
+		set.add(g3.getCurrentRecord());
+		addNodeOffRecord(g3);
+		
+		recordQueue.addRecords(set);
 	}
 
 	// Objects
 
+	public void updateObjectRecord() {
+		Set<ChangeRecord> set = new HashSet<>();
+		set.add(getCurrentRecord());
+		recordQueue.addRecords(set);
+	}
+
 	public void addNode(Node n) {
+		addNodeOffRecord(n);
+		updateObjectRecord();
+	}
+
+	public void addNodeOffRecord(Node n) {
 		nodes.add(n);
-		// trackChanges();
 	}
 
 	public void removeNode(Node n) {
+		removeNodeOffRecord(n);
+		updateObjectRecord();
+	}
+
+	public void removeNodeOffRecord(Node n) {
 		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
 			Link l = iter.next();
 			if (l.start.father == n || l.end.father == n) {
@@ -78,10 +101,14 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 			}
 		}
 		nodes.remove(n);
-		// trackChanges();
 	}
 
 	public void addLink(Link l) {
+		addLinkOffRecord(l);
+		updateObjectRecord();
+	}
+
+	public void addLinkOffRecord(Link l) {
 		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
 			Link ol = iter.next();
 			if (ol.end == l.end) {
@@ -89,12 +116,15 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 			}
 		}
 		links.add(l);
-		// trackChanges();
 	}
 
 	public void removeLink(Link l) {
+		removeLinkOffRecord(l);
+		updateObjectRecord();
+	}
+
+	public void removeLinkOffRecord(Link l) {
 		links.remove(l);
-		// trackChanges();
 	}
 
 	public List<GuiElement> getObjectList() {
@@ -114,55 +144,11 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 
 	// RecordQueue
 
-	private boolean isTracking = false;
-
-	public void trackChanges() {
-		if (isTracking) {
-			System.out.println("Warning, track loop");
-			return;
-		} else
-			isTracking = true;
-
-		Set<ChangeRecord> changes = new HashSet<>();
-		List<GuiElement> newObjectList = getObjectList();
-		HashSet<Recordable> newObjectSet = new HashSet<>();
-		// Check for new elements
-		for (GuiElement el : newObjectList) {
-			if (el instanceof Recordable) {
-				Recordable rec = (Recordable) el;
-				newObjectSet.add(rec);
-				if (!currentStateRecords.containsKey(rec) && rec.getCurrentRecord() != null) {
-					// TODO handle element added
-					ChangeRecord newRecord = rec.getCurrentRecord();
-					currentStateRecords.put(rec, newRecord);
-				}
-			}
-		}
-		// Check for changes and removes
-		for (Recordable rec : currentStateRecords.keySet()) {
-			if (!newObjectSet.contains(rec)) {
-				// TODO handle element removed
-			} else if (!currentStateRecords.get(rec).isFatherUpdated()) {
-				// handle element changed
-				ChangeRecord newRecord = rec.getCurrentRecord();
-				currentStateRecords.put(rec, newRecord);
-				changes.add(newRecord);
-			}
-		}
-		if (changes.size() > 0) {
-			recordQueue.addRecords(changes);
-		}
-
-		isTracking = false;
-	}
-
 	public void undo() {
 		Set<ChangeRecord> records = recordQueue.getUndoRecords();
 		if (records != null) {
 			for (ChangeRecord record : records) {
 				record.undoChange();
-				// TODO check
-				currentStateRecords.put(record.getFather(), record);
 			}
 		}
 	}
@@ -172,7 +158,6 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 		if (records != null) {
 			for (ChangeRecord record : records) {
 				record.redoChange();
-				currentStateRecords.put(record.getFather(), record);
 			}
 		}
 	}
@@ -295,14 +280,21 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		initMousePos = null;
+		if (clicked instanceof Node && didDrag) {
+			Set<ChangeRecord> set = new HashSet<>();
+			set.add(((Node) clicked).getCurrentRecord());
+			recordQueue.addRecords(set);
+		}
+		
 		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
 		GuiElement el = getPointedObject(vecMouse);
-		if (el != null && el.isClicked() && didDrag == false)
+		
+		if (el != null && el.isClicked() && !didDrag)
 			setSelected(el);
 		else
 			setSelected(null);
 		setClicked(null);
+		
 		if (draggedLink != null) {
 			if (el != null && el instanceof InPort) {
 				InPort inPort = (InPort) el;
@@ -322,9 +314,9 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 				}
 			}
 			draggedLink = null;
+			initMousePos = null;
 		}
 		mouseMoved(e);
-		trackChanges();
 	}
 
 	// KeyListener
@@ -334,7 +326,6 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 		if (e.getKeyChar() == KeyEvent.VK_DELETE)
 			if (selected != null)
 				selected.handleCommand(Types.Command.DELETE);
-		trackChanges();
 	}
 
 	@Override
@@ -344,6 +335,100 @@ public class Space implements MouseListener, MouseMotionListener, KeyListener {
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+
+	}
+
+	// Record
+
+	@Override
+	public ChangeRecord getCurrentRecord() {
+		SpaceRecord sr = new SpaceRecord(this);
+
+		// added node
+		for (Node n : nodes)
+			if (!lastRecordedNodes.contains(n))
+				sr.nodesAdded.add(n);
+
+		// removed node
+		for (Node n : lastRecordedNodes)
+			if (!nodes.contains(n))
+				sr.nodesRemoved.add(n);
+
+		// added link
+		for (Link l : links)
+			if (!lastRecordedLinks.contains(l))
+				sr.linksAdded.add(l);
+
+		// removed link
+		for (Link l : lastRecordedLinks)
+			if (!nodes.contains(l))
+				sr.linksRemoved.add(l);
+
+		lastRecordedNodes.clear();
+		for (Node n : nodes)
+			lastRecordedNodes.add(n);
+		lastRecordedLinks.clear();
+		for (Link l : links)
+			lastRecordedLinks.add(l);
+
+		return sr;
+	}
+
+	public class SpaceRecord extends ChangeRecord {
+
+		private Space father;
+
+		public ArrayList<Node> nodesAdded;
+		public ArrayList<Node> nodesRemoved;
+		public ArrayList<Link> linksAdded;
+		public ArrayList<Link> linksRemoved;
+
+		public SpaceRecord(Space father) {
+			super(father);
+			this.father = father;
+			nodesAdded = new ArrayList<>();
+			nodesRemoved = new ArrayList<>();
+			linksAdded = new ArrayList<>();
+			linksRemoved = new ArrayList<>();
+		}
+
+		@Override
+		public void undoChange() {
+			for (Node n : nodesAdded)
+				father.removeNodeOffRecord(n);
+			for (Node n : nodesRemoved)
+				father.addNodeOffRecord(n);
+			for (Link l : linksAdded)
+				father.removeLinkOffRecord(l);
+			for (Link l : linksRemoved)
+				father.addLinkOffRecord(l);
+
+			father.lastRecordedNodes.clear();
+			for (Node n : father.nodes)
+				father.lastRecordedNodes.add(n);
+			father.lastRecordedLinks.clear();
+			for (Link l : father.links)
+				father.lastRecordedLinks.add(l);
+		}
+
+		@Override
+		public void redoChange() {
+			for (Node n : nodesAdded)
+				father.addNodeOffRecord(n);
+			for (Node n : nodesRemoved)
+				father.removeNodeOffRecord(n);
+			for (Link l : linksAdded)
+				father.addLinkOffRecord(l);
+			for (Link l : linksRemoved)
+				father.removeLinkOffRecord(l);
+
+			father.lastRecordedNodes.clear();
+			for (Node n : father.nodes)
+				father.lastRecordedNodes.add(n);
+			father.lastRecordedLinks.clear();
+			for (Link l : father.links)
+				father.lastRecordedLinks.add(l);
+		}
 
 	}
 

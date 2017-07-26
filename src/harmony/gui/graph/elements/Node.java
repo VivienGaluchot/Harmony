@@ -133,7 +133,6 @@ public class Node extends GuiElement implements Recordable {
 
 		private Vector2D initPos;
 		private Vector2D endPos;
-		private boolean isUndo = false;
 
 		public NodeRecord(Node father, Vector2D initPos) {
 			super(father);
@@ -142,25 +141,15 @@ public class Node extends GuiElement implements Recordable {
 		}
 
 		@Override
-		public boolean isFatherUpdated() {
-			if (isUndo)
-				return ((Node) getFather()).pos.equals(this.initPos);
-			else
-				return ((Node) getFather()).pos.equals(this.endPos);
-		}
-
-		@Override
 		public void undoChange() {
 			((Node) getFather()).pos = initPos;
 			lastRecordedPos = initPos;
-			isUndo = true;
 		}
 
 		@Override
 		public void redoChange() {
 			((Node) getFather()).pos = endPos;
 			lastRecordedPos = endPos;
-			isUndo = false;
 		}
 
 	}

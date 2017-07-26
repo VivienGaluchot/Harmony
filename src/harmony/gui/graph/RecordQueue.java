@@ -46,14 +46,4 @@ public class RecordQueue {
 		return rec;
 	}
 
-	public ChangeRecord getPreviousRecord(Recordable father) {
-		for (int i = nStep - 1; i >= 0; i--) {
-			Set<ChangeRecord> set = recordArray.get(i);
-			for (ChangeRecord cr : set)
-				if (cr.getFather() == father)
-					return cr;
-		}
-		return null;
-	}
-
 }

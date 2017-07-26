@@ -15,8 +15,6 @@ public abstract class ChangeRecord {
 		return father;
 	}
 
-	public abstract boolean isFatherUpdated();
-
 	public abstract void undoChange();
 	public abstract void redoChange();
 
