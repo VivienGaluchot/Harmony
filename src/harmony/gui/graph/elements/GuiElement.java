@@ -4,10 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import harmony.gui.Types;
-import harmony.gui.graph.Recordable;
 import harmony.math.Vector2D;
 
-public abstract class GuiElement implements Recordable {
+public abstract class GuiElement {
 
 	public Color backgroundColor;
 	public Color color;

@@ -1,6 +1,6 @@
 package harmony;
 
-import harmony.gui.GraphPanel;
+import harmony.gui.DrawPanel;
 import harmony.gui.MainFrame;
 import harmony.sound.Concentrator;
 import harmony.sound.generation.mix.Adder;
@@ -14,7 +14,7 @@ import harmony.sound.generation.wave.Square;
 
 public class MainTest {
 	public static void main(String[] args) throws Exception {
-		GraphPanel panel = new GraphPanel();
+		DrawPanel panel = new DrawPanel();
 		new MainFrame(panel);
 
 		Adder mainPlayer = new Adder();

@@ -14,17 +14,20 @@ import javax.swing.JOptionPane;
 
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
-import harmony.gui.graph.Record;
+import harmony.gui.graph.ChangeRecord;
+import harmony.gui.graph.Recordable;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
-public class Node extends GuiElement {
+public class Node extends GuiElement implements Recordable {
 
 	public Space space;
 
 	public Vector2D pos;
-	public Vector2D size;
-	public String name;
+	private Vector2D lastRecordedPos = null;
+
+	private Vector2D size;
+	private String name;
 
 	private ArrayList<InPort> inPorts;
 	private ArrayList<OutPort> outPorts;
@@ -34,6 +37,7 @@ public class Node extends GuiElement {
 		this.space = space;
 		name = "Default";
 		pos = new Vector2D(-3. / 2, -1);
+		lastRecordedPos = pos;
 		size = new Vector2D(3, 2);
 
 		inPorts = new ArrayList<>();
@@ -62,7 +66,7 @@ public class Node extends GuiElement {
 	}
 
 	public void showOpt(Component parent) {
-		JOptionPane.showMessageDialog(parent, "Defaul object");
+		JOptionPane.showMessageDialog(parent, "Default object");
 	}
 
 	public List<InPort> getInPorts() {
@@ -119,8 +123,45 @@ public class Node extends GuiElement {
 	}
 
 	@Override
-	public Record getCurrentRecord() {
-		// TODO Auto-generated method stub
-		return null;
+	public ChangeRecord getCurrentRecord() {
+		ChangeRecord rec = new NodeRecord(this, lastRecordedPos);
+		lastRecordedPos = pos;
+		return rec;
+	}
+
+	public class NodeRecord extends ChangeRecord {
+
+		private Vector2D initPos;
+		private Vector2D endPos;
+		private boolean isUndo = false;
+
+		public NodeRecord(Node father, Vector2D initPos) {
+			super(father);
+			this.initPos = initPos;
+			this.endPos = father.pos;
+		}
+
+		@Override
+		public boolean isFatherUpdated() {
+			if (isUndo)
+				return ((Node) getFather()).pos.equals(this.initPos);
+			else
+				return ((Node) getFather()).pos.equals(this.endPos);
+		}
+
+		@Override
+		public void undoChange() {
+			((Node) getFather()).pos = initPos;
+			lastRecordedPos = initPos;
+			isUndo = true;
+		}
+
+		@Override
+		public void redoChange() {
+			((Node) getFather()).pos = endPos;
+			lastRecordedPos = endPos;
+			isUndo = false;
+		}
+
 	}
 }

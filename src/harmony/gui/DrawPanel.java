@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
-public class GraphPanel extends JPanel
+public class DrawPanel extends JPanel
 		implements ComponentListener, MouseWheelListener, MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ public class GraphPanel extends JPanel
 	private Color subGridColor = new Color(240, 240, 240);
 	private Color backgroundColor = new Color(250, 250, 250);
 
-	public GraphPanel() {
+	public DrawPanel() {
 		super();
 
 		space = new Space(this);
@@ -91,7 +91,11 @@ public class GraphPanel extends JPanel
 		this.gridSize = gridSize;
 	}
 
-	public void computeTransform() {
+	public Space getSpace() {
+		return space;
+	}
+
+	private void computeTransform() {
 		double scale = Math.min(getWidth(), getHeight()) / (double) graphicSize;
 		currentTransform.setToIdentity();
 		currentTransform.scale(scale, scale);
@@ -101,12 +105,12 @@ public class GraphPanel extends JPanel
 		currentTransform.translate(afterTranslate.x, afterTranslate.y);
 	}
 
-	public void setTranslate(Vector2D translate) {
+	private void setTranslate(Vector2D translate) {
 		this.afterTranslate = translate;
 		computeTransform();
 	}
 
-	public void zoom(int unit) {
+	private void zoom(int unit) {
 		while (unit > 0) {
 			afterScale = afterScale / 1.1f;
 			unit--;

@@ -8,7 +8,6 @@ import java.awt.geom.CubicCurve2D;
 
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
-import harmony.gui.graph.Record;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
@@ -106,10 +105,5 @@ public class Link extends GuiElement {
 		if (c == Types.Command.DELETE)
 			remove();
 	}
-
-	@Override
-	public Record getCurrentRecord() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 }

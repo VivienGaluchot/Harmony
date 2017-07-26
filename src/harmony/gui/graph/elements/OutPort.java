@@ -4,12 +4,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 
 import harmony.gui.Types.DataType;
-import harmony.gui.graph.Record;
 import harmony.math.Vector2D;
 
 public class OutPort extends Port {
@@ -32,11 +28,4 @@ public class OutPort extends Port {
 
 		g2d.dispose();
 	}
-
-	@Override
-	public Record getCurrentRecord() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

@@ -14,19 +14,21 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import harmony.gui.graph.elements.Node;
 import harmony.sound.Licence;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
-	private GraphPanel panel;
+	private DrawPanel panel;
 
-	public MainFrame(GraphPanel panel) {
+	public MainFrame(DrawPanel panel) {
 		super();
 		this.panel = panel;
 
@@ -152,26 +154,29 @@ public class MainFrame extends JFrame {
 
 	private void open() {
 		// TODO
+		JOptionPane.showMessageDialog(this, "Open command not already avialable...");
 	}
 
 	private void save() {
 		// TODO
+		JOptionPane.showMessageDialog(this, "Save command not already avialable...");
 	}
 
 	private void saveAs() {
 		// TODO
+		JOptionPane.showMessageDialog(this, "Save-as command not already avialable...");
 	}
 
 	private void addNode() {
-		// TODO
+		panel.getSpace().addNode(new Node(panel.getSpace()));
 	}
 
 	private void undo() {
-		// TODO
+		panel.getSpace().undo();
 	}
 
 	private void redo() {
-		// TODO
+		panel.getSpace().redo();
 	}
 
 	private void showLicence() {

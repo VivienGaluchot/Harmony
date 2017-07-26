@@ -1,76 +1,59 @@
 package harmony.gui.graph;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 public class RecordQueue {
 
-	private ArrayList<Set<Record>> recordArray;
-	private int currentStep;
+	private ArrayList<Set<ChangeRecord>> recordArray;
+	private int nStep;
 	private int maxSize;
 
 	public RecordQueue() {
 		recordArray = new ArrayList<>();
-		currentStep = 0;
+		nStep = 0;
 		maxSize = 100;
 	}
 
-	public void addRecord(Record step) {
-		HashSet<Record> set = new HashSet<>();
-		addRecords(set);
-	}
-
-	public void addRecords(Set<Record> step) {
-		recordArray.add(currentStep, step);
-		currentStep++;
+	public void addRecords(Set<ChangeRecord> changes) {
+		recordArray.add(nStep, changes);
+		nStep++;
 
 		// remove too long queue
 		while (recordArray.size() > maxSize) {
 			recordArray.remove(0);
-			currentStep--;
+			nStep--;
 		}
 
 		// remove head
-		while (recordArray.size() > currentStep)
-			recordArray.remove(currentStep);
-
+		while (recordArray.size() > nStep)
+			recordArray.remove(nStep);
 	}
 
-	public Set<Record> getUndoRecords() {
-		if (currentStep <= 0)
+	public Set<ChangeRecord> getUndoRecords() {
+		if (nStep <= 0)
 			return null;
-
-		currentStep = currentStep - 1;
-		return recordArray.get(currentStep);
+		nStep--;
+		Set<ChangeRecord> rec = recordArray.get(nStep);
+		return rec;
 	}
 
-	public Set<Record> getRedoRecords() {
-		if (currentStep >= recordArray.size())
+	public Set<ChangeRecord> getRedoRecords() {
+		if (nStep >= recordArray.size())
 			return null;
+		Set<ChangeRecord> rec = recordArray.get(nStep);
+		nStep++;
+		return rec;
+	}
 
-		currentStep = currentStep + 1;
-		return recordArray.get(currentStep);
-	}
-	
-	
-	// UNDO - REDO
-	
-	public void undo() {
-		Set<Record> records = getUndoRecords();
-		if(records != null) {
-			for(Record record : records) {
-				record.updateFather();
-			}
+	public ChangeRecord getPreviousRecord(Recordable father) {
+		for (int i = nStep - 1; i >= 0; i--) {
+			Set<ChangeRecord> set = recordArray.get(i);
+			for (ChangeRecord cr : set)
+				if (cr.getFather() == father)
+					return cr;
 		}
+		return null;
 	}
-	
-	public void redo() {
-		Set<Record> records = getRedoRecords();
-		if(records != null) {
-			for(Record record : records) {
-				record.updateFather();
-			}
-		}
-	}
+
 }

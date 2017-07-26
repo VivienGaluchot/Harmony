@@ -7,10 +7,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-import harmony.gui.GraphPanel;
+import harmony.gui.DrawPanel;
 import harmony.gui.Types;
 import harmony.gui.graph.elements.GuiElement;
 import harmony.gui.graph.elements.InPort;
@@ -20,8 +23,8 @@ import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
 import harmony.math.Vector2D;
 
-public class Space implements Recordable, MouseListener, MouseMotionListener, KeyListener {
-	private GraphPanel panel;
+public class Space implements MouseListener, MouseMotionListener, KeyListener {
+	private DrawPanel panel;
 
 	private ArrayList<Node> nodes;
 	private ArrayList<Link> links;
@@ -36,14 +39,16 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	private GuiElement selected = null;
 
 	private RecordQueue recordQueue;
+	private HashMap<Recordable, ChangeRecord> currentStateRecords;
 
-	public Space(GraphPanel panel) {
+	public Space(DrawPanel panel) {
 		this.panel = panel;
 
 		nodes = new ArrayList<>();
 		links = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
+		currentStateRecords = new HashMap<>();
 
 		Node g1 = new Node(this);
 		g1.pos = g1.pos.add(new Vector2D(-2, 0));
@@ -54,12 +59,15 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		Node g3 = new Node(this);
 		g3.pos = g3.pos.add(new Vector2D(0, 3));
 		addNode(g3);
+
+		trackChanges();
 	}
 
 	// Objects
 
 	public void addNode(Node n) {
 		nodes.add(n);
+		// trackChanges();
 	}
 
 	public void removeNode(Node n) {
@@ -70,6 +78,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 			}
 		}
 		nodes.remove(n);
+		// trackChanges();
 	}
 
 	public void addLink(Link l) {
@@ -80,10 +89,12 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 			}
 		}
 		links.add(l);
+		// trackChanges();
 	}
 
 	public void removeLink(Link l) {
 		links.remove(l);
+		// trackChanges();
 	}
 
 	public List<GuiElement> getObjectList() {
@@ -103,8 +114,67 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	// RecordQueue
 
-	public void trackChanges() {
+	private boolean isTracking = false;
 
+	public void trackChanges() {
+		if (isTracking) {
+			System.out.println("Warning, track loop");
+			return;
+		} else
+			isTracking = true;
+
+		Set<ChangeRecord> changes = new HashSet<>();
+		List<GuiElement> newObjectList = getObjectList();
+		HashSet<Recordable> newObjectSet = new HashSet<>();
+		// Check for new elements
+		for (GuiElement el : newObjectList) {
+			if (el instanceof Recordable) {
+				Recordable rec = (Recordable) el;
+				newObjectSet.add(rec);
+				if (!currentStateRecords.containsKey(rec) && rec.getCurrentRecord() != null) {
+					// TODO handle element added
+					ChangeRecord newRecord = rec.getCurrentRecord();
+					currentStateRecords.put(rec, newRecord);
+				}
+			}
+		}
+		// Check for changes and removes
+		for (Recordable rec : currentStateRecords.keySet()) {
+			if (!newObjectSet.contains(rec)) {
+				// TODO handle element removed
+			} else if (!currentStateRecords.get(rec).isFatherUpdated()) {
+				// handle element changed
+				ChangeRecord newRecord = rec.getCurrentRecord();
+				currentStateRecords.put(rec, newRecord);
+				changes.add(newRecord);
+			}
+		}
+		if (changes.size() > 0) {
+			recordQueue.addRecords(changes);
+		}
+
+		isTracking = false;
+	}
+
+	public void undo() {
+		Set<ChangeRecord> records = recordQueue.getUndoRecords();
+		if (records != null) {
+			for (ChangeRecord record : records) {
+				record.undoChange();
+				// TODO check
+				currentStateRecords.put(record.getFather(), record);
+			}
+		}
+	}
+
+	public void redo() {
+		Set<ChangeRecord> records = recordQueue.getRedoRecords();
+		if (records != null) {
+			for (ChangeRecord record : records) {
+				record.redoChange();
+				currentStateRecords.put(record.getFather(), record);
+			}
+		}
 	}
 
 	// Display
@@ -186,6 +256,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		}
 		setHovered(getPointedObject(vecMouse));
 		didDrag = true;
+		setSelected(null);
 	}
 
 	@Override
@@ -253,6 +324,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 			draggedLink = null;
 		}
 		mouseMoved(e);
+		trackChanges();
 	}
 
 	// KeyListener
@@ -262,6 +334,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		if (e.getKeyChar() == KeyEvent.VK_DELETE)
 			if (selected != null)
 				selected.handleCommand(Types.Command.DELETE);
+		trackChanges();
 	}
 
 	@Override
@@ -272,22 +345,6 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	@Override
 	public void keyReleased(KeyEvent e) {
 
-	}
-
-	// UNDO - REDO
-
-	public void undo() {
-		recordQueue.undo();
-	}
-
-	public void redo() {
-		recordQueue.redo();
-	}
-
-	@Override
-	public Record getCurrentRecord() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

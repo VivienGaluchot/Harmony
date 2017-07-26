@@ -33,6 +33,20 @@ public class Vector2D implements Serializable {
 		return "Vector2D(" + x + "," + y + ")";
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Vector2D) {
+			Vector2D v = (Vector2D) o;
+			return v.x == x && v.y == y;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Double.hashCode(x) + Double.hashCode(y);
+	}
+
 	public Vector2D subtract(Vector2D vect) {
 		return new Vector2D(x - vect.x, y - vect.y);
 	}

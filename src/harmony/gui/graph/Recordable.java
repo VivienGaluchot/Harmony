@@ -2,6 +2,6 @@ package harmony.gui.graph;
 
 public interface Recordable {
 
-	public Record getCurrentRecord();
+	public ChangeRecord getCurrentRecord();
 	
 }
