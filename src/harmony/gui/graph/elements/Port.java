@@ -1,4 +1,4 @@
-package harmony.gui.graph;
+package harmony.gui.graph.elements;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -7,7 +7,7 @@ import java.awt.geom.Ellipse2D;
 
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
-import harmony.sound.math.Vector2D;
+import harmony.math.Vector2D;
 
 public abstract class Port extends GuiElement {
 	public Node father;

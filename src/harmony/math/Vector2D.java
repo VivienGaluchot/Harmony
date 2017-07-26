@@ -1,4 +1,4 @@
-package harmony.sound.math;
+package harmony.math;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;

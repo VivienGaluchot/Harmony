@@ -24,7 +24,7 @@ import java.awt.geom.Point2D;
 import javax.swing.JPanel;
 
 import harmony.gui.graph.Space;
-import harmony.sound.math.Vector2D;
+import harmony.math.Vector2D;
 
 public class GraphPanel extends JPanel
 		implements ComponentListener, MouseWheelListener, MouseListener, MouseMotionListener, KeyListener {

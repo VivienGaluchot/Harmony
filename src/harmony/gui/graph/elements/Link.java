@@ -1,4 +1,4 @@
-package harmony.gui.graph;
+package harmony.gui.graph.elements;
 
 import java.awt.BasicStroke;
 import java.awt.Graphics;
@@ -8,9 +8,13 @@ import java.awt.geom.CubicCurve2D;
 
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
-import harmony.sound.math.Vector2D;
+import harmony.gui.graph.Record;
+import harmony.gui.graph.Space;
+import harmony.math.Vector2D;
 
 public class Link extends GuiElement {
+
+	public Space space;
 
 	public Vector2D loosePoint;
 	public OutPort start;
@@ -20,8 +24,10 @@ public class Link extends GuiElement {
 
 	private Shape shape;
 
-	public Link(Types.DataType dataType, OutPort start, InPort end) {
+	public Link(Space space, Types.DataType dataType, OutPort start, InPort end) {
 		super(Types.getDataColor(dataType), Types.getDataColor(dataType));
+		this.space = space;
+		
 		this.dataType = dataType;
 		if (start == null && end == null)
 			throw new IllegalArgumentException();
@@ -46,8 +52,7 @@ public class Link extends GuiElement {
 	}
 
 	public void remove() {
-		start.removeLink(this);
-		end.removeLink();
+		space.removeLink(this);
 	}
 
 	public void setLoosePoint(Vector2D p) {
@@ -100,5 +105,11 @@ public class Link extends GuiElement {
 	public void handleCommand(Command c) {
 		if (c == Types.Command.DELETE)
 			remove();
+	}
+
+	@Override
+	public Record getCurrentRecord() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

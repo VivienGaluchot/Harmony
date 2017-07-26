@@ -1,12 +1,13 @@
-package harmony.gui.graph;
+package harmony.gui.graph.elements;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import harmony.gui.Types;
-import harmony.sound.math.Vector2D;
+import harmony.gui.graph.Recordable;
+import harmony.math.Vector2D;
 
-public abstract class GuiElement {
+public abstract class GuiElement implements Recordable {
 
 	public Color backgroundColor;
 	public Color color;

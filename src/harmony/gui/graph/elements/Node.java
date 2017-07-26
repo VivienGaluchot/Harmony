@@ -1,4 +1,4 @@
-package harmony.gui.graph;
+package harmony.gui.graph.elements;
 
 import java.awt.BasicStroke;
 import java.awt.Component;
@@ -14,7 +14,9 @@ import javax.swing.JOptionPane;
 
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
-import harmony.sound.math.Vector2D;
+import harmony.gui.graph.Record;
+import harmony.gui.graph.Space;
+import harmony.math.Vector2D;
 
 public class Node extends GuiElement {
 
@@ -51,12 +53,7 @@ public class Node extends GuiElement {
 	}
 
 	public void remove() {
-		space.remove(this);
-		for (InPort dp : inPorts)
-			dp.removeLink();
-		for (OutPort dp : outPorts)
-			for (Link dl : dp.getLinks())
-				dl.remove();
+		space.removeNode(this);
 	}
 
 	@Override
@@ -119,5 +116,11 @@ public class Node extends GuiElement {
 	public void handleCommand(Command c) {
 		if (c == Types.Command.DELETE)
 			remove();
+	}
+
+	@Override
+	public Record getCurrentRecord() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
