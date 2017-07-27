@@ -19,7 +19,7 @@ import harmony.gui.graph.Recordable;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
-public class Node extends GuiElement implements Recordable {
+public abstract class Node extends GuiElement implements Recordable {
 
 	public Space space;
 
@@ -29,30 +29,37 @@ public class Node extends GuiElement implements Recordable {
 	private Vector2D size;
 	private String name;
 
-	private ArrayList<InPort> inPorts;
-	private ArrayList<OutPort> outPorts;
+	private ArrayList<InPort<?>> inPorts;
+	private ArrayList<OutPort<?>> outPorts;
 
-	public Node(Space space) {
+	public Node(Space space, String name) {
 		super();
 		this.space = space;
-		name = "Default";
+		this.name = name;
 		pos = new Vector2D(-3. / 2, -1);
 		lastRecordedPos = pos;
 		size = new Vector2D(3, 2);
 
 		inPorts = new ArrayList<>();
 		outPorts = new ArrayList<>();
+	}
 
-		inPorts.add(new InPort(this, Types.DataType.INTEGER, "in1"));
-		inPorts.add(new InPort(this, Types.DataType.FLOAT, "in2"));
-		inPorts.add(new InPort(this, Types.DataType.DOUBLE, "in3"));
-		outPorts.add(new OutPort(this, Types.DataType.INTEGER, "out1"));
-		outPorts.add(new OutPort(this, Types.DataType.FLOAT, "out2"));
+	/**
+	 * Write output according to inputs
+	 */
+	abstract public void execute();
 
+	protected void addInPort(InPort<?> ip) {
+		inPorts.add(ip);
 		adjustSize();
 	}
 
-	public void adjustSize() {
+	protected void addOutPort(OutPort<?> op) {
+		outPorts.add(op);
+		adjustSize();
+	}
+
+	protected void adjustSize() {
 		size.y = Math.max(1 + (inPorts.size() * 0.4), 1 + (outPorts.size() * 0.4));
 	}
 
@@ -69,15 +76,15 @@ public class Node extends GuiElement implements Recordable {
 		JOptionPane.showMessageDialog(parent, "Default object");
 	}
 
-	public List<InPort> getInPorts() {
+	public List<InPort<?>> getInPorts() {
 		return Collections.unmodifiableList(inPorts);
 	}
 
-	public List<OutPort> getOutPorts() {
+	public List<OutPort<?>> getOutPorts() {
 		return Collections.unmodifiableList(outPorts);
 	}
 
-	public Vector2D getPortPos(Port port) {
+	public Vector2D getPortPos(Port<?> port) {
 		int id;
 		id = inPorts.indexOf(port);
 		if (id >= 0) {

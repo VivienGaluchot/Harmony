@@ -11,19 +11,19 @@ import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
-public class Link extends GuiElement {
+public class Link<T> extends GuiElement {
 
 	public Space space;
 
 	public Vector2D loosePoint;
-	public OutPort start;
-	public InPort end;
+	public OutPort<T> start;
+	public InPort<T> end;
 
 	public Types.DataType dataType;
 
 	private Shape shape;
 
-	public Link(Space space, Types.DataType dataType, OutPort start, InPort end) {
+	public Link(Space space, Types.DataType dataType, OutPort<T> start, InPort<T> end) {
 		super(Types.getDataColor(dataType), Types.getDataColor(dataType));
 		this.space = space;
 		
@@ -38,7 +38,7 @@ public class Link extends GuiElement {
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Link) {
-			Link dl = (Link) o;
+			Link<T> dl = (Link<T>) o;
 			if (dl.start == this.start && dl.end == this.end)
 				return true;
 		}

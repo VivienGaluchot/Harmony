@@ -8,7 +8,7 @@ import java.awt.geom.Rectangle2D;
 import harmony.gui.Types.DataType;
 import harmony.math.Vector2D;
 
-public class OutPort extends Port {
+public class OutPort<T> extends Port<T> {
 
 	public OutPort(Node father, DataType dataType, String name) {
 		super(father, dataType, name);

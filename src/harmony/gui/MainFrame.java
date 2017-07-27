@@ -21,6 +21,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import harmony.gui.graph.elements.Node;
+import harmony.gui.graph.elements.nodes.Default;
 import harmony.sound.Licence;
 
 public class MainFrame extends JFrame {
@@ -168,7 +169,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addNode() {
-		panel.getSpace().addNode(new Node(panel.getSpace()));
+		panel.getSpace().addNode(new Default(panel.getSpace()));
 	}
 
 	private void undo() {

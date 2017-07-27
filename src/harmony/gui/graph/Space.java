@@ -20,6 +20,8 @@ import harmony.gui.graph.elements.Link;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
+import harmony.gui.graph.elements.nodes.Default;
+import harmony.gui.graph.elements.nodes.Display;
 import harmony.math.Vector2D;
 
 public class Space implements Recordable, MouseListener, MouseMotionListener, KeyListener {
@@ -27,10 +29,10 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	private ArrayList<Node> lastRecordedNodes;
 	private ArrayList<Node> nodes;
-	private ArrayList<Link> lastRecordedLinks;
-	private ArrayList<Link> links;
+	private ArrayList<Link<?>> lastRecordedLinks;
+	private ArrayList<Link<?>> links;
 
-	private Link draggedLink = null;
+	private Link<?> draggedLink = null;
 
 	private boolean didDrag = false;
 	private Vector2D initMousePos = null;
@@ -53,22 +55,23 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 		Set<ChangeRecord> set = new HashSet<>();
 		
-		Node g1 = new Node(this);
+		Node g1 = new Default(this);
 		g1.pos = g1.pos.add(new Vector2D(-2, 0));
 		set.add(g1.getCurrentRecord());
 		addNodeOffRecord(g1);
 		
-		Node g2 = new Node(this);
+		Node g2 = new Default(this);
 		g2.pos = g2.pos.add(new Vector2D(2, 0));
 		set.add(g2.getCurrentRecord());
 		addNodeOffRecord(g2);
 		
-		Node g3 = new Node(this);
+		Node g3 = new Display(this);
 		g3.pos = g3.pos.add(new Vector2D(0, 3));
 		set.add(g3.getCurrentRecord());
 		addNodeOffRecord(g3);
 		
 		recordQueue.addRecords(set);
+		updateObjectRecord();
 	}
 
 	// Objects
@@ -94,8 +97,8 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	}
 
 	public void removeNodeOffRecord(Node n) {
-		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
-			Link l = iter.next();
+		for (Iterator<Link<?>> iter = links.listIterator(); iter.hasNext();) {
+			Link<?> l = iter.next();
 			if (l.start.father == n || l.end.father == n) {
 				iter.remove();
 			}
@@ -103,14 +106,14 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		nodes.remove(n);
 	}
 
-	public void addLink(Link l) {
+	public void addLink(Link<?> l) {
 		addLinkOffRecord(l);
 		updateObjectRecord();
 	}
 
-	public void addLinkOffRecord(Link l) {
-		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
-			Link ol = iter.next();
+	public void addLinkOffRecord(Link<?> l) {
+		for (Iterator<Link<?>> iter = links.listIterator(); iter.hasNext();) {
+			Link<?> ol = iter.next();
 			if (ol.end == l.end) {
 				iter.remove();
 			}
@@ -118,12 +121,12 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		links.add(l);
 	}
 
-	public void removeLink(Link l) {
+	public void removeLink(Link<?> l) {
 		removeLinkOffRecord(l);
 		updateObjectRecord();
 	}
 
-	public void removeLinkOffRecord(Link l) {
+	public void removeLinkOffRecord(Link<?> l) {
 		links.remove(l);
 	}
 
@@ -131,12 +134,12 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		List<GuiElement> list = new ArrayList<>();
 		for (Node n : nodes) {
 			list.add(n);
-			for (Port dp : n.getInPorts())
+			for (Port<?> dp : n.getInPorts())
 				list.add(dp);
-			for (Port dp : n.getOutPorts())
+			for (Port<?> dp : n.getOutPorts())
 				list.add(dp);
 		}
-		for (Link l : links) {
+		for (Link<?> l : links) {
 			list.add(l);
 		}
 		return list;
@@ -225,14 +228,14 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
 				initMousePos = vecMouse;
 			} else if (clicked instanceof InPort) {
-				InPort inPort = (InPort) clicked;
+				InPort<?> inPort = (InPort) clicked;
 				if (draggedLink == null)
 					draggedLink = new Link(this, inPort.dataType, null, inPort);
 				draggedLink.setClicked(true);
 				draggedLink.setLoosePoint(vecMouse);
 
 			} else if (clicked instanceof OutPort) {
-				OutPort outPort = (OutPort) clicked;
+				OutPort<?> outPort = (OutPort) clicked;
 				if (draggedLink == null)
 					draggedLink = new Link(this, outPort.dataType, outPort, null);
 				draggedLink.setClicked(true);

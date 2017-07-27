@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import harmony.gui.Types.DataType;
 import harmony.math.Vector2D;
 
-public class InPort extends Port {
+public class InPort<T> extends Port<T> {
 
 	public InPort(Node father, DataType dataType, String name) {
 		super(father, dataType, name);
