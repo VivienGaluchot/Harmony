@@ -12,7 +12,8 @@ public abstract class OutPort extends Port {
 	public OutPort(Node father, Class<?> dataType, String name) {
 		super(father, dataType, name);
 	}
-	
+
+	@Override
 	public abstract Object getValue();
 
 	@Override

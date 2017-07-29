@@ -28,7 +28,7 @@ public class Default extends Node {
 		out2 = new OutPort(this, Float.class, "out2 = 2*in2") {
 			@Override
 			public Object getValue() {
-				if(in2.getValue() != null)
+				if (in2.getValue() != null)
 					return (Float) in2.getValue() * 2;
 				else
 					return new Float(1);

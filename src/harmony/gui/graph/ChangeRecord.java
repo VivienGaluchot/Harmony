@@ -1,13 +1,13 @@
 package harmony.gui.graph;
 
 public abstract class ChangeRecord {
-	
+
 	private Recordable father;
 
 	public ChangeRecord(Recordable father) {
 		if (father == null)
 			throw new IllegalArgumentException();
-		
+
 		this.father = father;
 	}
 
@@ -16,6 +16,7 @@ public abstract class ChangeRecord {
 	}
 
 	public abstract void undoChange();
+
 	public abstract void redoChange();
 
 }

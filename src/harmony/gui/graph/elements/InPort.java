@@ -13,6 +13,7 @@ public class InPort extends Port {
 		link = null;
 	}
 
+	@Override
 	public Object getValue() {
 		if (link == null)
 			return null;

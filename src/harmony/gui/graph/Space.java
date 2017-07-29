@@ -54,22 +54,22 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		recordQueue = new RecordQueue();
 
 		Set<ChangeRecord> set = new HashSet<>();
-		
+
 		Node g1 = new Default(this);
 		g1.pos = g1.pos.add(new Vector2D(-2, 0));
 		set.add(g1.getCurrentRecord());
 		addNodeOffRecord(g1);
-		
+
 		Node g2 = new Default(this);
 		g2.pos = g2.pos.add(new Vector2D(2, 0));
 		set.add(g2.getCurrentRecord());
 		addNodeOffRecord(g2);
-		
+
 		Node g3 = new Display(this);
 		g3.pos = g3.pos.add(new Vector2D(0, 3));
 		set.add(g3.getCurrentRecord());
 		addNodeOffRecord(g3);
-		
+
 		recordQueue.addRecords(set);
 		updateObjectRecord();
 	}
@@ -288,16 +288,16 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 			set.add(((Node) clicked).getCurrentRecord());
 			recordQueue.addRecords(set);
 		}
-		
+
 		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
 		GuiElement el = getPointedObject(vecMouse);
-		
+
 		if (el != null && el.isClicked() && !didDrag)
 			setSelected(el);
 		else
 			setSelected(null);
 		setClicked(null);
-		
+
 		if (draggedLink != null) {
 			if (el != null && el instanceof InPort) {
 				InPort inPort = (InPort) el;

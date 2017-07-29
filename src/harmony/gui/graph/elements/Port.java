@@ -23,7 +23,7 @@ public abstract class Port extends GuiElement {
 		this.type = type;
 		radius = 0.1;
 	}
-	
+
 	public abstract Object getValue();
 
 	public Vector2D getPos() {

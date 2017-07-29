@@ -20,7 +20,7 @@ public class Display extends Node {
 		addInPort(in1);
 		addInPort(in2);
 		addInPort(in3);
-		
+
 		// TODO show values
 	}
 
