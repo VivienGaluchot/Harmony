@@ -13,6 +13,13 @@ public class InPort extends Port {
 		link = null;
 	}
 
+	public OutPort getDependencie() {
+		if (link == null)
+			return null;
+		else
+			return link.getStart();
+	}
+
 	@Override
 	public Object getValue() {
 		if (link == null)
@@ -27,7 +34,7 @@ public class InPort extends Port {
 		if (this.link != null) {
 			Link t_link = this.link;
 			this.link = null;
-			t_link.remove();
+			father.space.removeLinkOffRecord(t_link);
 		}
 		if (link != null && link.type != this.type)
 			throw new IllegalArgumentException();

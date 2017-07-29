@@ -1,5 +1,8 @@
 package harmony.gui.graph.elements.nodes;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.InPort;
 import harmony.gui.graph.elements.Node;
@@ -24,6 +27,13 @@ public class Default extends Node {
 			public Object getValue() {
 				return in1.getValue();
 			}
+
+			@Override
+			public Set<InPort> getDependencies() {
+				HashSet<InPort> set = new HashSet<>();
+				set.add(in1);
+				return set;
+			}
 		};
 		out2 = new OutPort(this, Float.class, "out2 = 2*in2") {
 			@Override
@@ -34,6 +44,12 @@ public class Default extends Node {
 					return new Float(1);
 			}
 
+			@Override
+			public Set<InPort> getDependencies() {
+				HashSet<InPort> set = new HashSet<>();
+				set.add(in2);
+				return set;
+			}
 		};
 
 		addInPort(in1);

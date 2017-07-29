@@ -4,6 +4,8 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
+import java.util.HashSet;
+import java.util.Set;
 
 import harmony.math.Vector2D;
 
@@ -12,6 +14,24 @@ public abstract class OutPort extends Port {
 	public OutPort(Node father, Class<?> dataType, String name) {
 		super(father, dataType, name);
 	}
+	
+	public boolean containsComputingLoops() {
+		return containsComputingLoopsRec(new HashSet<InPort>());
+	}
+
+	public boolean containsComputingLoopsRec(Set<InPort> inLoop) {
+		Set<InPort> localDep = getDependencies();
+		for (InPort ip : localDep) {
+			if (inLoop.contains(ip))
+				return true;
+			inLoop.add(ip);
+			if (ip.getDependencie() != null && ip.getDependencie().containsComputingLoopsRec(inLoop) == true)
+				return true;
+		}
+		return false;
+	}
+
+	public abstract Set<InPort> getDependencies();
 
 	@Override
 	public abstract Object getValue();

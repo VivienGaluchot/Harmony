@@ -45,12 +45,6 @@ public class Link extends GuiElement {
 		return v;
 	}
 
-	public void remove() {
-		if (end != null)
-			end.setLink(null);
-		space.removeLink(this);
-	}
-
 	public OutPort getStart() {
 		return start;
 	}
@@ -118,7 +112,7 @@ public class Link extends GuiElement {
 	@Override
 	public void handleCommand(Command c) {
 		if (c == Types.Command.DELETE)
-			remove();
+			space.removeLink(this);
 	}
 
 	@Override

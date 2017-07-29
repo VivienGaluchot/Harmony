@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import harmony.gui.DrawPanel;
 import harmony.gui.Types;
 import harmony.gui.graph.elements.GuiElement;
@@ -112,13 +115,23 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	}
 
 	public void addLinkOffRecord(Link l) {
+		// Remove existing links with same end
 		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
 			Link ol = iter.next();
 			if (ol.getEnd() == l.getEnd()) {
 				iter.remove();
 			}
 		}
+
+		// Add
 		links.add(l);
+
+		// Check if link is making loops
+		if (l.getStart().containsComputingLoops()) {
+			JOptionPane.showMessageDialog(panel, "Computing loop detected, the new link will be removed.", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			removeLinkOffRecord(l);
+		}
 	}
 
 	public void removeLink(Link l) {
@@ -127,6 +140,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	}
 
 	public void removeLinkOffRecord(Link l) {
+		l.getEnd().setLink(null);
 		links.remove(l);
 	}
 
