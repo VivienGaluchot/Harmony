@@ -29,8 +29,8 @@ public abstract class Node extends GuiElement implements Recordable {
 	private Vector2D size;
 	private String name;
 
-	private ArrayList<InPort<?>> inPorts;
-	private ArrayList<OutPort<?>> outPorts;
+	private ArrayList<InPort> inPorts;
+	private ArrayList<OutPort> outPorts;
 
 	public Node(Space space, String name) {
 		super();
@@ -44,17 +44,12 @@ public abstract class Node extends GuiElement implements Recordable {
 		outPorts = new ArrayList<>();
 	}
 
-	/**
-	 * Write output according to inputs
-	 */
-	abstract public void execute();
-
-	protected void addInPort(InPort<?> ip) {
+	protected void addInPort(InPort ip) {
 		inPorts.add(ip);
 		adjustSize();
 	}
 
-	protected void addOutPort(OutPort<?> op) {
+	protected void addOutPort(OutPort op) {
 		outPorts.add(op);
 		adjustSize();
 	}
@@ -76,15 +71,15 @@ public abstract class Node extends GuiElement implements Recordable {
 		JOptionPane.showMessageDialog(parent, "Default object");
 	}
 
-	public List<InPort<?>> getInPorts() {
+	public List<InPort> getInPorts() {
 		return Collections.unmodifiableList(inPorts);
 	}
 
-	public List<OutPort<?>> getOutPorts() {
+	public List<OutPort> getOutPorts() {
 		return Collections.unmodifiableList(outPorts);
 	}
 
-	public Vector2D getPortPos(Port<?> port) {
+	public Vector2D getPortPos(Port port) {
 		int id;
 		id = inPorts.indexOf(port);
 		if (id >= 0) {

@@ -11,47 +11,62 @@ import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
-public class Link<T> extends GuiElement {
+public class Link extends GuiElement {
 
-	public Space space;
+	private Space space;
 
-	public Vector2D loosePoint;
-	public OutPort<T> start;
-	public InPort<T> end;
+	private Vector2D loosePoint;
 
-	public Types.DataType dataType;
+	private OutPort start;
+	private InPort end;
+
+	public Class<?> type;
 
 	private Shape shape;
 
-	public Link(Space space, Types.DataType dataType, OutPort<T> start, InPort<T> end) {
-		super(Types.getDataColor(dataType), Types.getDataColor(dataType));
+	public Link(Space space, Class<?> type, OutPort start, InPort end) {
+		super(Types.getDataColor(type), Types.getDataColor(type));
 		this.space = space;
-		
-		this.dataType = dataType;
+
+		this.type = type;
 		if (start == null && end == null)
 			throw new IllegalArgumentException();
-		this.start = start;
-		this.end = end;
+
+		setStart(start);
+		setEnd(end);
+
 		shape = null;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (o instanceof Link) {
-			Link<T> dl = (Link<T>) o;
-			if (dl.start == this.start && dl.end == this.end)
-				return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return start.hashCode() ^ end.hashCode();
+	public Object getValue() {
+		Object v = getStart().getValue();
+		if (v != null && v.getClass() != type)
+			throw new IllegalArgumentException();
+		return v;
 	}
 
 	public void remove() {
+		if (end != null)
+			end.setLink(null);
 		space.removeLink(this);
+	}
+
+	public OutPort getStart() {
+		return start;
+	}
+
+	public void setStart(OutPort start) {
+		this.start = start;
+	}
+
+	public InPort getEnd() {
+		return end;
+	}
+
+	public void setEnd(InPort end) {
+		this.end = end;
+		if (end != null)
+			end.setLink(this);
 	}
 
 	public void setLoosePoint(Vector2D p) {
@@ -105,5 +120,20 @@ public class Link<T> extends GuiElement {
 		if (c == Types.Command.DELETE)
 			remove();
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Link) {
+			Link dl = (Link) o;
+			if (dl.start == this.start && dl.end == this.end)
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return start.hashCode() ^ end.hashCode();
+	}
+
 }

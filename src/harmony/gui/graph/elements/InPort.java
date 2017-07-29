@@ -3,13 +3,35 @@ package harmony.gui.graph.elements;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import harmony.gui.Types.DataType;
 import harmony.math.Vector2D;
 
-public class InPort<T> extends Port<T> {
+public class InPort extends Port {
+	private Link link;
 
-	public InPort(Node father, DataType dataType, String name) {
+	public InPort(Node father, Class<?> dataType, String name) {
 		super(father, dataType, name);
+		link = null;
+	}
+
+	public Object getValue() {
+		if (link == null)
+			return null;
+		Object v = link.getValue();
+		if (v != null && v.getClass() != type)
+			throw new IllegalArgumentException();
+		return v;
+	}
+
+	public void setLink(Link link) {
+		if (this.link != null) {
+			Link t_link = this.link;
+			this.link = null;
+			t_link.remove();
+		}
+		if (link != null && link.type != this.type)
+			throw new IllegalArgumentException();
+		else
+			this.link = link;
 	}
 
 	@Override

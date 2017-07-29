@@ -29,10 +29,10 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	private ArrayList<Node> lastRecordedNodes;
 	private ArrayList<Node> nodes;
-	private ArrayList<Link<?>> lastRecordedLinks;
-	private ArrayList<Link<?>> links;
+	private ArrayList<Link> lastRecordedLinks;
+	private ArrayList<Link> links;
 
-	private Link<?> draggedLink = null;
+	private Link draggedLink = null;
 
 	private boolean didDrag = false;
 	private Vector2D initMousePos = null;
@@ -97,36 +97,36 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	}
 
 	public void removeNodeOffRecord(Node n) {
-		for (Iterator<Link<?>> iter = links.listIterator(); iter.hasNext();) {
-			Link<?> l = iter.next();
-			if (l.start.father == n || l.end.father == n) {
+		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
+			Link l = iter.next();
+			if (l.getStart().father == n || l.getEnd().father == n) {
 				iter.remove();
 			}
 		}
 		nodes.remove(n);
 	}
 
-	public void addLink(Link<?> l) {
+	public void addLink(Link l) {
 		addLinkOffRecord(l);
 		updateObjectRecord();
 	}
 
-	public void addLinkOffRecord(Link<?> l) {
-		for (Iterator<Link<?>> iter = links.listIterator(); iter.hasNext();) {
-			Link<?> ol = iter.next();
-			if (ol.end == l.end) {
+	public void addLinkOffRecord(Link l) {
+		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
+			Link ol = iter.next();
+			if (ol.getEnd() == l.getEnd()) {
 				iter.remove();
 			}
 		}
 		links.add(l);
 	}
 
-	public void removeLink(Link<?> l) {
+	public void removeLink(Link l) {
 		removeLinkOffRecord(l);
 		updateObjectRecord();
 	}
 
-	public void removeLinkOffRecord(Link<?> l) {
+	public void removeLinkOffRecord(Link l) {
 		links.remove(l);
 	}
 
@@ -134,12 +134,12 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		List<GuiElement> list = new ArrayList<>();
 		for (Node n : nodes) {
 			list.add(n);
-			for (Port<?> dp : n.getInPorts())
+			for (Port dp : n.getInPorts())
 				list.add(dp);
-			for (Port<?> dp : n.getOutPorts())
+			for (Port dp : n.getOutPorts())
 				list.add(dp);
 		}
-		for (Link<?> l : links) {
+		for (Link l : links) {
 			list.add(l);
 		}
 		return list;
@@ -228,16 +228,16 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
 				initMousePos = vecMouse;
 			} else if (clicked instanceof InPort) {
-				InPort<?> inPort = (InPort) clicked;
+				InPort inPort = (InPort) clicked;
 				if (draggedLink == null)
-					draggedLink = new Link(this, inPort.dataType, null, inPort);
+					draggedLink = new Link(this, inPort.type, null, inPort);
 				draggedLink.setClicked(true);
 				draggedLink.setLoosePoint(vecMouse);
 
 			} else if (clicked instanceof OutPort) {
-				OutPort<?> outPort = (OutPort) clicked;
+				OutPort outPort = (OutPort) clicked;
 				if (draggedLink == null)
-					draggedLink = new Link(this, outPort.dataType, outPort, null);
+					draggedLink = new Link(this, outPort.type, outPort, null);
 				draggedLink.setClicked(true);
 				draggedLink.setLoosePoint(vecMouse);
 			}
@@ -301,17 +301,17 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		if (draggedLink != null) {
 			if (el != null && el instanceof InPort) {
 				InPort inPort = (InPort) el;
-				if (draggedLink.end == null && inPort.dataType == draggedLink.dataType)
-					draggedLink.end = inPort;
-				if (draggedLink.start != null && draggedLink.end != null) {
+				if (draggedLink.getEnd() == null && inPort.type == draggedLink.type)
+					draggedLink.setEnd(inPort);
+				if (draggedLink.getStart() != null && draggedLink.getEnd() != null) {
 					draggedLink.setClicked(false);
 					addLink(draggedLink);
 				}
 			} else if (el != null && el instanceof OutPort) {
 				OutPort outPort = (OutPort) el;
-				if (draggedLink.start == null && outPort.dataType == draggedLink.dataType)
-					draggedLink.start = outPort;
-				if (draggedLink.start != null && draggedLink.end != null) {
+				if (draggedLink.getStart() == null && outPort.type == draggedLink.type)
+					draggedLink.setStart(outPort);
+				if (draggedLink.getStart() != null && draggedLink.getEnd() != null) {
 					draggedLink.setClicked(false);
 					addLink(draggedLink);
 				}

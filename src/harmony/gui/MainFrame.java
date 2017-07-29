@@ -20,7 +20,6 @@ import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.nodes.Default;
 import harmony.sound.Licence;
 

@@ -5,14 +5,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
-import harmony.gui.Types.DataType;
 import harmony.math.Vector2D;
 
-public class OutPort<T> extends Port<T> {
+public abstract class OutPort extends Port {
 
-	public OutPort(Node father, DataType dataType, String name) {
+	public OutPort(Node father, Class<?> dataType, String name) {
 		super(father, dataType, name);
 	}
+	
+	public abstract Object getValue();
 
 	@Override
 	public void paint(Graphics g) {

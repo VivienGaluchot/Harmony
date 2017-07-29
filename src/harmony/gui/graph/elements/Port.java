@@ -9,34 +9,25 @@ import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.math.Vector2D;
 
-public abstract class Port<T> extends GuiElement {
+public abstract class Port extends GuiElement {
 	public Node father;
-	public Types.DataType dataType;
+	public Class<?> type;
 	public String name;
 
 	public Double radius;
 
-	private T value;
-
-	public Port(Node father, Types.DataType dataType, String name) {
-		super(Types.getDataColor(dataType), Types.getDataColor(dataType).darker());
+	public Port(Node father, Class<?> type, String name) {
+		super(Types.getDataColor(type), Types.getDataColor(type).darker());
 		this.father = father;
 		this.name = name;
-		this.dataType = dataType;
+		this.type = type;
 		radius = 0.1;
-		value = null;
 	}
+	
+	public abstract Object getValue();
 
 	public Vector2D getPos() {
 		return father.getPortPos(this);
-	}
-
-	public T getValue() {
-		return value;
-	}
-
-	public void setValue(T value) {
-		this.value = value;
 	}
 
 	@Override
