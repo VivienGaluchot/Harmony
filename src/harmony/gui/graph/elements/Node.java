@@ -121,7 +121,7 @@ public abstract class Node extends GuiElement implements Recordable {
 		Font currentFont = new Font("Arial", Font.PLAIN, 1);
 		Font newFont = currentFont.deriveFont(0.3f);
 		g2d.setFont(newFont);
-		g2d.drawString(name, (float) pos.x + 0.1f, (float) pos.y + 0.5f);
+		g2d.drawString(name, (float) pos.x + 0.1f, (float) pos.y + 0.4f);
 		if (isSelected()) {
 			float dash1[] = { 0.1f };
 			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1, 0.0f);

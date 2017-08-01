@@ -102,7 +102,7 @@ public class Link extends GuiElement {
 			endPos = loosePoint;
 
 		CubicCurve2D.Double cubicCurve; // Cubic curve
-		Double xDist = Math.max(0.3, endPos.subtract(startPos).x / 2);
+		Double xDist = Math.max(0.3, Math.abs(endPos.subtract(startPos).x / 2));
 		cubicCurve = new CubicCurve2D.Double(startPos.x, startPos.y, startPos.x + xDist, startPos.y, endPos.x - xDist,
 				endPos.y, endPos.x, endPos.y);
 

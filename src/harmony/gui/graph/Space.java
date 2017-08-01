@@ -53,6 +53,9 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	private boolean didDrag = false;
 	private Vector2D initMousePos = null;
+	private Vector2D initObjPos = null;
+
+	private boolean alt_key_pressed = false;
 
 	private GuiElement hovered = null;
 	private GuiElement clicked = null;
@@ -110,7 +113,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 		// Connect
 		l.getEnd().setLink(l);
-		
+
 		// Check if link is making loops
 		if (l.getStart().containsComputingLoops()) {
 			JOptionPane.showMessageDialog(panel, "Computing loop detected, new link can't be added.", "Error",
@@ -208,8 +211,13 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		if (initMousePos != null) {
 			if (clicked instanceof Node) {
 				Node go = (Node) clicked;
-				go.pos = go.pos.add(vecMouse.subtract(initMousePos));
-				initMousePos = vecMouse;
+				if (initObjPos == null)
+					initObjPos = go.pos.clone();
+				go.pos = initObjPos.add(vecMouse.subtract(initMousePos));
+				if (!alt_key_pressed) {
+					go.pos.x = Math.round(4 * go.pos.x) / 4.;
+					go.pos.y = Math.round(4 * go.pos.y) / 4.;
+				}
 			} else if (clicked instanceof InPort) {
 				InPort inPort = (InPort) clicked;
 				if (draggedLink == null)
@@ -254,7 +262,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		GuiElement el = getPointedObject(vecMouse);
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			setClicked(el);
-			initMousePos = panel.transformMousePosition(e.getPoint());
+			initMousePos = vecMouse;
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			if (el instanceof Node) {
 				Node go = (Node) el;
@@ -283,6 +291,8 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 				if (draggedLink.getStart() != null && draggedLink.getEnd() != null) {
 					draggedLink.setClicked(false);
 					addLink(draggedLink);
+
+					recordQueue.trackDiffs();
 				}
 			} else if (el != null && el instanceof OutPort) {
 				OutPort outPort = (OutPort) el;
@@ -291,35 +301,45 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 				if (draggedLink.getStart() != null && draggedLink.getEnd() != null) {
 					draggedLink.setClicked(false);
 					addLink(draggedLink);
+
+					recordQueue.trackDiffs();
 				}
 			}
 			draggedLink = null;
-			initMousePos = null;
 		}
-		mouseMoved(e);
 
-		recordQueue.trackDiffs();
+		if (didDrag) {
+			recordQueue.trackDiffs();
+		}
+
+		initMousePos = null;
+		initObjPos = null;
+		mouseMoved(e);
 	}
 
 	// KeyListener
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if (e.getKeyChar() == KeyEvent.VK_DELETE)
-			if (selected != null)
+		if (e.getKeyChar() == KeyEvent.VK_DELETE) {
+			if (selected != null) {
 				selected.handleCommand(Types.Command.DELETE);
 
-		recordQueue.trackDiffs();
+				recordQueue.trackDiffs();
+			}
+		}
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		if (e.getKeyCode() == KeyEvent.VK_ALT)
+			alt_key_pressed = true;
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		if (e.getKeyCode() == KeyEvent.VK_ALT)
+			alt_key_pressed = false;
 	}
 
 	// Record

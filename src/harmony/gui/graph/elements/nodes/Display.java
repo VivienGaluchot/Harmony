@@ -22,6 +22,7 @@ public class Display extends Node {
 		addInPort(in3);
 
 		// TODO show values
+		// Terminal Ports
 	}
 
 }
