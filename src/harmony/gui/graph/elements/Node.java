@@ -14,9 +14,10 @@ import javax.swing.JOptionPane;
 
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
-import harmony.gui.graph.ChangeRecord;
-import harmony.gui.graph.Recordable;
 import harmony.gui.graph.Space;
+import harmony.gui.record.ChangeRecord;
+import harmony.gui.record.Recordable;
+import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 
 public abstract class Node extends GuiElement implements Recordable {
@@ -24,7 +25,6 @@ public abstract class Node extends GuiElement implements Recordable {
 	public Space space;
 
 	public Vector2D pos;
-	private Vector2D lastRecordedPos = null;
 
 	private Vector2D size;
 	private String name;
@@ -37,7 +37,6 @@ public abstract class Node extends GuiElement implements Recordable {
 		this.space = space;
 		this.name = name;
 		pos = new Vector2D(-3. / 2, -1);
-		lastRecordedPos = pos;
 		size = new Vector2D(3, 2);
 
 		inPorts = new ArrayList<>();
@@ -124,35 +123,49 @@ public abstract class Node extends GuiElement implements Recordable {
 			remove();
 	}
 
+	// Records
+
 	@Override
-	public ChangeRecord getCurrentRecord() {
-		ChangeRecord rec = new NodeRecord(this, lastRecordedPos);
-		lastRecordedPos = pos;
-		return rec;
+	public StateRecord getCurrentState() {
+		return new NodeStateRecord(this);
 	}
 
-	public class NodeRecord extends ChangeRecord {
+	public class NodeStateRecord extends StateRecord {
+		private Vector2D pos;
 
-		private Vector2D initPos;
+		public NodeStateRecord(Node father) {
+			super(father);
+			pos = father.pos;
+		}
+
+		@Override
+		public ChangeRecord getDiffs(StateRecord ref) {
+			if (pos.equals(((NodeStateRecord) ref).pos)) {
+				return null;
+			} else {
+				return new NodeChangeRecord((Node) getFather(), pos, ((NodeStateRecord) ref).pos);
+			}
+		}
+	}
+
+	public class NodeChangeRecord extends ChangeRecord {
+		private Vector2D startPos;
 		private Vector2D endPos;
 
-		public NodeRecord(Node father, Vector2D initPos) {
+		public NodeChangeRecord(Node father, Vector2D startPos, Vector2D endPos) {
 			super(father);
-			this.initPos = initPos;
-			this.endPos = father.pos;
+			this.startPos = startPos;
+			this.endPos = endPos;
 		}
 
 		@Override
 		public void undoChange() {
-			((Node) getFather()).pos = initPos;
-			lastRecordedPos = initPos;
+			((Node) getFather()).pos = startPos.clone();
 		}
 
 		@Override
 		public void redoChange() {
-			((Node) getFather()).pos = endPos;
-			lastRecordedPos = endPos;
+			((Node) getFather()).pos = endPos.clone();
 		}
-
 	}
 }

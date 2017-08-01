@@ -34,7 +34,7 @@ public class InPort extends Port {
 		if (this.link != null) {
 			Link t_link = this.link;
 			this.link = null;
-			father.space.removeLinkOffRecord(t_link);
+			father.space.removeLink(t_link);
 		}
 		if (link != null && link.type != this.type)
 			throw new IllegalArgumentException();

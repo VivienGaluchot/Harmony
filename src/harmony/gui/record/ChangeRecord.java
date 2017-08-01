@@ -1,4 +1,4 @@
-package harmony.gui.graph;
+package harmony.gui.record;
 
 public abstract class ChangeRecord {
 

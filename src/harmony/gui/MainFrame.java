@@ -172,11 +172,11 @@ public class MainFrame extends JFrame {
 	}
 
 	private void undo() {
-		panel.getSpace().undo();
+		panel.getSpace().getRecordQueue().undo();
 	}
 
 	private void redo() {
-		panel.getSpace().redo();
+		panel.getSpace().getRecordQueue().redo();
 	}
 
 	private void showLicence() {
