@@ -1,3 +1,18 @@
+//    Harmony : procedural sound waves generator
+//    Copyright (C) 2017  Vivien Galuchot
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, version 3 of the License.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package harmony.gui.graph.elements;
 
 import java.awt.Graphics;
@@ -31,15 +46,14 @@ public class InPort extends Port {
 	}
 
 	public void setLink(Link link) {
-		if (this.link != null) {
-			Link t_link = this.link;
-			this.link = null;
-			father.space.removeLink(t_link);
-		}
 		if (link != null && link.type != this.type)
 			throw new IllegalArgumentException();
 		else
 			this.link = link;
+	}
+
+	public Link getLink() {
+		return link;
 	}
 
 	@Override

@@ -1,9 +1,23 @@
+//    Harmony : procedural sound waves generator
+//    Copyright (C) 2017  Vivien Galuchot
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, version 3 of the License.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package harmony.gui.record;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 public class RecordQueue {
@@ -28,6 +42,8 @@ public class RecordQueue {
 
 	public void removeTrackedObject(Recordable rec) {
 		// TODO remove trackedObject
+		// the given object won't change now
+		// can be removed from track when not anymore referenced in changes
 	}
 
 	public void undo() {
@@ -52,9 +68,7 @@ public class RecordQueue {
 
 	public void trackDiffs() {
 		Set<ChangeRecord> changes = new HashSet<>();
-		Iterator<Recordable> it = trackHead.keySet().iterator();
-		while (it.hasNext()) {
-			Recordable rec = it.next();
+		for (Recordable rec : trackHead.keySet()) {
 			StateRecord currentState = rec.getCurrentState();
 			ChangeRecord currentDiffs = trackHead.get(rec).getDiffs(currentState);
 			if (currentDiffs != null) {
@@ -65,10 +79,13 @@ public class RecordQueue {
 		if (changes.size() > 0)
 			addRecords(changes);
 	}
-	
+
 	// Queue
 
 	private void addRecords(Set<ChangeRecord> changes) {
+		if (changes.size() == 0)
+			return;
+		
 		changesArray.add(nStep, changes);
 		nStep++;
 

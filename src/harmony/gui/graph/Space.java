@@ -1,3 +1,18 @@
+//    Harmony : procedural sound waves generator
+//    Copyright (C) 2017  Vivien Galuchot
+//
+//    This program is free software: you can redistribute it and/or modify
+//    it under the terms of the GNU General Public License as published by
+//    the Free Software Foundation, version 3 of the License.
+//
+//    This program is distributed in the hope that it will be useful,
+//    but WITHOUT ANY WARRANTY; without even the implied warranty of
+//    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//    GNU General Public License for more details.
+//
+//    You should have received a copy of the GNU General Public License
+//    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 package harmony.gui.graph;
 
 import java.awt.Graphics;
@@ -30,7 +45,7 @@ import harmony.math.Vector2D;
 
 public class Space implements Recordable, MouseListener, MouseMotionListener, KeyListener {
 	private DrawPanel panel;
-	
+
 	private ArrayList<Node> nodes;
 	private ArrayList<Link> links;
 
@@ -47,7 +62,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	public Space(DrawPanel panel) {
 		this.panel = panel;
-		
+
 		nodes = new ArrayList<>();
 		links = new ArrayList<>();
 
@@ -64,14 +79,13 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		Node g3 = new Display(this);
 		g3.pos = g3.pos.add(new Vector2D(0, 3));
 		addNode(g3);
-		
-		// TODO remettre
-		// recordQueue.addTrackedObject(this);
+
+		recordQueue.addTrackedObject(this);
 	}
 
 	// Objects
-	
-	public RecordQueue getRecordQueue(){
+
+	public RecordQueue getRecordQueue() {
 		return recordQueue;
 	}
 
@@ -92,23 +106,26 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	}
 
 	public void addLink(Link l) {
-		// Remove existing links with same end
-		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
-			Link ol = iter.next();
-			if (ol.getEnd() == l.getEnd()) {
-				iter.remove();
-			}
-		}
+		Link initEndlink = l.getEnd().getLink();
 
-		// Add
-		links.add(l);
-
+		// Connect
+		l.getEnd().setLink(l);
+		
 		// Check if link is making loops
 		if (l.getStart().containsComputingLoops()) {
-			JOptionPane.showMessageDialog(panel, "Computing loop detected, the new link will be removed.", "Error",
+			JOptionPane.showMessageDialog(panel, "Computing loop detected, new link can't be added.", "Error",
 					JOptionPane.ERROR_MESSAGE);
-			removeLink(l);
+			// Reset end link as it was
+			l.getEnd().setLink(initEndlink);
+			return;
 		}
+
+		// Remove existing link with same end
+		if (initEndlink != null && initEndlink != l)
+			removeLink(initEndlink);
+
+		// Add link
+		links.add(l);
 	}
 
 	public void removeLink(Link l) {
@@ -280,7 +297,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 			initMousePos = null;
 		}
 		mouseMoved(e);
-		
+
 		recordQueue.trackDiffs();
 	}
 
@@ -291,7 +308,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		if (e.getKeyChar() == KeyEvent.VK_DELETE)
 			if (selected != null)
 				selected.handleCommand(Types.Command.DELETE);
-		
+
 		recordQueue.trackDiffs();
 	}
 
@@ -309,49 +326,104 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	@Override
 	public StateRecord getCurrentState() {
-		return null;
+		return new SpaceStateRecord(this);
 	}
 
-	public class SpaceRecord extends ChangeRecord {
+	public class SpaceStateRecord extends StateRecord {
+		private ArrayList<Node> recNodes;
+		private ArrayList<Link> recLinks;
 
-		private Space father;
-
-		public ArrayList<Node> nodesAdded;
-		public ArrayList<Node> nodesRemoved;
-		public ArrayList<Link> linksAdded;
-		public ArrayList<Link> linksRemoved;
-
-		public SpaceRecord(Space father) {
+		public SpaceStateRecord(Space father) {
 			super(father);
-			this.father = father;
+			recNodes = new ArrayList<>();
+			recLinks = new ArrayList<>();
+			for (Node n : father.nodes)
+				recNodes.add(n);
+			for (Link l : father.links)
+				recLinks.add(l);
+		}
+
+		@Override
+		public ChangeRecord getDiffs(StateRecord ref) {
+			SpaceStateRecord stateRef = (SpaceStateRecord) ref;
+			SpaceChangeRecord change = new SpaceChangeRecord((Space) getFather());
+			for (Node n : recNodes)
+				if (!stateRef.recNodes.contains(n))
+					change.nodeRemoved(n);
+			for (Node n : stateRef.recNodes)
+				if (!recNodes.contains(n))
+					change.nodeAdded(n);
+			for (Link l : recLinks)
+				if (!stateRef.recLinks.contains(l))
+					change.linkRemoved(l);
+			for (Link l : stateRef.recLinks)
+				if (!recLinks.contains(l))
+					change.linkAdded(l);
+
+			if (change.isDiff())
+				return change;
+			else
+				return null;
+		}
+
+	}
+
+	public class SpaceChangeRecord extends ChangeRecord {
+		private ArrayList<Node> nodesAdded;
+		private ArrayList<Node> nodesRemoved;
+		private ArrayList<Link> linksAdded;
+		private ArrayList<Link> linksRemoved;
+
+		public SpaceChangeRecord(Space father) {
+			super(father);
 			nodesAdded = new ArrayList<>();
 			nodesRemoved = new ArrayList<>();
 			linksAdded = new ArrayList<>();
 			linksRemoved = new ArrayList<>();
 		}
 
+		public void nodeAdded(Node n) {
+			nodesAdded.add(n);
+		}
+
+		public void nodeRemoved(Node n) {
+			nodesRemoved.add(n);
+		}
+
+		public void linkAdded(Link l) {
+			linksAdded.add(l);
+		}
+
+		public void linkRemoved(Link l) {
+			linksRemoved.add(l);
+		}
+
+		public boolean isDiff() {
+			return nodesAdded.size() > 0 || nodesRemoved.size() > 0 || linksAdded.size() > 0 || linksRemoved.size() > 0;
+		}
+
 		@Override
 		public void undoChange() {
 			for (Node n : nodesAdded)
-				father.removeNode(n);
+				((Space) getFather()).removeNode(n);
 			for (Node n : nodesRemoved)
-				father.addNode(n);
+				((Space) getFather()).addNode(n);
 			for (Link l : linksAdded)
-				father.removeLink(l);
+				((Space) getFather()).removeLink(l);
 			for (Link l : linksRemoved)
-				father.addLink(l);
+				((Space) getFather()).addLink(l);
 		}
 
 		@Override
 		public void redoChange() {
 			for (Node n : nodesAdded)
-				father.addNode(n);
+				((Space) getFather()).addNode(n);
 			for (Node n : nodesRemoved)
-				father.removeNode(n);
+				((Space) getFather()).removeNode(n);
 			for (Link l : linksAdded)
-				father.addLink(l);
+				((Space) getFather()).addLink(l);
 			for (Link l : linksRemoved)
-				father.removeLink(l);
+				((Space) getFather()).removeLink(l);
 		}
 
 	}
