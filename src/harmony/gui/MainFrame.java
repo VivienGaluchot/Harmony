@@ -49,10 +49,11 @@ public class MainFrame extends JFrame {
 
 		initMenu();
 
+		setTitle("Harmony");
 		setLayout(new GridBagLayout());
 		getContentPane().setBackground(Color.white);
 
-		add(new JLabel("-- Harmony --"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER,
+		add(new JLabel("Toolbar"), new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.WEST,
 				GridBagConstraints.NONE, new Insets(10, 10, 10, 10), 0, 0));
 		add(panel, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
