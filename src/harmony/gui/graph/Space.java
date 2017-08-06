@@ -35,6 +35,7 @@ import harmony.gui.graph.elements.Link;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
+import harmony.gui.graph.elements.nodes.Constant;
 import harmony.gui.graph.elements.nodes.Default;
 import harmony.gui.graph.elements.nodes.Display;
 import harmony.gui.record.ChangeRecord;
@@ -82,6 +83,10 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		Node g3 = new Display(this);
 		g3.pos = g3.pos.add(new Vector2D(0, 3));
 		addNode(g3);
+		
+		Node g4 = new Constant(this);
+		g4.pos = g4.pos.add(new Vector2D(0, -3));
+		addNode(g4);
 
 		recordQueue.addTrackedObject(this);
 	}
