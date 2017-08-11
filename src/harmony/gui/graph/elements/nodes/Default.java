@@ -24,8 +24,8 @@ public class Default extends Node {
 		
 		out1 = new OutPort(this, Integer.class, "out1 = in1") {
 			@Override
-			public Object processData() {
-				return in1.processData();
+			public Object getData() {
+				return in1.getData();
 			}
 
 			@Override
@@ -37,9 +37,9 @@ public class Default extends Node {
 		};
 		out2 = new OutPort(this, Double.class, "out2 = 2*in2") {
 			@Override
-			public Object processData() {
-				if (in2.processData() != null)
-					return (Double) in2.processData() * 2;
+			public Object getData() {
+				if (in2.getData() != null)
+					return (Double) in2.getData() * 2;
 				else
 					return new Double(1);
 			}

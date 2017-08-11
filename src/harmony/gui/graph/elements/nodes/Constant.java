@@ -27,13 +27,13 @@ public class Constant extends Node {
 			}
 
 			@Override
-			public Object processData() {
+			public Object getData() {
 				return value;
 			}
 
 			@Override
 			public void paint(Graphics g) {
-				Object v = this.processData();
+				Object v = this.getData();
 				if (v != null)
 					this.name = "value : " + v.toString();
 				else

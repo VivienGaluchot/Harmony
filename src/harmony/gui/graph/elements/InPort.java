@@ -32,7 +32,7 @@ public class InPort extends Port {
 	}
 
 	@Override
-	public Object processData() {
+	public Object getData() {
 		if (link == null)
 			return null;
 		Object v = link.getValue();

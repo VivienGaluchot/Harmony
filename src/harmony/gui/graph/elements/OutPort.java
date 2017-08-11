@@ -34,7 +34,7 @@ public abstract class OutPort extends Port implements DataProcessor {
 	public abstract Set<DataProcessor> getDataProcessDependencies();
 
 	@Override
-	public abstract Object processData();
+	public abstract Object getData();
 
 	@Override
 	public void paint(Graphics g) {
