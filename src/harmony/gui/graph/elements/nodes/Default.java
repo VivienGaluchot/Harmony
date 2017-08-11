@@ -3,6 +3,7 @@ package harmony.gui.graph.elements.nodes;
 import java.util.HashSet;
 import java.util.Set;
 
+import harmony.data.DataProcessor;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.InPort;
 import harmony.gui.graph.elements.Node;
@@ -20,31 +21,32 @@ public class Default extends Node {
 
 		in1 = new InPort(this, Integer.class, "in1");
 		in2 = new InPort(this, Double.class, "in2");
+		
 		out1 = new OutPort(this, Integer.class, "out1 = in1") {
 			@Override
-			public Object getValue() {
-				return in1.getValue();
+			public Object processData() {
+				return in1.processData();
 			}
 
 			@Override
-			public Set<InPort> getDependencies() {
-				HashSet<InPort> set = new HashSet<>();
+			public Set<DataProcessor> getDataProcessDependencies() {
+				Set<DataProcessor> set = new HashSet<>();
 				set.add(in1);
 				return set;
 			}
 		};
 		out2 = new OutPort(this, Double.class, "out2 = 2*in2") {
 			@Override
-			public Object getValue() {
-				if (in2.getValue() != null)
-					return (Double) in2.getValue() * 2;
+			public Object processData() {
+				if (in2.processData() != null)
+					return (Double) in2.processData() * 2;
 				else
 					return new Double(1);
 			}
 
 			@Override
-			public Set<InPort> getDependencies() {
-				HashSet<InPort> set = new HashSet<>();
+			public Set<DataProcessor> getDataProcessDependencies() {
+				Set<DataProcessor> set = new HashSet<>();
 				set.add(in2);
 				return set;
 			}

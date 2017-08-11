@@ -15,16 +15,18 @@
 
 package harmony.gui.graph.elements;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
+import harmony.data.DataProcessor;
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.math.Vector2D;
 
-public abstract class Port extends GuiElement {
+public abstract class Port extends GuiElement implements DataProcessor {
 	public Node father;
 	public Class<?> type;
 	public String name;
@@ -39,16 +41,19 @@ public abstract class Port extends GuiElement {
 		radius = 0.1;
 	}
 
-	public abstract Object getValue();
-
 	public Vector2D getPos() {
 		return father.getPortPos(this);
 	}
 
 	@Override
+	public Class<?> getDataClass() {
+		return type;
+	}
+
+	@Override
 	public boolean contains(Vector2D p) {
 		Vector2D pos = getPos();
-		Double selectionRadius = 2 * radius;
+		Double selectionRadius = 1.5 * radius;
 		Ellipse2D el = new Ellipse2D.Double(pos.x - selectionRadius, pos.y - selectionRadius, 2 * selectionRadius,
 				2 * selectionRadius);
 		return el.contains(p.x, p.y);
@@ -61,7 +66,10 @@ public abstract class Port extends GuiElement {
 		Vector2D pos = getPos();
 		Shape sp = new Ellipse2D.Double(pos.x - radius, pos.y - radius, 2 * radius, 2 * radius);
 
-		g2d.setColor(getBackgroundColor());
+		if (!isHovered())
+			g2d.setColor(getBackgroundColor());
+		else
+			g2d.setColor(Color.white);
 		g2d.fill(sp);
 
 		g2d.setColor(getColor());

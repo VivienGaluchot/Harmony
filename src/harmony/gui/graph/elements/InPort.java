@@ -17,7 +17,10 @@ package harmony.gui.graph.elements;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.HashSet;
+import java.util.Set;
 
+import harmony.data.DataProcessor;
 import harmony.math.Vector2D;
 
 public class InPort extends Port {
@@ -28,21 +31,22 @@ public class InPort extends Port {
 		link = null;
 	}
 
-	public OutPort getDependencie() {
-		if (link == null)
-			return null;
-		else
-			return link.getStart();
-	}
-
 	@Override
-	public Object getValue() {
+	public Object processData() {
 		if (link == null)
 			return null;
 		Object v = link.getValue();
 		if (v != null && v.getClass() != type)
 			throw new IllegalArgumentException();
 		return v;
+	}
+
+	@Override
+	public Set<DataProcessor> getDataProcessDependencies() {
+		HashSet<DataProcessor> dep = new HashSet<>();
+		if (link != null)
+			dep.add(link.getStart());
+		return dep;
 	}
 
 	public void setLink(Link link) {

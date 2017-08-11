@@ -18,7 +18,7 @@ public class Display extends Node {
 		in1 = new InPort(this, Integer.class, "in1") {			
 			@Override
 			public void paint(Graphics g) {
-				Object v = this.getValue();
+				Object v = this.processData();
 				if(v != null)
 					this.name = v.toString();
 				else
@@ -29,7 +29,7 @@ public class Display extends Node {
 		in2 = new InPort(this, Float.class, "in2") {			
 			@Override
 			public void paint(Graphics g) {
-				Object v = this.getValue();
+				Object v = this.processData();
 				if(v != null)
 					this.name = v.toString();
 				else
@@ -40,7 +40,7 @@ public class Display extends Node {
 		in3 = new InPort(this, Double.class, "in3") {			
 			@Override
 			public void paint(Graphics g) {
-				Object v = this.getValue();
+				Object v = this.processData();
 				if(v != null)
 					this.name = v.toString();
 				else
@@ -52,9 +52,6 @@ public class Display extends Node {
 		addInPort(in1);
 		addInPort(in2);
 		addInPort(in3);
-
-		// TODO show values
-		// Terminal Node
 	}
 
 }

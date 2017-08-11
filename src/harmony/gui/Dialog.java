@@ -17,20 +17,20 @@ public class Dialog {
 		return res == JOptionPane.OK_OPTION;
 	}
 
-	public static Double DoubleDialog(Component frame, String msg, String defaultPort) {
+	public static Double DoubleDialog(Component frame, String msg, String defaultValue) {
 		try {
-			Double p = Double.parseDouble((String) JOptionPane.showInputDialog(frame, msg, "Port",
-					JOptionPane.PLAIN_MESSAGE, null, null, defaultPort));
+			Double p = Double.parseDouble((String) JOptionPane.showInputDialog(frame, msg, "Informations",
+					JOptionPane.PLAIN_MESSAGE, null, null, defaultValue));
 			return p;
 		} catch (NumberFormatException e) {
-			displayError(frame, "Input value should be a real number");
+			displayError(frame, "Input value must be a real number");
 			return null;
 		}
 	}
 	
-	public static String NameDialog(Component frame) {
-		return (String) JOptionPane.showInputDialog(frame, "Type your name :", "Name", JOptionPane.PLAIN_MESSAGE, null,
-				null, "patrick");
+	public static String StringDialog(Component frame, String msg, String defaultValue) {
+		return (String) JOptionPane.showInputDialog(frame, msg, "Informations", JOptionPane.PLAIN_MESSAGE, null,
+				null, defaultValue);
 	}
 
 	public static Object JListDialog(Component frame, String text, List<Object> objects) {

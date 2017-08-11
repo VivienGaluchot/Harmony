@@ -54,7 +54,7 @@ public class Link extends GuiElement {
 	}
 
 	public Object getValue() {
-		Object v = getStart().getValue();
+		Object v = getStart().processData();
 		if (v != null && v.getClass() != type)
 			throw new IllegalArgumentException();
 		return v;
