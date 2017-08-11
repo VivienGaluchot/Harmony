@@ -130,7 +130,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 		// Remove existing link with same end
 		if (initEndlink != null && initEndlink != l)
-			removeLink(initEndlink);
+			links.remove(initEndlink);
 
 		// Add link
 		links.add(l);

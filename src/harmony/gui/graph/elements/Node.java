@@ -70,6 +70,7 @@ public abstract class Node extends GuiElement implements Recordable {
 
 	protected void adjustSize() {
 		size.y = Math.max(1 + (inPorts.size() * 0.4), 1 + (outPorts.size() * 0.4));
+		size.y = Math.round(size.y * 2 + 0.5) / 2.0;
 	}
 
 	public void remove() {
@@ -164,23 +165,21 @@ public abstract class Node extends GuiElement implements Recordable {
 	}
 
 	public class NodeChangeRecord extends ChangeRecord {
-		private Vector2D startPos;
-		private Vector2D endPos;
+		private Vector2D diffPos;
 
 		public NodeChangeRecord(Node father, Vector2D startPos, Vector2D endPos) {
 			super(father);
-			this.startPos = startPos;
-			this.endPos = endPos;
+			this.diffPos = endPos.subtract(startPos);
 		}
 
 		@Override
 		public void undoChange() {
-			((Node) getFather()).pos = startPos.clone();
+			((Node) getFather()).pos = ((Node) getFather()).pos.subtract(diffPos);
 		}
 
 		@Override
 		public void redoChange() {
-			((Node) getFather()).pos = endPos.clone();
+			((Node) getFather()).pos = ((Node) getFather()).pos.add(diffPos);
 		}
 	}
 }
