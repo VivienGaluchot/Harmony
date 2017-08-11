@@ -1,9 +1,7 @@
 package harmony.data;
 
-public interface DataGenerator {
+public interface DataGenerator extends DataDescriptor {
 
 	public Object getData();
-
-	public Class<?> getDataClass();
 
 }

@@ -17,7 +17,6 @@ package harmony;
 
 import harmony.gui.DrawPanel;
 import harmony.gui.MainFrame;
-import harmony.sound.Concentrator;
 import harmony.sound.generation.mix.Adder;
 import harmony.sound.generation.mix.Delayer;
 import harmony.sound.generation.mix.DurationAdjuster;
@@ -44,7 +43,7 @@ public class MainTest {
 
 		mainPlayer.add(new Repeater(4, subAdder));
 
-		Concentrator c = new Concentrator(mainPlayer);
+		// Concentrator c = new Concentrator(mainPlayer);
 		// c.listen();
 	}
 }

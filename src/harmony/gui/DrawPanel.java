@@ -35,9 +35,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
+import harmony.data.DataDescriptor;
+import harmony.data.DataGenerator;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
@@ -66,7 +70,48 @@ public class DrawPanel extends JPanel
 	public DrawPanel() {
 		super();
 
-		space = new Space(this);
+		List<DataGenerator> inputs = new ArrayList<>();
+		inputs.add(new DataGenerator() {
+			@Override
+			public Class<?> getDataClass() {
+				return Double.class;
+			}
+
+			@Override
+			public String getDataName() {
+				return "Time (s)";
+			}
+
+			@Override
+			public Object getData() {
+				return 5.0;
+			}
+		});
+
+		List<DataDescriptor> outputs = new ArrayList<>();
+		outputs.add(new DataDescriptor() {
+			@Override
+			public Class<?> getDataClass() {
+				return Double.class;
+			}
+
+			@Override
+			public String getDataName() {
+				return "Right signal";
+			}
+		});
+		outputs.add(new DataDescriptor() {
+			@Override
+			public Class<?> getDataClass() {
+				return Double.class;
+			}
+
+			@Override
+			public String getDataName() {
+				return "Left signal";
+			}
+		});
+		space = new Space(this, inputs, outputs);
 
 		currentTransform = new AffineTransform();
 		afterTranslate = new Vector2D(0, 0);

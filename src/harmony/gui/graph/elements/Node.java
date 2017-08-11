@@ -35,7 +35,7 @@ import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 
-public abstract class Node extends GuiElement implements Recordable {
+public class Node extends GuiElement implements Recordable {
 
 	public Space space;
 

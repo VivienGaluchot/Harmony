@@ -51,6 +51,11 @@ public abstract class Port extends GuiElement implements DataProcessor {
 	}
 
 	@Override
+	public String getDataName() {
+		return name;
+	}
+
+	@Override
 	public boolean contains(Vector2D p) {
 		Vector2D pos = getPos();
 		Double selectionRadius = 1.5 * radius;

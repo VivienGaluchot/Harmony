@@ -31,6 +31,6 @@ public class Types {
 		else if (type == Double.class)
 			return Color.BLUE;
 		else
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException(type.getName());
 	}
 }

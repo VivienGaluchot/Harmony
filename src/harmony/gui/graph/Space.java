@@ -29,6 +29,8 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
+import harmony.data.DataDescriptor;
+import harmony.data.DataGenerator;
 import harmony.data.DataProcessor;
 import harmony.data.Util;
 import harmony.gui.Dialog;
@@ -43,6 +45,8 @@ import harmony.gui.graph.elements.Port;
 import harmony.gui.graph.elements.nodes.Constant;
 import harmony.gui.graph.elements.nodes.Default;
 import harmony.gui.graph.elements.nodes.Display;
+import harmony.gui.graph.elements.nodes.SpaceInputNode;
+import harmony.gui.graph.elements.nodes.SpaceOutputNode;
 import harmony.gui.record.ChangeRecord;
 import harmony.gui.record.RecordQueue;
 import harmony.gui.record.Recordable;
@@ -53,6 +57,8 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	private DrawPanel panel;
 
 	private ArrayList<Node> nodes;
+	private SpaceInputNode inputNode;
+	private SpaceOutputNode outputNode;
 	private ArrayList<Link> links;
 
 	private Link draggedLink = null;
@@ -69,10 +75,15 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	private RecordQueue recordQueue;
 
-	public Space(DrawPanel panel) {
+	public Space(DrawPanel panel, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
 		this.panel = panel;
 
 		nodes = new ArrayList<>();
+		inputNode = new SpaceInputNode(this, inputs);
+		inputNode.pos = inputNode.pos.add(new Vector2D(-6, 0));
+
+		outputNode = new SpaceOutputNode(this, outputs);
+		outputNode.pos = outputNode.pos.add(new Vector2D(6, 0));
 		links = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
@@ -93,6 +104,8 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		g4.pos = g4.pos.add(new Vector2D(0, -3));
 		addNode(g4);
 
+		recordQueue.addTrackedObject(inputNode);
+		recordQueue.addTrackedObject(outputNode);
 		recordQueue.addTrackedObject(this);
 	}
 
@@ -108,6 +121,10 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	}
 
 	public void removeNode(Node n) {
+		if (n == inputNode)
+			return;
+		if (n == outputNode)
+			return;
 		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
 			Link l = iter.next();
 			if (l.getStart().father == n || l.getEnd().father == n) {
@@ -149,8 +166,14 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	public List<GuiElement> getObjectList() {
 		List<GuiElement> list = new ArrayList<>();
+		list.add(inputNode);
+		list.add(outputNode);
 		for (Node n : nodes) {
 			list.add(n);
+			for (Port dp : inputNode.getOutPorts())
+				list.add(dp);
+			for (Port dp : outputNode.getInPorts())
+				list.add(dp);
 			for (Port dp : n.getInPorts())
 				list.add(dp);
 			for (Port dp : n.getOutPorts())
