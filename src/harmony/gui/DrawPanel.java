@@ -270,6 +270,19 @@ public class DrawPanel extends JPanel
 		space.paint(g2d);
 
 		g2d.dispose();
+
+		// draw overlay
+		g2d = (Graphics2D) g.create();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+		g2d.drawString("OverlayToolbar", 10, 20);
+
+		g2d.drawString("OverlayInfobar", 10, this.getHeight() - 10);
+
+		g2d.drawString("Harmony Dev-0", this.getWidth() - 100, 20);
+
+		g2d.dispose();
 	}
 
 	// MouseWheel Listener
