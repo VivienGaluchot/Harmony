@@ -23,14 +23,14 @@ import harmony.math.Vector2D;
 
 public abstract class GuiElement {
 
-	public Color backgroundColor;
-	public Color color;
+	private Color backgroundColor;
+	private Color color;
 
-	public Color hoveredBackgroundColor;
-	public Color hoveredColor;
+	private Color hoveredBackgroundColor;
+	private Color hoveredColor;
 
-	public Color clickedBackgroundColor;
-	public Color clickedColor;
+	private Color clickedBackgroundColor;
+	private Color clickedColor;
 
 	private boolean hovered;
 	private boolean clicked;
@@ -61,7 +61,7 @@ public abstract class GuiElement {
 
 	public abstract void handleCommand(Types.Command c);
 
-	public Color getColor() {
+	public Color getCurrentColor() {
 		if (isClicked())
 			return clickedColor;
 		else if (isHovered())
@@ -70,7 +70,7 @@ public abstract class GuiElement {
 			return color;
 	}
 
-	public Color getBackgroundColor() {
+	public Color getCurrentBackgroundColor() {
 		if (isClicked())
 			return clickedBackgroundColor;
 		else if (isHovered())
@@ -101,5 +101,53 @@ public abstract class GuiElement {
 
 	public boolean isSelected() {
 		return selected;
+	}
+
+	public Color getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public Color getHoveredBackgroundColor() {
+		return hoveredBackgroundColor;
+	}
+
+	public void setHoveredBackgroundColor(Color hoveredBackgroundColor) {
+		this.hoveredBackgroundColor = hoveredBackgroundColor;
+	}
+
+	public Color getHoveredColor() {
+		return hoveredColor;
+	}
+
+	public void setHoveredColor(Color hoveredColor) {
+		this.hoveredColor = hoveredColor;
+	}
+
+	public Color getClickedBackgroundColor() {
+		return clickedBackgroundColor;
+	}
+
+	public void setClickedBackgroundColor(Color clickedBackgroundColor) {
+		this.clickedBackgroundColor = clickedBackgroundColor;
+	}
+
+	public Color getClickedColor() {
+		return clickedColor;
+	}
+
+	public void setClickedColor(Color clickedColor) {
+		this.clickedColor = clickedColor;
 	}
 }

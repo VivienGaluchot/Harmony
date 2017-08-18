@@ -19,6 +19,8 @@ import java.awt.Color;
 
 public class Types {
 
+	private static final Color DoubleColor = new Color(90, 170, 255);
+
 	public static enum Command {
 		DELETE
 	}
@@ -29,7 +31,7 @@ public class Types {
 		else if (type == Float.class)
 			return Color.GREEN;
 		else if (type == Double.class)
-			return Color.BLUE;
+			return DoubleColor;
 		else
 			throw new IllegalArgumentException(type.getName());
 	}

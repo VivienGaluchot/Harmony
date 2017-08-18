@@ -43,7 +43,7 @@ public abstract class OutPort extends Port implements DataProcessor {
 		Graphics2D g2d = (Graphics2D) g.create();
 		Vector2D pos = getPos();
 
-		g2d.setColor(getColor());
+		g2d.setColor(getCurrentColor());
 		FontMetrics fm = g2d.getFontMetrics(g2d.getFont());
 		Rectangle2D nameRect = fm.getStringBounds(name, g2d);
 		g2d.drawString(name, (float) pos.x - 0.2f - (float) nameRect.getWidth(), (float) pos.y + 0.07f);

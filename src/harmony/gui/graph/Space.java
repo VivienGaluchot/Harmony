@@ -167,13 +167,13 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	public List<GuiElement> getObjectList() {
 		List<GuiElement> list = new ArrayList<>();
 		list.add(inputNode);
+		for (Port dp : inputNode.getOutPorts())
+			list.add(dp);
 		list.add(outputNode);
+		for (Port dp : outputNode.getInPorts())
+			list.add(dp);
 		for (Node n : nodes) {
 			list.add(n);
-			for (Port dp : inputNode.getOutPorts())
-				list.add(dp);
-			for (Port dp : outputNode.getInPorts())
-				list.add(dp);
 			for (Port dp : n.getInPorts())
 				list.add(dp);
 			for (Port dp : n.getOutPorts())
@@ -248,7 +248,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 				if (initObjPos == null)
 					initObjPos = go.pos.clone();
 				go.pos = initObjPos.add(vecMouse.subtract(initMousePos));
-				if (!alt_key_pressed) {
+				if (alt_key_pressed) {
 					go.pos.x = Math.round(4 * go.pos.x) / 4.;
 					go.pos.y = Math.round(4 * go.pos.y) / 4.;
 				}

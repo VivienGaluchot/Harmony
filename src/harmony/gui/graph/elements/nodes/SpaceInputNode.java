@@ -1,7 +1,11 @@
 package harmony.gui.graph.elements.nodes;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.List;
 import java.util.Set;
+
+import javax.swing.JOptionPane;
 
 import harmony.data.DataGenerator;
 import harmony.data.DataProcessor;
@@ -13,6 +17,8 @@ public class SpaceInputNode extends Node {
 
 	public SpaceInputNode(Space space, List<DataGenerator> inputs) {
 		super(space, "Input");
+
+		this.setBackgroundColor(new Color(240, 240, 240));
 
 		for (DataGenerator gen : inputs) {
 			OutPort out = new OutPort(this, gen.getDataClass(), gen.getDataName()) {
@@ -28,6 +34,11 @@ public class SpaceInputNode extends Node {
 			};
 			addOutPort(out);
 		}
+	}
+
+	@Override
+	public void showOpt(Component parent) {
+		JOptionPane.showMessageDialog(parent, "Data to process flows out of this InputNode");
 	}
 
 }

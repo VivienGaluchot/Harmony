@@ -118,10 +118,10 @@ public class Node extends GuiElement implements Recordable {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
 
-		g2d.setColor(getBackgroundColor());
+		g2d.setColor(getCurrentBackgroundColor());
 		g2d.fill(new Rectangle2D.Double(pos.x, pos.y, size.x, size.y));
 
-		g2d.setColor(getColor());
+		g2d.setColor(getCurrentColor());
 		g2d.draw(new Rectangle2D.Double(pos.x, pos.y, size.x, size.y));
 
 		Font currentFont = new Font("Arial", Font.PLAIN, 1);

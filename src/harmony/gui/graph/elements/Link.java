@@ -107,7 +107,7 @@ public class Link extends GuiElement {
 				endPos.y, endPos.x, endPos.y);
 
 		g2d.setStroke(new BasicStroke(0.04f));
-		g2d.setColor(getColor());
+		g2d.setColor(getCurrentColor());
 		g2d.draw(cubicCurve);
 		g2d.setStroke(new BasicStroke(0.1f));
 		shape = g2d.getStroke().createStrokedShape(cubicCurve);

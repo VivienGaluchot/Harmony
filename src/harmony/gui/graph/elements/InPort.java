@@ -67,7 +67,7 @@ public class InPort extends Port {
 		Graphics2D g2d = (Graphics2D) g.create();
 		Vector2D pos = getPos();
 
-		g2d.setColor(getColor());
+		g2d.setColor(getCurrentColor());
 		g2d.drawString(name, (float) pos.x + 0.2f, (float) pos.y + 0.07f);
 
 		g2d.dispose();
