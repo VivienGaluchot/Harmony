@@ -36,7 +36,7 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
 import harmony.gui.graph.elements.nodes.Default;
-import harmony.sound.Licence;
+import harmony.sound.License;
 
 public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -151,15 +151,15 @@ public class MainFrame extends JFrame {
 		JMenu help = new JMenu("Help");
 		help.setMnemonic('H');
 
-		JMenuItem licence = new JMenuItem("Licence");
-		licence.setToolTipText("Software licence");
-		licence.addActionListener(new ActionListener() {
+		JMenuItem license = new JMenuItem("License");
+		license.setToolTipText("Software license");
+		license.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				showLicence();
+				showLicense();
 			}
 		});
-		help.add(licence);
+		help.add(license);
 
 		menuBar.add(help);
 
@@ -197,27 +197,38 @@ public class MainFrame extends JFrame {
 		panel.repaint();
 	}
 
-	private void showLicence() {
+	private void showLicense() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				JFrame licenceFrame = new JFrame();
-				licenceFrame.setLayout(new GridBagLayout());
+				JFrame licenseFrame = new JFrame();
+				licenseFrame.setLayout(new GridBagLayout());
+				licenseFrame.setTitle("License");
 
-				licenceFrame.add(new JLabel("Harmony Software Copyright (C) 2017 Vivien Galuchot"),
-						new GridBagConstraints(0, 0, 1, 1, 0, 0, GridBagConstraints.CENTER, GridBagConstraints.NONE,
-								new Insets(10, 10, 10, 10), 0, 0));
-				JTextPane text = new JTextPane();
-				text.setEditable(false);
-				text.setText(Licence.licence);
-				text.setFont(new Font("Consolas", Font.PLAIN, 12));
-				JScrollPane scroll = new JScrollPane(text);
-				licenceFrame.add(scroll, new GridBagConstraints(0, 1, 1, 1, 1, 1, GridBagConstraints.CENTER,
-						GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				licenseFrame.add(new JLabel("Harmony, license informations"), new GridBagConstraints(0, 0, 1, 1, 0, 0,
+						GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(10, 10, 10, 10), 0, 0));
+				JTextPane pref = new JTextPane();
+				pref.setEditable(false);
+				pref.setText("Harmony : procedural sound waves generator\n" + "Copyright (C) 2017  Vivien Galuchot\n"
+						+ "\n"
+						+ "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 of the License.\n"
+						+ "\n"
+						+ "This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.");
+				pref.setOpaque(false);
+				licenseFrame.add(pref, new GridBagConstraints(0, 1, 1, 1, 1, 0, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
 
-				licenceFrame.setSize(new Dimension(550, 600));
-				licenceFrame.setVisible(true);
-				licenceFrame.setLocationRelativeTo(null);
+				JTextPane textLisence = new JTextPane();
+				textLisence.setEditable(false);
+				textLisence.setText(License.license);
+				textLisence.setFont(new Font("Consolas", Font.PLAIN, 12));
+				JScrollPane scroll = new JScrollPane(textLisence);
+				licenseFrame.add(scroll, new GridBagConstraints(0, 2, 1, 1, 1, 1, GridBagConstraints.CENTER,
+						GridBagConstraints.BOTH, new Insets(5, 5, 5, 5), 0, 0));
+
+				licenseFrame.setSize(new Dimension(600, 600));
+				licenseFrame.setVisible(true);
+				licenseFrame.setLocationRelativeTo(null);
 			}
 		});
 	}
