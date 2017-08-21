@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 import harmony.data.DataGenerator;
-import harmony.data.DataProcessor;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;
@@ -23,7 +22,7 @@ public class SpaceInputNode extends Node {
 		for (DataGenerator gen : inputs) {
 			OutPort out = new OutPort(this, gen.getDataClass(), gen.getDataName()) {
 				@Override
-				public Set<DataProcessor> getDataProcessDependencies() {
+				public Set<DataGenerator> getDataProcessDependencies() {
 					return null;
 				}
 

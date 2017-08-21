@@ -5,24 +5,35 @@ import java.util.Set;
 
 public class Util {
 
-	public static boolean containsComputingLoops(DataProcessor processor) {
-		Set<DataProcessor> set = new HashSet<>();
-		return containsComputingLoops(processor, set);
+	public static boolean containsComputingLoops(DataGenerator processor) {
+		Set<DataGenerator> set = new HashSet<>();
+		return containsComputingLoops(processor, processor, set);
 	}
 
-	public static boolean containsComputingLoops(DataProcessor processor, Set<DataProcessor> allDependencies) {
-		if (allDependencies.contains(processor))
+	public static boolean containsComputingLoops(DataGenerator current, DataGenerator origin,
+			Set<DataGenerator> allDependencies) {
+		if (current == null || origin == null || allDependencies == null)
+			throw new IllegalArgumentException();
+		
+		// TODO fix bug
+		
+		if (allDependencies.contains(origin))
 			return true;
+		
 		else {
-			Set<DataProcessor> localDep = processor.getDataProcessDependencies();
-			if (localDep != null) {
-				for (DataProcessor ip : localDep) {
-					if (containsComputingLoops(ip, allDependencies))
-						return true;
+			if (current instanceof DataProcessor) {
+				Set<DataGenerator> localDependencies = ((DataProcessor) current).getDataProcessDependencies();
+				if (localDependencies != null) {
+					for (DataGenerator dep : localDependencies) {
+						if (dep == current)
+							return true;
+						if (containsComputingLoops(dep, origin, allDependencies))
+							return true;
+					}
 				}
 			}
 		}
-		allDependencies.add(processor);
+		allDependencies.add(current);
 		return false;
 	}
 

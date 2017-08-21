@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
@@ -35,7 +33,7 @@ import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 
-public class Node extends GuiElement implements Recordable {
+public abstract class Node extends GuiElement implements Recordable {
 
 	public Space space;
 
@@ -89,9 +87,7 @@ public class Node extends GuiElement implements Recordable {
 		return pos.x <= p.x && pos.x + size.x >= p.x && pos.y <= p.y && pos.y + size.y >= p.y;
 	}
 
-	public void showOpt(Component parent) {
-		JOptionPane.showMessageDialog(parent, "Default object");
-	}
+	public abstract void showOpt(Component parent);
 
 	public List<InPort> getInPorts() {
 		return Collections.unmodifiableList(inPorts);

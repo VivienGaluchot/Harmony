@@ -35,7 +35,7 @@ import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
-import harmony.gui.graph.elements.nodes.Default;
+import harmony.gui.graph.elements.nodes.NodeFactory;
 import harmony.sound.License;
 
 public class MainFrame extends JFrame {
@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
 		setTitle("Harmony");
 		setLayout(new GridBagLayout());
 		getContentPane().setBackground(Color.white);
-		
+
 		add(panel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
 
@@ -182,7 +182,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addNode() {
-		panel.getSpace().addNode(new Default(panel.getSpace()));
+		panel.getSpace().addNode(NodeFactory.createTestNode(panel.getSpace()));
 	}
 
 	private void undo() {

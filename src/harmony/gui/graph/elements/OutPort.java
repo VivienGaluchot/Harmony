@@ -21,6 +21,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Set;
 
+import harmony.data.DataGenerator;
 import harmony.data.DataProcessor;
 import harmony.math.Vector2D;
 
@@ -31,7 +32,7 @@ public abstract class OutPort extends Port implements DataProcessor {
 	}
 
 	@Override
-	public abstract Set<DataProcessor> getDataProcessDependencies();
+	public abstract Set<DataGenerator> getDataProcessDependencies();
 
 	@Override
 	public abstract Object getData();

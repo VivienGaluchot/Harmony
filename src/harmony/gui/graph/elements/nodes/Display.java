@@ -1,6 +1,9 @@
 package harmony.gui.graph.elements.nodes;
 
+import java.awt.Component;
 import java.awt.Graphics;
+
+import javax.swing.JOptionPane;
 
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.InPort;
@@ -52,6 +55,11 @@ public class Display extends Node {
 		addInPort(in1);
 		addInPort(in2);
 		addInPort(in3);
+	}
+	
+	@Override
+	public void showOpt(Component parent) {
+		JOptionPane.showMessageDialog(parent, "Display Node");
 	}
 
 }

@@ -4,6 +4,6 @@ import java.util.Set;
 
 public interface DataProcessor extends DataGenerator {
 
-	public Set<DataProcessor> getDataProcessDependencies();
+	public Set<DataGenerator> getDataProcessDependencies();
 
 }

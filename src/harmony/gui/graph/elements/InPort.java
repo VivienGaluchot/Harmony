@@ -20,7 +20,7 @@ import java.awt.Graphics2D;
 import java.util.HashSet;
 import java.util.Set;
 
-import harmony.data.DataProcessor;
+import harmony.data.DataGenerator;
 import harmony.math.Vector2D;
 
 public class InPort extends Port {
@@ -42,8 +42,8 @@ public class InPort extends Port {
 	}
 
 	@Override
-	public Set<DataProcessor> getDataProcessDependencies() {
-		HashSet<DataProcessor> dep = new HashSet<>();
+	public Set<DataGenerator> getDataProcessDependencies() {
+		Set<DataGenerator> dep = new HashSet<>();
 		if (link != null)
 			dep.add(link.getStart());
 		return dep;

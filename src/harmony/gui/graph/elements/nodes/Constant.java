@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.awt.Graphics;
 import java.util.Set;
 
-import harmony.data.DataProcessor;
+import harmony.data.DataGenerator;
 import harmony.gui.Dialog;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.Node;
@@ -22,7 +22,7 @@ public class Constant extends Node {
 
 		OutPort out = new OutPort(this, Double.class, "value") {
 			@Override
-			public Set<DataProcessor> getDataProcessDependencies() {
+			public Set<DataGenerator> getDataProcessDependencies() {
 				return null;
 			}
 

@@ -31,7 +31,6 @@ import javax.swing.JOptionPane;
 
 import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
-import harmony.data.DataProcessor;
 import harmony.data.Util;
 import harmony.gui.Dialog;
 import harmony.gui.DrawPanel;
@@ -43,8 +42,8 @@ import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
 import harmony.gui.graph.elements.nodes.Constant;
-import harmony.gui.graph.elements.nodes.Default;
 import harmony.gui.graph.elements.nodes.Display;
+import harmony.gui.graph.elements.nodes.NodeFactory;
 import harmony.gui.graph.elements.nodes.SpaceInputNode;
 import harmony.gui.graph.elements.nodes.SpaceOutputNode;
 import harmony.gui.record.ChangeRecord;
@@ -88,11 +87,11 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 		recordQueue = new RecordQueue();
 
-		Node g1 = new Default(this);
+		Node g1 = NodeFactory.createTestNode(this);
 		g1.pos = g1.pos.add(new Vector2D(-2, 0));
 		addNode(g1);
 
-		Node g2 = new Default(this);
+		Node g2 = NodeFactory.createTestNode(this);
 		g2.pos = g2.pos.add(new Vector2D(2, 0));
 		addNode(g2);
 
@@ -137,9 +136,9 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	public void addLink(Link l) {
 		// Check if link is making loops
-		Set<DataProcessor> dependencies = new HashSet<>();
+		Set<DataGenerator> dependencies = new HashSet<>();
 		dependencies.add(l.getEnd());
-		if (Util.containsComputingLoops(l.getStart(), dependencies)) {
+		if (Util.containsComputingLoops(l.getStart(), l.getStart(), dependencies)) {
 			JOptionPane.showMessageDialog(panel, "Computing loop detected, new link can't be added.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			// Do nothing
