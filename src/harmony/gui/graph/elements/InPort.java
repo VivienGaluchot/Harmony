@@ -45,7 +45,7 @@ public class InPort extends Port {
 	public Set<DataGenerator> getDataProcessDependencies() {
 		Set<DataGenerator> dep = new HashSet<>();
 		if (link != null)
-			dep.add(link.getStart());
+			dep.add(link.getOutPort());
 		return dep;
 	}
 

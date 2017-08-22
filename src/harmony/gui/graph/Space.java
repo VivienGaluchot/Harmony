@@ -22,10 +22,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -126,7 +124,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 			return;
 		for (Iterator<Link> iter = links.listIterator(); iter.hasNext();) {
 			Link l = iter.next();
-			if (l.getStart().father == n || l.getEnd().father == n) {
+			if (l.getOutPort().father == n || l.getInPort().father == n) {
 				iter.remove();
 			}
 		}
@@ -136,9 +134,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	public void addLink(Link l) {
 		// Check if link is making loops
-		Set<DataGenerator> dependencies = new HashSet<>();
-		dependencies.add(l.getEnd());
-		if (Util.containsComputingLoops(l.getStart(), l.getStart(), dependencies)) {
+		if (Util.isInDependenciesTree(l.getOutPort(), l.getInPort())) {
 			JOptionPane.showMessageDialog(panel, "Computing loop detected, new link can't be added.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			// Do nothing
@@ -146,19 +142,19 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		}
 
 		// Remove existing link with same end
-		Link initEndlink = l.getEnd().getLink();
+		Link initEndlink = l.getInPort().getLink();
 		if (initEndlink != null)
 			removeLink(initEndlink);
 
 		// Connect
-		l.getEnd().setLink(l);
+		l.getInPort().setLink(l);
 		// Add link
 		links.add(l);
 	}
 
 	public void removeLink(Link l) {
 		// Disconnect
-		l.getEnd().setLink(null);
+		l.getInPort().setLink(null);
 		// Remove
 		links.remove(l);
 	}
@@ -319,18 +315,18 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		if (draggedLink != null) {
 			if (el != null && el instanceof InPort) {
 				InPort inPort = (InPort) el;
-				if (draggedLink.getEnd() == null && inPort.type == draggedLink.type)
-					draggedLink.setEnd(inPort);
+				if (draggedLink.getInPort() == null && inPort.type == draggedLink.type)
+					draggedLink.setInPort(inPort);
 				else
 					Dialog.displayError(null, "Incompatible port types. The new link can't be added.");
 			} else if (el != null && el instanceof OutPort) {
 				OutPort outPort = (OutPort) el;
-				if (draggedLink.getStart() == null && outPort.type == draggedLink.type)
-					draggedLink.setStart(outPort);
+				if (draggedLink.getOutPort() == null && outPort.type == draggedLink.type)
+					draggedLink.setOutPort(outPort);
 				else
 					Dialog.displayError(null, "Incompatible port types. The new link can't be added.");
 			}
-			if (draggedLink.getStart() != null && draggedLink.getEnd() != null) {
+			if (draggedLink.getOutPort() != null && draggedLink.getInPort() != null) {
 				draggedLink.setClicked(false);
 				addLink(draggedLink);
 				recordQueue.trackDiffs();

@@ -32,8 +32,8 @@ public class Link extends GuiElement {
 
 	private Vector2D loosePoint;
 
-	private OutPort start;
-	private InPort end;
+	private OutPort outPort;
+	private InPort inPort;
 
 	public Class<?> type;
 
@@ -47,33 +47,33 @@ public class Link extends GuiElement {
 		if (start == null && end == null)
 			throw new IllegalArgumentException();
 
-		setStart(start);
-		setEnd(end);
+		setOutPort(start);
+		setInPort(end);
 
 		shape = null;
 	}
 
 	public Object getValue() {
-		Object v = getStart().getData();
+		Object v = getOutPort().getData();
 		if (v != null && v.getClass() != type)
 			throw new IllegalArgumentException();
 		return v;
 	}
 
-	public OutPort getStart() {
-		return start;
+	public OutPort getOutPort() {
+		return outPort;
 	}
 
-	public void setStart(OutPort start) {
-		this.start = start;
+	public void setOutPort(OutPort start) {
+		this.outPort = start;
 	}
 
-	public InPort getEnd() {
-		return end;
+	public InPort getInPort() {
+		return inPort;
 	}
 
-	public void setEnd(InPort end) {
-		this.end = end;
+	public void setInPort(InPort end) {
+		this.inPort = end;
 	}
 
 	public void setLoosePoint(Vector2D p) {
@@ -90,14 +90,14 @@ public class Link extends GuiElement {
 		Graphics2D g2d = (Graphics2D) g.create();
 
 		Vector2D startPos;
-		if (start != null)
-			startPos = start.getPos().add(new Vector2D(start.radius, 0));
+		if (outPort != null)
+			startPos = outPort.getPos().add(new Vector2D(outPort.radius, 0));
 		else
 			startPos = loosePoint;
 
 		Vector2D endPos;
-		if (end != null)
-			endPos = end.getPos().add(new Vector2D(-end.radius, 0));
+		if (inPort != null)
+			endPos = inPort.getPos().add(new Vector2D(-inPort.radius, 0));
 		else
 			endPos = loosePoint;
 
@@ -132,7 +132,7 @@ public class Link extends GuiElement {
 	public boolean equals(Object o) {
 		if (o instanceof Link) {
 			Link dl = (Link) o;
-			if (dl.start == this.start && dl.end == this.end)
+			if (dl.outPort == this.outPort && dl.inPort == this.inPort)
 				return true;
 		}
 		return false;
@@ -140,7 +140,7 @@ public class Link extends GuiElement {
 
 	@Override
 	public int hashCode() {
-		return start.hashCode() ^ end.hashCode();
+		return outPort.hashCode() ^ inPort.hashCode();
 	}
 
 }

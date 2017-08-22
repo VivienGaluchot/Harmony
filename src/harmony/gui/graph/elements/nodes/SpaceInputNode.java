@@ -17,7 +17,7 @@ public class SpaceInputNode extends Node {
 	public SpaceInputNode(Space space, List<DataGenerator> inputs) {
 		super(space, "Input");
 
-		this.setBackgroundColor(new Color(240, 240, 240));
+		setBackgroundColor(new Color(240, 240, 240));
 
 		for (DataGenerator gen : inputs) {
 			OutPort out = new OutPort(this, gen.getDataClass(), gen.getDataName()) {
