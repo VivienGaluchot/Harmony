@@ -16,7 +16,7 @@
 package harmony.gui.record;
 
 public abstract class StateRecord {
-	
+
 	private Recordable father;
 
 	public StateRecord(Recordable father) {

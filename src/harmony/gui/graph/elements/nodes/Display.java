@@ -18,33 +18,33 @@ public class Display extends Node {
 	public Display(Space space) {
 		super(space, "Display");
 
-		in1 = new InPort(this, Integer.class, "in1") {			
+		in1 = new InPort(this, Integer.class, "in1") {
 			@Override
 			public void paint(Graphics g) {
 				Object v = this.getData();
-				if(v != null)
+				if (v != null)
 					this.name = v.toString();
 				else
 					this.name = "-";
 				super.paint(g);
 			}
 		};
-		in2 = new InPort(this, Float.class, "in2") {			
+		in2 = new InPort(this, Float.class, "in2") {
 			@Override
 			public void paint(Graphics g) {
 				Object v = this.getData();
-				if(v != null)
+				if (v != null)
 					this.name = v.toString();
 				else
 					this.name = "-";
 				super.paint(g);
 			}
 		};
-		in3 = new InPort(this, Double.class, "in3") {			
+		in3 = new InPort(this, Double.class, "in3") {
 			@Override
 			public void paint(Graphics g) {
 				Object v = this.getData();
-				if(v != null)
+				if (v != null)
 					this.name = v.toString();
 				else
 					this.name = "-";
@@ -56,7 +56,7 @@ public class Display extends Node {
 		addInPort(in2);
 		addInPort(in3);
 	}
-	
+
 	@Override
 	public void showOpt(Component parent) {
 		JOptionPane.showMessageDialog(parent, "Display Node");

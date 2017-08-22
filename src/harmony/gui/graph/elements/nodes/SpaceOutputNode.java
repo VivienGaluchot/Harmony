@@ -13,12 +13,12 @@ import harmony.gui.graph.elements.InPort;
 import harmony.gui.graph.elements.Node;
 
 public class SpaceOutputNode extends Node {
-	
+
 	private HashMap<DataDescriptor, InPort> portMap;
 
 	public SpaceOutputNode(Space space, List<DataDescriptor> outputs) {
 		super(space, "Output");
-		
+
 		portMap = new HashMap<>();
 
 		this.setBackgroundColor(new Color(240, 240, 240));
@@ -29,10 +29,10 @@ public class SpaceOutputNode extends Node {
 			addInPort(in);
 		}
 	}
-	
+
 	public Object getData(DataDescriptor descriptor) {
 		InPort port = portMap.get(descriptor);
-		if(port == null)
+		if (port == null)
 			throw new IllegalArgumentException();
 		return port.getData();
 	}

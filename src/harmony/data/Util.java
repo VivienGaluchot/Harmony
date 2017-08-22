@@ -5,7 +5,8 @@ import java.util.Set;
 public class Util {
 
 	/**
-	 *  Test if given generator depends on descriptor
+	 * Test if given generator depends on descriptor
+	 * 
 	 * @param generator
 	 * @param origin
 	 * @return

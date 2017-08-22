@@ -8,5 +8,5 @@ public interface ProcessScheme extends DataDescriptor {
 	public Set<DataDescriptor> getDependencies();
 
 	public Object process(Map<DataDescriptor, DataGenerator> generatorMap);
-	
+
 }

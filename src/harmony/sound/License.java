@@ -27,10 +27,10 @@ public class License {
 			FileReader fr = new FileReader("LICENSE");
 			BufferedReader br = new BufferedReader(fr);
 			String currentLine = null;
-			if((currentLine = br.readLine()) != null) {
-				buff.append(currentLine);				
+			if ((currentLine = br.readLine()) != null) {
+				buff.append(currentLine);
 			}
-			while((currentLine = br.readLine()) != null) {
+			while ((currentLine = br.readLine()) != null) {
 				buff.append('\n');
 				buff.append(currentLine);
 			}
@@ -40,10 +40,10 @@ public class License {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}
 		return buff.toString();
 	}
-	
+
 	public static String license = readLicenceFile();
-	
+
 }

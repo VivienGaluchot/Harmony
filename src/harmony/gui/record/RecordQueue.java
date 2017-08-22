@@ -85,7 +85,7 @@ public class RecordQueue {
 	private void addRecords(Set<ChangeRecord> changes) {
 		if (changes.size() == 0)
 			return;
-		
+
 		changesArray.add(nStep, changes);
 		nStep++;
 

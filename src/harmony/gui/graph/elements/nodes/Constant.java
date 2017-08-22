@@ -17,7 +17,7 @@ public class Constant extends Node {
 
 	public Constant(Space space) {
 		super(space, "Constant");
-		
+
 		this.constantName = getName();
 
 		OutPort out = new OutPort(this, Double.class, "value") {

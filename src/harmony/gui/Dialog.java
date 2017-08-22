@@ -11,8 +11,8 @@ public class Dialog {
 	public static void displayError(Component frame, String message) {
 		JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
-	
-	public static boolean YesNoDialog(Component frame, String question){
+
+	public static boolean YesNoDialog(Component frame, String question) {
 		int res = JOptionPane.showConfirmDialog(frame, question);
 		return res == JOptionPane.OK_OPTION;
 	}
@@ -27,10 +27,10 @@ public class Dialog {
 			return null;
 		}
 	}
-	
+
 	public static String StringDialog(Component frame, String msg, String defaultValue) {
-		return (String) JOptionPane.showInputDialog(frame, msg, "Informations", JOptionPane.PLAIN_MESSAGE, null,
-				null, defaultValue);
+		return (String) JOptionPane.showInputDialog(frame, msg, "Informations", JOptionPane.PLAIN_MESSAGE, null, null,
+				defaultValue);
 	}
 
 	public static Object JListDialog(Component frame, String text, List<Object> objects) {
