@@ -14,7 +14,6 @@ public class MultiplyScheme extends ABScheme {
 
 	@Override
 	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-		System.out.println(findValue(a, generatorMap));
 		return findValue(a, generatorMap) * findValue(b, generatorMap);
 	}
 
