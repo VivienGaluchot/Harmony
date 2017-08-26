@@ -27,6 +27,7 @@ import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.Node;
 
 public class NodeFactory {
+	
 	public static Node createTestNode(Space space) {
 		ArrayList<ProcessScheme> schemes = new ArrayList<>();
 

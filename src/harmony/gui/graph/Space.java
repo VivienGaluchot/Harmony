@@ -30,6 +30,9 @@ import javax.swing.JOptionPane;
 import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
 import harmony.data.Util;
+import harmony.data.basicSchemes.AddScheme;
+import harmony.data.basicSchemes.MultiplyScheme;
+import harmony.data.basicSchemes.SubstractScheme;
 import harmony.gui.Dialog;
 import harmony.gui.DrawPanel;
 import harmony.gui.Types;
@@ -42,6 +45,7 @@ import harmony.gui.graph.elements.Port;
 import harmony.gui.graph.elements.nodes.Constant;
 import harmony.gui.graph.elements.nodes.Display;
 import harmony.gui.graph.elements.nodes.NodeFactory;
+import harmony.gui.graph.elements.nodes.ProcessNode;
 import harmony.gui.graph.elements.nodes.SpaceInputNode;
 import harmony.gui.graph.elements.nodes.SpaceOutputNode;
 import harmony.gui.record.ChangeRecord;
@@ -77,29 +81,37 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 		nodes = new ArrayList<>();
 		inputNode = new SpaceInputNode(this, inputs);
-		inputNode.pos = inputNode.pos.add(new Vector2D(-6, 0));
+		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
 
 		outputNode = new SpaceOutputNode(this, outputs);
-		outputNode.pos = outputNode.pos.add(new Vector2D(6, 0));
+		outputNode.pos = outputNode.pos.add(new Vector2D(5, 0));
 		links = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
 
-		Node g1 = NodeFactory.createTestNode(this);
-		g1.pos = g1.pos.add(new Vector2D(-2, 0));
-		addNode(g1);
+		Node node = NodeFactory.createTestNode(this);
+		node.pos = node.pos.add(new Vector2D(0,-3));
+		addNode(node);
 
-		Node g2 = NodeFactory.createTestNode(this);
-		g2.pos = g2.pos.add(new Vector2D(2, 0));
-		addNode(g2);
+		node = new ProcessNode(this, "Add", new AddScheme());
+		node.pos = node.pos.add(new Vector2D(0, -1));
+		addNode(node);
 
-		Node g3 = new Display(this);
-		g3.pos = g3.pos.add(new Vector2D(0, 3));
-		addNode(g3);
+		node = new ProcessNode(this, "Substract", new SubstractScheme());
+		node.pos = node.pos.add(new Vector2D(0, 1));
+		addNode(node);
 
-		Node g4 = new Constant(this);
-		g4.pos = g4.pos.add(new Vector2D(0, -3));
-		addNode(g4);
+		node = new ProcessNode(this, "Multiply", new MultiplyScheme());
+		node.pos = node.pos.add(new Vector2D(0, 3));
+		addNode(node);
+
+		node = new Display(this);
+		node.pos = node.pos.add(new Vector2D(5, -2));
+		addNode(node);
+
+		node = new Constant(this);
+		node.pos = node.pos.add(new Vector2D(-5, -2));
+		addNode(node);
 
 		recordQueue.addTrackedObject(inputNode);
 		recordQueue.addTrackedObject(outputNode);

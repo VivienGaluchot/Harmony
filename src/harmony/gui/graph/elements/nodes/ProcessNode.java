@@ -16,6 +16,7 @@
 package harmony.gui.graph.elements.nodes;
 
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -36,9 +37,23 @@ public class ProcessNode extends Node {
 
 	private Map<DataDescriptor, DataGenerator> inPortsMap;
 
-	public ProcessNode(Space space, String name, List<ProcessScheme> schemes) {
-		super(space, name);
+	public ProcessNode(Space space, String name, ProcessScheme scheme) {
+		this(space, name);
+		ArrayList<ProcessScheme> schemes = new ArrayList<>();
+		schemes.add(scheme);
+		initPorts(schemes);
+	}
 
+	public ProcessNode(Space space, String name, List<ProcessScheme> schemes) {
+		this(space, name);
+		initPorts(schemes);
+	}
+
+	public ProcessNode(Space space, String name) {
+		super(space, name);
+	}
+
+	protected void initPorts(List<ProcessScheme> schemes) {
 		inPortsMap = new HashMap<>();
 
 		// Compute all dependencies
