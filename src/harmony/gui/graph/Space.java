@@ -90,7 +90,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		recordQueue = new RecordQueue();
 
 		Node node = NodeFactory.createTestNode(this);
-		node.pos = node.pos.add(new Vector2D(0,-3));
+		node.pos = node.pos.add(new Vector2D(0, -3));
 		addNode(node);
 
 		node = new ProcessNode(this, "Add", new AddScheme());
@@ -171,24 +171,23 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		links.remove(l);
 	}
 
+	private void sequenceNode(Node n, List<GuiElement> list) {
+		list.add(n);
+		for (InPort dp : n.getInPorts()) {
+			list.add(dp);
+			if (dp.getLink() != null)
+				list.add(dp.getLink());
+		}
+		for (Port dp : n.getOutPorts())
+			list.add(dp);
+	}
+
 	public List<GuiElement> getObjectList() {
 		List<GuiElement> list = new ArrayList<>();
-		list.add(inputNode);
-		for (Port dp : inputNode.getOutPorts())
-			list.add(dp);
-		list.add(outputNode);
-		for (Port dp : outputNode.getInPorts())
-			list.add(dp);
-		for (Node n : nodes) {
-			list.add(n);
-			for (Port dp : n.getInPorts())
-				list.add(dp);
-			for (Port dp : n.getOutPorts())
-				list.add(dp);
-		}
-		for (Link l : links) {
-			list.add(l);
-		}
+		sequenceNode(inputNode, list);
+		sequenceNode(outputNode, list);
+		for (Node n : nodes)
+			sequenceNode(n, list);
 		return list;
 	}
 

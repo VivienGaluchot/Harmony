@@ -71,14 +71,13 @@ public abstract class Port extends GuiElement implements DataProcessor {
 		Vector2D pos = getPos();
 		Shape sp = new Ellipse2D.Double(pos.x - radius, pos.y - radius, 2 * radius, 2 * radius);
 
-		if (!isHovered())
-			g2d.setColor(getCurrentBackgroundColor());
-		else
-			g2d.setColor(Color.white);
+		g2d.setColor(getCurrentBackgroundColor());
 		g2d.fill(sp);
 
-		g2d.setColor(getCurrentColor());
-		g2d.draw(sp);
+		if (isHovered()) {
+			g2d.setColor(getCurrentColor());
+			g2d.draw(sp);
+		}
 
 		g2d.dispose();
 	}
