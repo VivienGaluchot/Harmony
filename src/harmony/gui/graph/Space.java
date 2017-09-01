@@ -31,6 +31,7 @@ import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
 import harmony.data.Util;
 import harmony.data.basicSchemes.AddScheme;
+import harmony.data.basicSchemes.DivideScheme;
 import harmony.data.basicSchemes.MultiplyScheme;
 import harmony.data.basicSchemes.SubstractScheme;
 import harmony.gui.Dialog;
@@ -90,19 +91,23 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		recordQueue = new RecordQueue();
 
 		Node node = NodeFactory.createTestNode(this);
-		node.pos = node.pos.add(new Vector2D(0, -3));
+		node.pos = node.pos.add(new Vector2D(0, -4));
 		addNode(node);
 
 		node = new ProcessNode(this, "Add", new AddScheme());
-		node.pos = node.pos.add(new Vector2D(0, -1));
+		node.pos = node.pos.add(new Vector2D(0, -2));
 		addNode(node);
 
 		node = new ProcessNode(this, "Substract", new SubstractScheme());
-		node.pos = node.pos.add(new Vector2D(0, 1));
+		node.pos = node.pos.add(new Vector2D(0, 0));
 		addNode(node);
 
 		node = new ProcessNode(this, "Multiply", new MultiplyScheme());
-		node.pos = node.pos.add(new Vector2D(0, 3));
+		node.pos = node.pos.add(new Vector2D(0, 2));
+		addNode(node);
+		
+		node = new ProcessNode(this, "Divide", new DivideScheme());
+		node.pos = node.pos.add(new Vector2D(0, 4));
 		addNode(node);
 
 		node = new Display(this);

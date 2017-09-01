@@ -20,16 +20,20 @@ import java.util.Map;
 import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
 
-public class MultiplyScheme extends ABScheme {
+public class DivideScheme extends ABScheme {
 
 	@Override
 	public String getDataName() {
-		return a.getDataName() + "*" + b.getDataName();
+		return a.getDataName() + "/" + b.getDataName();
 	}
 
 	@Override
 	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-		return findValue(a, generatorMap) * findValue(b, generatorMap);
+		Double bValue =  findValue(b, generatorMap);
+		if(bValue != 0)
+			return findValue(a, generatorMap) / bValue;
+		else
+			return null;
 	}
 
 }
