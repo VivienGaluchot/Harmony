@@ -23,6 +23,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,7 +37,15 @@ import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
+import harmony.data.basicSchemes.AddScheme;
+import harmony.data.basicSchemes.DivideScheme;
+import harmony.data.basicSchemes.MultiplyScheme;
+import harmony.data.basicSchemes.SubstractScheme;
+import harmony.gui.graph.elements.Node;
+import harmony.gui.graph.elements.nodes.Constant;
+import harmony.gui.graph.elements.nodes.Display;
 import harmony.gui.graph.elements.nodes.NodeFactory;
+import harmony.gui.graph.elements.nodes.ProcessNode;
 import harmony.sound.License;
 
 public class MainFrame extends JFrame {
@@ -181,8 +191,32 @@ public class MainFrame extends JFrame {
 		JOptionPane.showMessageDialog(this, "Save-as command not already avialable...");
 	}
 
+	private class NodeWrapper {
+		public Node n;
+
+		public NodeWrapper(Node n) {
+			this.n = n;
+		}
+
+		public String toString() {
+			return n.getName();
+		}
+	}
+
 	private void addNode() {
-		panel.getSpace().addNode(NodeFactory.createTestNode(panel.getSpace()));
+		List<Object> choices = new ArrayList<>();
+		choices.add(new NodeWrapper(NodeFactory.createTestNode(panel.getSpace())));
+		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Add", new AddScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Substract", new SubstractScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Divide", new DivideScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Multiply", new MultiplyScheme())));
+		choices.add(new NodeWrapper(new Display(panel.getSpace())));
+		choices.add(new NodeWrapper(new Constant(panel.getSpace())));
+		NodeWrapper nw = (NodeWrapper) Dialog.JListDialog(this, "Node to add : ", choices);
+		if (nw != null) {
+			panel.getSpace().addNode(nw.n);
+			panel.getSpace().getRecordQueue().trackDiffs();
+		}
 	}
 
 	private void undo() {

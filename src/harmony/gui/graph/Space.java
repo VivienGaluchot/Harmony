@@ -30,10 +30,6 @@ import javax.swing.JOptionPane;
 import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
 import harmony.data.Util;
-import harmony.data.basicSchemes.AddScheme;
-import harmony.data.basicSchemes.DivideScheme;
-import harmony.data.basicSchemes.MultiplyScheme;
-import harmony.data.basicSchemes.SubstractScheme;
 import harmony.gui.Dialog;
 import harmony.gui.DrawPanel;
 import harmony.gui.Types;
@@ -43,10 +39,6 @@ import harmony.gui.graph.elements.Link;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
-import harmony.gui.graph.elements.nodes.Constant;
-import harmony.gui.graph.elements.nodes.Display;
-import harmony.gui.graph.elements.nodes.NodeFactory;
-import harmony.gui.graph.elements.nodes.ProcessNode;
 import harmony.gui.graph.elements.nodes.SpaceInputNode;
 import harmony.gui.graph.elements.nodes.SpaceOutputNode;
 import harmony.gui.record.ChangeRecord;
@@ -89,38 +81,9 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		links = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
-
-		Node node = NodeFactory.createTestNode(this);
-		node.pos = node.pos.add(new Vector2D(0, -4));
-		addNode(node);
-
-		node = new ProcessNode(this, "Add", new AddScheme());
-		node.pos = node.pos.add(new Vector2D(0, -2));
-		addNode(node);
-
-		node = new ProcessNode(this, "Substract", new SubstractScheme());
-		node.pos = node.pos.add(new Vector2D(0, 0));
-		addNode(node);
-
-		node = new ProcessNode(this, "Multiply", new MultiplyScheme());
-		node.pos = node.pos.add(new Vector2D(0, 2));
-		addNode(node);
-		
-		node = new ProcessNode(this, "Divide", new DivideScheme());
-		node.pos = node.pos.add(new Vector2D(0, 4));
-		addNode(node);
-
-		node = new Display(this);
-		node.pos = node.pos.add(new Vector2D(5, -2));
-		addNode(node);
-
-		node = new Constant(this);
-		node.pos = node.pos.add(new Vector2D(-5, -2));
-		addNode(node);
-
+		recordQueue.addTrackedObject(this);
 		recordQueue.addTrackedObject(inputNode);
 		recordQueue.addTrackedObject(outputNode);
-		recordQueue.addTrackedObject(this);
 	}
 
 	// Objects

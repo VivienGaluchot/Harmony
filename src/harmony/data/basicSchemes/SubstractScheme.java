@@ -24,7 +24,7 @@ public class SubstractScheme extends ABScheme {
 
 	@Override
 	public String getDataName() {
-		return a.getDataName() + "-" + b.getDataName();
+		return a.getDataName() + " - " + b.getDataName();
 	}
 
 	@Override

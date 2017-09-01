@@ -38,6 +38,7 @@ public abstract class ABScheme implements ProcessScheme {
 	public Class<?> getDataClass() {
 		return Double.class;
 	}
+
 	@Override
 	public Set<DataDescriptor> getDependencies() {
 		Set<DataDescriptor> dep = new HashSet<>();

@@ -24,13 +24,13 @@ public class DivideScheme extends ABScheme {
 
 	@Override
 	public String getDataName() {
-		return a.getDataName() + "/" + b.getDataName();
+		return a.getDataName() + " / " + b.getDataName();
 	}
 
 	@Override
 	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-		Double bValue =  findValue(b, generatorMap);
-		if(bValue != 0)
+		Double bValue = findValue(b, generatorMap);
+		if (bValue != 0)
 			return findValue(a, generatorMap) / bValue;
 		else
 			return null;

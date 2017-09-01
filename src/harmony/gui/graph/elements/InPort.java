@@ -70,13 +70,14 @@ public class InPort extends Port {
 
 		g2d.setColor(getCurrentColor());
 		g2d.drawString(name, (float) pos.x + 0.2f, (float) pos.y + 0.07f);
-		
+
 		if (isHovered()) {
 			if (this.getData() != null) {
 				String dispMsg = this.getData().toString();
 				Rectangle2D bound = g2d.getFontMetrics().getStringBounds(dispMsg, g2d);
 				Vector2D mspPos = pos.clone();
-				g2d.drawString(dispMsg, (float) (mspPos.x - bound.getWidth()) - 0.05f, (float) (mspPos.y - radius) - 0.05f);
+				g2d.drawString(dispMsg, (float) (mspPos.x - bound.getWidth()) - 0.05f,
+						(float) (mspPos.y - radius) - 0.05f);
 			}
 		}
 

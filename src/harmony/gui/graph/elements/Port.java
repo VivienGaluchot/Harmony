@@ -19,7 +19,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 
 import harmony.data.DataProcessor;
 import harmony.gui.Types;
