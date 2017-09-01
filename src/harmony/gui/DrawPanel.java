@@ -35,13 +35,9 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.JPanel;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataGenerator;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
@@ -67,51 +63,11 @@ public class DrawPanel extends JPanel
 	private Color subGridColor = new Color(240, 240, 240);
 	private Color backgroundColor = new Color(250, 250, 250);
 
-	public DrawPanel() {
+	public DrawPanel(Space space) {
 		super();
 
-		List<DataGenerator> inputs = new ArrayList<>();
-		inputs.add(new DataGenerator() {
-			@Override
-			public Class<?> getDataClass() {
-				return Double.class;
-			}
-
-			@Override
-			public String getDataName() {
-				return "Time (s)";
-			}
-
-			@Override
-			public Object getData() {
-				return 5.0;
-			}
-		});
-
-		List<DataDescriptor> outputs = new ArrayList<>();
-		outputs.add(new DataDescriptor() {
-			@Override
-			public Class<?> getDataClass() {
-				return Double.class;
-			}
-
-			@Override
-			public String getDataName() {
-				return "Right signal";
-			}
-		});
-		outputs.add(new DataDescriptor() {
-			@Override
-			public Class<?> getDataClass() {
-				return Double.class;
-			}
-
-			@Override
-			public String getDataName() {
-				return "Left signal";
-			}
-		});
-		space = new Space(this, inputs, outputs);
+		this.space = space;
+		space.setDrawPanel(this);
 
 		currentTransform = new AffineTransform();
 		afterTranslate = new Vector2D(0, 0);

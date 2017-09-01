@@ -69,21 +69,46 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	private RecordQueue recordQueue;
 
-	public Space(DrawPanel panel, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
-		this.panel = panel;
+	public Space() {
+		// Empty constructor
+	}
 
+	public void init(List<DataGenerator> inputs, SpaceOutputNode outputNode) {
 		nodes = new ArrayList<>();
-		inputNode = new SpaceInputNode(this, inputs);
-		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
-
-		outputNode = new SpaceOutputNode(this, outputs);
-		outputNode.pos = outputNode.pos.add(new Vector2D(5, 0));
 		links = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
-		recordQueue.addTrackedObject(this);
+
+		inputNode = new SpaceInputNode(this, inputs);
+		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
 		recordQueue.addTrackedObject(inputNode);
+
+		this.outputNode = outputNode;
+		outputNode.pos = outputNode.pos.add(new Vector2D(5, 0));
 		recordQueue.addTrackedObject(outputNode);
+
+		recordQueue.addTrackedObject(this);
+	}
+
+	public Space(List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+		nodes = new ArrayList<>();
+		links = new ArrayList<>();
+
+		recordQueue = new RecordQueue();
+
+		inputNode = new SpaceInputNode(this, inputs);
+		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
+		recordQueue.addTrackedObject(inputNode);
+
+		outputNode = new SpaceOutputNode(this, outputs);
+		outputNode.pos = outputNode.pos.add(new Vector2D(5, 0));
+		recordQueue.addTrackedObject(outputNode);
+
+		recordQueue.addTrackedObject(this);
+	}
+
+	public void setDrawPanel(DrawPanel panel) {
+		this.panel = panel;
 	}
 
 	// Objects
@@ -152,8 +177,10 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	public List<GuiElement> getObjectList() {
 		List<GuiElement> list = new ArrayList<>();
-		sequenceNode(inputNode, list);
-		sequenceNode(outputNode, list);
+		if (inputNode != null)
+			sequenceNode(inputNode, list);
+		if (outputNode != null)
+			sequenceNode(outputNode, list);
 		for (Node n : nodes)
 			sequenceNode(n, list);
 		return list;

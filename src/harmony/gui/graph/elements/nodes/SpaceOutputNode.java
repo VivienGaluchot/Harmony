@@ -17,15 +17,19 @@ package harmony.gui.graph.elements.nodes;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
 import harmony.data.DataDescriptor;
+import harmony.data.DataGenerator;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.InPort;
 import harmony.gui.graph.elements.Node;
+import harmony.gui.graph.elements.OutPort;
 
 public class SpaceOutputNode extends Node {
 
@@ -43,6 +47,26 @@ public class SpaceOutputNode extends Node {
 			portMap.put(des, in);
 			addInPort(in);
 		}
+	}
+
+	public List<OutPort> createOutPortList(Node father) {
+		List<OutPort> outPorts = new ArrayList<>();
+		for (DataDescriptor des : portMap.keySet()) {
+			InPort inPort = portMap.get(des);
+			OutPort outPort = new OutPort(father, des.getDataClass(), des.getDataName()) {
+				@Override
+				public Set<DataGenerator> getDataProcessDependencies() {
+					return inPort.getDataProcessDependencies();
+				}
+
+				@Override
+				public Object getData() {
+					return inPort.getData();
+				}
+			};
+			outPorts.add(outPort);
+		}
+		return outPorts;
 	}
 
 	public Object getData(DataDescriptor descriptor) {

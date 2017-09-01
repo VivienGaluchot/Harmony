@@ -15,8 +15,14 @@
 
 package harmony;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import harmony.data.DataDescriptor;
+import harmony.data.DataGenerator;
 import harmony.gui.DrawPanel;
 import harmony.gui.MainFrame;
+import harmony.gui.graph.Space;
 import harmony.sound.generation.mix.Adder;
 import harmony.sound.generation.mix.Delayer;
 import harmony.sound.generation.mix.DurationAdjuster;
@@ -28,7 +34,50 @@ import harmony.sound.generation.wave.Square;
 
 public class MainTest {
 	public static void main(String[] args) throws Exception {
-		DrawPanel panel = new DrawPanel();
+
+		List<DataGenerator> inputs = new ArrayList<>();
+		inputs.add(new DataGenerator() {
+			@Override
+			public Class<?> getDataClass() {
+				return Double.class;
+			}
+
+			@Override
+			public String getDataName() {
+				return "Time (s)";
+			}
+
+			@Override
+			public Object getData() {
+				return 5.0;
+			}
+		});
+
+		List<DataDescriptor> outputs = new ArrayList<>();
+		outputs.add(new DataDescriptor() {
+			@Override
+			public Class<?> getDataClass() {
+				return Double.class;
+			}
+
+			@Override
+			public String getDataName() {
+				return "Right signal";
+			}
+		});
+		outputs.add(new DataDescriptor() {
+			@Override
+			public Class<?> getDataClass() {
+				return Double.class;
+			}
+
+			@Override
+			public String getDataName() {
+				return "Left signal";
+			}
+		});
+		Space space = new Space(inputs, outputs);
+		DrawPanel panel = new DrawPanel(space);
 		new MainFrame(panel);
 
 		Adder mainPlayer = new Adder();
