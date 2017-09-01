@@ -191,6 +191,9 @@ public class MainFrame extends JFrame {
 		JOptionPane.showMessageDialog(this, "Save-as command not already avialable...");
 	}
 
+	/**
+	 * Allow to display node's name in list
+	 */
 	private class NodeWrapper {
 		public Node n;
 
@@ -198,6 +201,7 @@ public class MainFrame extends JFrame {
 			this.n = n;
 		}
 
+		@Override
 		public String toString() {
 			return n.getName();
 		}
