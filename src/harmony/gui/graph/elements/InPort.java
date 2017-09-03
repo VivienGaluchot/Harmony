@@ -73,7 +73,7 @@ public class InPort extends Port {
 
 		if (isHovered()) {
 			if (this.getData() != null) {
-				String dispMsg = this.getData().toString();
+				String dispMsg = getData().toString();
 				Rectangle2D bound = g2d.getFontMetrics().getStringBounds(dispMsg, g2d);
 				Vector2D mspPos = pos.clone();
 				g2d.drawString(dispMsg, (float) (mspPos.x - bound.getWidth() - this.radius - 0.05f),

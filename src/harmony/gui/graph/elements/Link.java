@@ -101,7 +101,7 @@ public class Link extends GuiElement {
 		else
 			endPos = loosePoint;
 
-		CubicCurve2D.Double cubicCurve; // Cubic curve
+		CubicCurve2D.Double cubicCurve;
 		Double xDist = Math.max(0.3, Math.abs(endPos.subtract(startPos).x / 2));
 		cubicCurve = new CubicCurve2D.Double(startPos.x, startPos.y, startPos.x + xDist, startPos.y, endPos.x - xDist,
 				endPos.y, endPos.x, endPos.y);
@@ -132,8 +132,7 @@ public class Link extends GuiElement {
 	public boolean equals(Object o) {
 		if (o instanceof Link) {
 			Link dl = (Link) o;
-			if (dl.outPort == this.outPort && dl.inPort == this.inPort)
-				return true;
+			return dl.outPort == this.outPort && dl.inPort == this.inPort;
 		}
 		return false;
 	}
