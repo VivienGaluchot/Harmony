@@ -27,8 +27,8 @@ import harmony.math.Vector2D;
 
 public abstract class OutPort extends Port implements DataProcessor {
 
-	public OutPort(Node father, Class<?> dataType, String name) {
-		super(father, dataType, name);
+	public OutPort(Node node, Class<?> dataType, String name) {
+		super(node, dataType, name);
 	}
 
 	@Override

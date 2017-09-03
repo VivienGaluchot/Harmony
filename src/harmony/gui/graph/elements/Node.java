@@ -49,7 +49,7 @@ public abstract class Node extends GuiElement implements Recordable {
 	private Shape currentShape;
 
 	public Node(Space space, String name) {
-		super();
+		super(space);
 		this.space = space;
 		this.name = name;
 		pos = new Vector2D(0, 0);

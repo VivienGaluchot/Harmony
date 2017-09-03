@@ -16,12 +16,16 @@
 package harmony.gui.graph.elements;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 
 import harmony.gui.Types;
+import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
 public abstract class GuiElement {
+
+	private Component father;
 
 	private Color backgroundColor;
 	private Color color;
@@ -36,11 +40,21 @@ public abstract class GuiElement {
 	private boolean clicked;
 	private boolean selected;
 
-	public GuiElement() {
-		this(Color.white, Color.black);
+	public GuiElement(Space space) {
+		this(space.getDrawPanel());
 	}
 
-	public GuiElement(Color backgroundColor, Color color2) {
+	public GuiElement(Space space, Color backgroundColor, Color color2) {
+		this(space.getDrawPanel(), backgroundColor, color2);
+	}
+
+	public GuiElement(Component father) {
+		this(father, Color.white, Color.black);
+	}
+
+	public GuiElement(Component father, Color backgroundColor, Color color2) {
+		this.father = father;
+
 		this.backgroundColor = backgroundColor;
 		this.color = color2;
 
@@ -53,6 +67,14 @@ public abstract class GuiElement {
 		hovered = false;
 		clicked = false;
 		selected = false;
+	}
+
+	public void setFather(Component father) {
+		this.father = father;
+	}
+
+	public Component getFather() {
+		return father;
 	}
 
 	public abstract boolean contains(Vector2D p);

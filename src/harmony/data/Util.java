@@ -54,7 +54,7 @@ public class Util {
 		if (processor == null || dependencies == null)
 			throw new IllegalArgumentException();
 
-		Set<DataGenerator> localDependencies = ((DataProcessor) processor).getDataProcessDependencies();
+		Set<DataGenerator> localDependencies = processor.getDataProcessDependencies();
 		if (localDependencies != null) {
 			dependencies.addAll(localDependencies);
 			for (DataGenerator dep : localDependencies) {

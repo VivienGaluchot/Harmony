@@ -40,7 +40,7 @@ public class Link extends GuiElement {
 	private Shape shape;
 
 	public Link(Space space, Class<?> type, OutPort start, InPort end) {
-		super(Types.getDataColor(type), Types.getDataColor(type));
+		super(space, Types.getDataColor(type), Types.getDataColor(type));
 		this.space = space;
 
 		this.type = type;

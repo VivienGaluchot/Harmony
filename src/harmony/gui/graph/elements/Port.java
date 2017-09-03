@@ -26,22 +26,22 @@ import harmony.gui.Types.Command;
 import harmony.math.Vector2D;
 
 public abstract class Port extends GuiElement implements DataProcessor {
-	public Node father;
+	public Node node;
 	public Class<?> type;
 	public String name;
 
 	public Double radius;
 
-	public Port(Node father, Class<?> type, String name) {
-		super(Types.getDataColor(type), Types.getDataColor(type).darker());
-		this.father = father;
+	public Port(Node node, Class<?> type, String name) {
+		super(node.getFather(), Types.getDataColor(type), Types.getDataColor(type).darker());
+		this.node = node;
 		this.name = name;
 		this.type = type;
 		radius = 0.1;
 	}
 
 	public Vector2D getPos() {
-		return father.getPortPos(this);
+		return node.getPortPos(this);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public abstract class Port extends GuiElement implements DataProcessor {
 		g2d.fill(sp);
 		g2d.setColor(getCurrentColor());
 		g2d.draw(sp);
-		
+
 		g2d.dispose();
 	}
 

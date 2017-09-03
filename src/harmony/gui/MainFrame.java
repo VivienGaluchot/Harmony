@@ -179,17 +179,17 @@ public class MainFrame extends JFrame {
 
 	private void open() {
 		// TODO
-		JOptionPane.showMessageDialog(this, "Open command not already avialable...");
+		JOptionPane.showMessageDialog(this, "Open command not currently avialable...");
 	}
 
 	private void save() {
 		// TODO
-		JOptionPane.showMessageDialog(this, "Save command not already avialable...");
+		JOptionPane.showMessageDialog(this, "Save command not currently avialable...");
 	}
 
 	private void saveAs() {
 		// TODO
-		JOptionPane.showMessageDialog(this, "Save-as command not already avialable...");
+		JOptionPane.showMessageDialog(this, "Save-as command not currently avialable...");
 	}
 
 	/**
@@ -247,7 +247,7 @@ public class MainFrame extends JFrame {
 						GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(10, 10, 10, 10), 0, 0));
 				JTextPane pref = new JTextPane();
 				pref.setEditable(false);
-				pref.setText("Harmony : procedural sound waves generator\n" + "Copyright (C) 2017  Vivien Galuchot\n"
+				pref.setText("Harmony : procedural sound waves generator\n" + "Copyright (C) 2017 - Vivien Galuchot\n"
 						+ "\n"
 						+ "This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, version 3 of the License.\n"
 						+ "\n"

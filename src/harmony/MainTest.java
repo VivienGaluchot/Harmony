@@ -76,7 +76,7 @@ public class MainTest {
 				return "Left signal";
 			}
 		});
-		Space space = new Space(inputs, outputs);
+		Space space = new Space("Main", inputs, outputs);
 		DrawPanel panel = new DrawPanel(space);
 		new MainFrame(panel);
 

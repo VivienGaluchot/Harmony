@@ -234,9 +234,9 @@ public class DrawPanel extends JPanel
 
 		g2d.drawString("OverlayToolbar", 10, 20);
 
-		g2d.drawString("OverlayInfobar", 10, this.getHeight() - 10);
+		g2d.drawString(space.getName() + " | " + space.getHoveredElementInfo(), 10, this.getHeight() - 10);
 
-		g2d.drawString("Harmony Dev-0", this.getWidth() - 100, 20);
+		g2d.drawString("Harmony Dev0", this.getWidth() - 100, 20);
 
 		g2d.dispose();
 	}

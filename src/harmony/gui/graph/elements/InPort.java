@@ -27,8 +27,8 @@ import harmony.math.Vector2D;
 public class InPort extends Port {
 	private Link link;
 
-	public InPort(Node father, Class<?> dataType, String name) {
-		super(father, dataType, name);
+	public InPort(Node node, Class<?> dataType, String name) {
+		super(node, dataType, name);
 		link = null;
 	}
 

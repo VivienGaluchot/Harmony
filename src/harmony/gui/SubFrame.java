@@ -59,7 +59,7 @@ public class SubFrame extends JFrame {
 
 		add(panel, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
-		
+
 		setSize(new Dimension(800, 600));
 		setVisible(true);
 		setLocationRelativeTo(null);

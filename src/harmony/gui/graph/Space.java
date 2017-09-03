@@ -51,6 +51,7 @@ import harmony.math.Vector2D;
 
 public class Space implements Recordable, MouseListener, MouseMotionListener, KeyListener {
 	private DrawPanel panel;
+	private String name;
 
 	private ArrayList<Node> nodes;
 	private SpaceInputNode inputNode;
@@ -72,7 +73,9 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	private RecordQueue recordQueue;
 
-	public Space(List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+	public Space(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+		this.name = name;
+
 		nodes = new ArrayList<>();
 		links = new ArrayList<>();
 
@@ -92,8 +95,18 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		recordQueue.addTrackedObject(this);
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public void setDrawPanel(DrawPanel panel) {
 		this.panel = panel;
+		for (GuiElement el : getObjectList())
+			el.setFather(panel);
+	}
+
+	public DrawPanel getDrawPanel() {
+		return panel;
 	}
 
 	public SpaceInputNode getInputNode() {
@@ -102,6 +115,13 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	public SpaceOutputNode getOutputNode() {
 		return outputNode;
+	}
+	
+	public String getHoveredElementInfo() {
+		if(hovereds.size() > 0)
+			return hovereds.get(0).toString();
+		else
+			return "";
 	}
 
 	// Objects
@@ -123,7 +143,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		Iterator<Link> iter = links.listIterator();
 		while (iter.hasNext()) {
 			Link l = iter.next();
-			if (l.getOutPort().father == n || l.getInPort().father == n) {
+			if (l.getOutPort().node == n || l.getInPort().node == n) {
 				System.out.println("rm");
 				l.getInPort().setLink(null);
 				iter.remove();
@@ -205,8 +225,12 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	// GuiElement handle
 
 	private void setHovered(GuiElement hovered) {
-		for (GuiElement el : hovereds)
+		for (GuiElement el : hovereds) {
 			el.setHovered(false);
+			// Update distant displays
+			if (el.getFather() != this.getDrawPanel())
+				el.getFather().repaint();
+		}
 		hovereds.clear();
 
 		if (hovered != null) {
@@ -220,8 +244,12 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 				}
 			}
 		}
-		for (GuiElement el : hovereds)
+		for (GuiElement el : hovereds) {
 			el.setHovered(true);
+			// Update distant displays
+			if (el.getFather() != this.getDrawPanel())
+				el.getFather().repaint();
+		}
 	}
 
 	private void setClicked(GuiElement clicked) {
