@@ -24,11 +24,13 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JOptionPane;
 
 import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
+import harmony.data.DataProcessor;
 import harmony.data.Util;
 import harmony.gui.Dialog;
 import harmony.gui.DrawPanel;
@@ -62,37 +64,20 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	private Vector2D initObjPos = null;
 
 	private boolean alt_key_pressed = false;
+	private boolean ctrl_key_pressed = false;
 
-	private GuiElement hovered = null;
+	private List<GuiElement> hovereds;
+	private List<GuiElement> selecteds;
 	private GuiElement clicked = null;
-	private GuiElement selected = null;
 
 	private RecordQueue recordQueue;
-
-	public Space() {
-		// Empty constructor
-	}
-
-	public void init(List<DataGenerator> inputs, SpaceOutputNode outputNode) {
-		nodes = new ArrayList<>();
-		links = new ArrayList<>();
-
-		recordQueue = new RecordQueue();
-
-		inputNode = new SpaceInputNode(this, inputs);
-		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
-		recordQueue.addTrackedObject(inputNode);
-
-		this.outputNode = outputNode;
-		outputNode.pos = outputNode.pos.add(new Vector2D(5, 0));
-		recordQueue.addTrackedObject(outputNode);
-
-		recordQueue.addTrackedObject(this);
-	}
 
 	public Space(List<DataGenerator> inputs, List<DataDescriptor> outputs) {
 		nodes = new ArrayList<>();
 		links = new ArrayList<>();
+
+		hovereds = new ArrayList<>();
+		selecteds = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
 
@@ -109,6 +94,14 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 
 	public void setDrawPanel(DrawPanel panel) {
 		this.panel = panel;
+	}
+
+	public SpaceInputNode getInputNode() {
+		return inputNode;
+	}
+
+	public SpaceOutputNode getOutputNode() {
+		return outputNode;
 	}
 
 	// Objects
@@ -209,13 +202,23 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	// GuiElement handle
 
 	private void setHovered(GuiElement hovered) {
-		if (this.hovered != null) {
-			this.hovered.setHovered(false);
+		for (GuiElement el : hovereds)
+			el.setHovered(false);
+		hovereds.clear();
+
+		if (hovered != null) {
+			hovereds.add(hovered);
+			if (hovered instanceof DataProcessor) {
+				Set<DataDescriptor> dependencies = Util.getDependencies((DataProcessor) hovered);
+				for (DataDescriptor des : dependencies) {
+					if (des instanceof GuiElement) {
+						hovereds.add((GuiElement) des);
+					}
+				}
+			}
 		}
-		this.hovered = hovered;
-		if (this.hovered != null) {
-			this.hovered.setHovered(true);
-		}
+		for (GuiElement el : hovereds)
+			el.setHovered(true);
 	}
 
 	private void setClicked(GuiElement clicked) {
@@ -229,13 +232,17 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	}
 
 	private void setSelected(GuiElement selected) {
-		if (this.selected != null) {
-			this.selected.setSelected(false);
-		}
-		this.selected = selected;
-		if (this.selected != null) {
-			this.selected.setSelected(true);
-		}
+		for (GuiElement el : selecteds)
+			el.setSelected(false);
+		selecteds.clear();
+		if (selected != null)
+			addToSelecteds(selected);
+	}
+
+	private void addToSelecteds(GuiElement selected) {
+		selecteds.add(selected);
+		for (GuiElement el : selecteds)
+			el.setSelected(true);
 	}
 
 	// MouseListener
@@ -246,12 +253,21 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		if (initMousePos != null) {
 			if (clicked instanceof Node) {
 				Node go = (Node) clicked;
+				if (!go.isSelected())
+					setSelected(go);
 				if (initObjPos == null)
 					initObjPos = go.pos.clone();
+				Vector2D currentDrag = go.pos.clone();
 				go.pos = initObjPos.add(vecMouse.subtract(initMousePos));
 				if (alt_key_pressed) {
 					go.pos.x = Math.round(4 * go.pos.x) / 4.;
 					go.pos.y = Math.round(4 * go.pos.y) / 4.;
+				}
+				currentDrag = go.pos.subtract(currentDrag);
+				for (GuiElement el : selecteds) {
+					if (el instanceof Node && el != clicked) {
+						((Node) el).pos = ((Node) el).pos.add(currentDrag);
+					}
 				}
 			} else if (clicked instanceof InPort) {
 				InPort inPort = (InPort) clicked;
@@ -270,7 +286,6 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		}
 		setHovered(getPointedObject(vecMouse));
 		didDrag = true;
-		setSelected(null);
 	}
 
 	@Override
@@ -313,8 +328,11 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		GuiElement el = getPointedObject(vecMouse);
 
 		if (el != null && el.isClicked() && !didDrag)
-			setSelected(el);
-		else
+			if (ctrl_key_pressed)
+				addToSelecteds(el);
+			else
+				setSelected(el);
+		else if (!didDrag)
 			setSelected(null);
 		setClicked(null);
 
@@ -354,11 +372,10 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	@Override
 	public void keyTyped(KeyEvent e) {
 		if (e.getKeyChar() == KeyEvent.VK_DELETE) {
-			if (selected != null) {
-				selected.handleCommand(Types.Command.DELETE);
+			for (GuiElement el : selecteds)
+				el.handleCommand(Types.Command.DELETE);
 
-				recordQueue.trackDiffs();
-			}
+			recordQueue.trackDiffs();
 		}
 	}
 
@@ -366,12 +383,16 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ALT)
 			alt_key_pressed = true;
+		else if (e.getKeyCode() == KeyEvent.VK_CONTROL)
+			ctrl_key_pressed = true;
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ALT)
 			alt_key_pressed = false;
+		else if (e.getKeyCode() == KeyEvent.VK_CONTROL)
+			ctrl_key_pressed = false;
 	}
 
 	// Record

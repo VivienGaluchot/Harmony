@@ -82,6 +82,9 @@ public abstract class Node extends GuiElement implements Recordable {
 	}
 
 	public void remove() {
+		setSelected(false);
+		setHovered(false);
+		setClicked(false);
 		space.removeNode(this);
 	}
 

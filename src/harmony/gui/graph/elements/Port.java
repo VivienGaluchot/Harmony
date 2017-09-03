@@ -72,12 +72,9 @@ public abstract class Port extends GuiElement implements DataProcessor {
 
 		g2d.setColor(getCurrentBackgroundColor());
 		g2d.fill(sp);
-
-		if (isHovered()) {
-			g2d.setColor(getCurrentColor());
-			g2d.draw(sp);
-		}
-
+		g2d.setColor(getCurrentColor());
+		g2d.draw(sp);
+		
 		g2d.dispose();
 	}
 

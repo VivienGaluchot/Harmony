@@ -15,6 +15,7 @@
 
 package harmony.data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Util {
@@ -43,4 +44,23 @@ public class Util {
 		return false;
 	}
 
+	public static Set<DataDescriptor> getDependencies(DataProcessor processor) {
+		Set<DataDescriptor> dependencies = new HashSet<DataDescriptor>();
+		getDependencies(processor, dependencies);
+		return dependencies;
+	}
+
+	public static void getDependencies(DataProcessor processor, Set<DataDescriptor> dependencies) {
+		if (processor == null || dependencies == null)
+			throw new IllegalArgumentException();
+
+		Set<DataGenerator> localDependencies = ((DataProcessor) processor).getDataProcessDependencies();
+		if (localDependencies != null) {
+			dependencies.addAll(localDependencies);
+			for (DataGenerator dep : localDependencies) {
+				if (dep instanceof DataProcessor)
+					getDependencies((DataProcessor) dep, dependencies);
+			}
+		}
+	}
 }

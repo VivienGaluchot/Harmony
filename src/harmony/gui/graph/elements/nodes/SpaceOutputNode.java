@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -49,14 +50,16 @@ public class SpaceOutputNode extends Node {
 		}
 	}
 
-	public List<OutPort> createOutPortList(Node father) {
+	public List<OutPort> createAssociedOutPortList(Node father) {
 		List<OutPort> outPorts = new ArrayList<>();
 		for (DataDescriptor des : portMap.keySet()) {
 			InPort inPort = portMap.get(des);
 			OutPort outPort = new OutPort(father, des.getDataClass(), des.getDataName()) {
 				@Override
 				public Set<DataGenerator> getDataProcessDependencies() {
-					return inPort.getDataProcessDependencies();
+					Set<DataGenerator> dependencies = new HashSet<>();
+					dependencies.add(inPort);
+					return dependencies;
 				}
 
 				@Override

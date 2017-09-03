@@ -35,7 +35,6 @@ public class SpaceNode extends Node {
 
 	public SpaceNode(Space space, String name) {
 		super(space, name);
-		inSpace = new Space();
 
 		InPort inPort1 = new InPort(this, Double.class, "I1");
 		InPort inPort2 = new InPort(this, Double.class, "I2");
@@ -48,15 +47,15 @@ public class SpaceNode extends Node {
 		List<DataDescriptor> outputs = new ArrayList<>();
 		outputs.add(new DataDescriptorModel(Double.class, "O1"));
 		outputs.add(new DataDescriptorModel(Double.class, "O2"));
-		SpaceOutputNode outputNode = new SpaceOutputNode(inSpace, outputs);
-		List<OutPort> outPorts = outputNode.createOutPortList(this);
+
+		// TODO fix detection of infinite loop due to recurtion
+		// create spaceInputNode with right getDataProcessDependencies() 
+		inSpace = new Space(inputs, outputs);
+		
+		List<OutPort> outPorts = inSpace.getOutputNode().createAssociedOutPortList(this);
 		for (OutPort outPort : outPorts) {
 			addOutPort(outPort);
 		}
-
-		inSpace.init(inputs, outputNode);
-		
-		// TODO fix detection of infinite loop due to recurtion
 	}
 
 	@Override
