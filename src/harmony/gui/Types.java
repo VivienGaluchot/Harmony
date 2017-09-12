@@ -17,6 +17,8 @@ package harmony.gui;
 
 import java.awt.Color;
 
+import harmony.gui.graph.elements.nodes.FunctionNode;
+
 public class Types {
 
 	private static final Color DoubleColor = new Color(90, 170, 255);
@@ -32,6 +34,8 @@ public class Types {
 			return Color.GREEN;
 		else if (type == Double.class)
 			return DoubleColor;
+		else if (type == FunctionNode.class)
+			return Color.MAGENTA;
 		else
 			throw new IllegalArgumentException(type.getName());
 	}

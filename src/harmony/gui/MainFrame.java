@@ -47,6 +47,8 @@ import harmony.gui.graph.elements.nodes.Display;
 import harmony.gui.graph.elements.nodes.NodeFactory;
 import harmony.gui.graph.elements.nodes.ProcessNode;
 import harmony.gui.graph.elements.nodes.SpaceNode;
+import harmony.gui.graph.elements.nodes.FunctionCallNode;
+import harmony.gui.graph.elements.nodes.FunctionNode;
 import harmony.sound.License;
 
 public class MainFrame extends JFrame {
@@ -218,6 +220,8 @@ public class MainFrame extends JFrame {
 		choices.add(new NodeWrapper(new Display(panel.getSpace())));
 		choices.add(new NodeWrapper(new Constant(panel.getSpace())));
 		choices.add(new NodeWrapper(new SpaceNode(panel.getSpace(), "SpaceNode")));
+		choices.add(new NodeWrapper(new FunctionNode(panel.getSpace(), "Function")));
+		choices.add(new NodeWrapper(new FunctionCallNode(panel.getSpace())));
 		NodeWrapper nw = (NodeWrapper) Dialog.JListDialog(this, "Node to add : ", choices);
 		if (nw != null) {
 			panel.getSpace().addNode(nw.n);
