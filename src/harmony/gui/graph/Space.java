@@ -144,7 +144,6 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		while (iter.hasNext()) {
 			Link l = iter.next();
 			if (l.getOutPort().node == n || l.getInPort().node == n) {
-				System.out.println("rm");
 				l.getInPort().setLink(null);
 				iter.remove();
 			}

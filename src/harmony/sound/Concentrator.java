@@ -22,11 +22,11 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
 import harmony.sound.generation.SampleGenerator;
+import harmony.sound.generation.SampleGeneratorModel;
 import harmony.sound.generation.WaveGenerator;
 
 public class Concentrator {
-	// Temps de référence en nombre de sample depuis le debut du stream
-	int time = 0;
+	int sampleCount = 0;
 
 	final SourceDataLine soundLine;
 	final int bufferSize;
@@ -35,7 +35,7 @@ public class Concentrator {
 	SampleGenerator generator;
 
 	public Concentrator(WaveGenerator generator) throws LineUnavailableException {
-		this(new SampleGenerator(generator, generator));
+		this(new SampleGeneratorModel(generator, generator));
 	}
 
 	public Concentrator(SampleGenerator generator) throws LineUnavailableException {
@@ -59,7 +59,7 @@ public class Concentrator {
 	}
 
 	public double getMsTime() {
-		return time / (Sample.sampleRate * Sample.channels);
+		return sampleCount / (Sample.sampleRate * Sample.channels);
 	}
 
 	public void listen() {
@@ -90,7 +90,7 @@ public class Concentrator {
 						i += Sample.byteLength;
 					}
 
-					time += sizeToWrite / (Sample.channels * (Sample.sampleSizeInBits / 8));
+					sampleCount += sizeToWrite / (Sample.channels * (Sample.sampleSizeInBits / 8));
 					// the next call is blocking until the entire buffer is
 					// sent to the SourceDataLine
 					soundLine.write(buffer, 0, sizeToWrite);

@@ -40,7 +40,9 @@ import javax.swing.SwingUtilities;
 import harmony.data.basicSchemes.AddScheme;
 import harmony.data.basicSchemes.DivideScheme;
 import harmony.data.basicSchemes.MultiplyScheme;
+import harmony.data.basicSchemes.SinScheme;
 import harmony.data.basicSchemes.SubstractScheme;
+import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.nodes.Constant;
 import harmony.gui.graph.elements.nodes.Display;
@@ -55,6 +57,10 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private DrawPanel panel;
+	
+	public MainFrame(Space space) {
+		this(new DrawPanel(space));
+	}
 
 	public MainFrame(DrawPanel panel) {
 		super();
@@ -217,6 +223,7 @@ public class MainFrame extends JFrame {
 		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Substract", new SubstractScheme())));
 		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Divide", new DivideScheme())));
 		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Multiply", new MultiplyScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(panel.getSpace(), "Sin", new SinScheme())));
 		choices.add(new NodeWrapper(new Display(panel.getSpace())));
 		choices.add(new NodeWrapper(new Constant(panel.getSpace())));
 		choices.add(new NodeWrapper(new SpaceNode(panel.getSpace(), "SpaceNode")));
