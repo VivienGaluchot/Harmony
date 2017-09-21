@@ -187,17 +187,17 @@ public class MainFrame extends JFrame {
 
 	private void open() {
 		// TODO
-		JOptionPane.showMessageDialog(this, "Open command not currently avialable...");
+		JOptionPane.showMessageDialog(this, "Open command not already available...");
 	}
 
 	private void save() {
 		// TODO
-		JOptionPane.showMessageDialog(this, "Save command not currently avialable...");
+		JOptionPane.showMessageDialog(this, "Save command not already available...");
 	}
 
 	private void saveAs() {
 		// TODO
-		JOptionPane.showMessageDialog(this, "Save-as command not currently avialable...");
+		JOptionPane.showMessageDialog(this, "Save-as command not currently available...");
 	}
 
 	/**
