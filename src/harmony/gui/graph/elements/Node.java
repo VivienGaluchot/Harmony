@@ -29,12 +29,15 @@ import java.util.List;
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
+import harmony.gui.persist.Persistable;
+import harmony.gui.persist.Persistor;
+import harmony.gui.persist.persistors.NodePersistor;
 import harmony.gui.record.ChangeRecord;
 import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 
-public abstract class Node extends GuiElement implements Recordable {
+public abstract class Node extends GuiElement implements Recordable, Persistable<Node> {
 
 	public Space space;
 
@@ -196,5 +199,12 @@ public abstract class Node extends GuiElement implements Recordable {
 		public void redoChange() {
 			((Node) getFather()).pos = ((Node) getFather()).pos.add(diffPos);
 		}
+	}
+	
+	// Persistence
+
+	@Override
+	public Persistor<Node> getCurrentPersistRecord() {
+		return new NodePersistor(this);
 	}
 }

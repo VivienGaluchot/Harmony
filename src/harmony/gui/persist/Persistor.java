@@ -13,23 +13,19 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data.basicSchemes;
+package harmony.gui.persist;
 
-import java.util.Map;
+import java.io.Serializable;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataGenerator;
-
-public class SinScheme extends AScheme {
-
-	@Override
-	public String getDataName() {
-		return "sin(" + a.getDataName() + ")";
+public abstract class Persistor<T> implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	public Class<?> sourceClass;
+	
+	public Persistor(T source) {
+		sourceClass = source.getClass();
 	}
-
-	@Override
-	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-			return Math.sin(findValue(a, generatorMap));
-	}
-
+	
+	public abstract T recreate();
+	public abstract void update(T source);
 }

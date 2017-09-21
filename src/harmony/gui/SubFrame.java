@@ -137,7 +137,7 @@ public class SubFrame extends JFrame {
 		choices.add(new NodeWrapper(new Display(panel.getSpace())));
 		choices.add(new NodeWrapper(new Constant(panel.getSpace())));
 		choices.add(new NodeWrapper(new SpaceNode(panel.getSpace(), "SpaceNode")));
-		NodeWrapper nw = (NodeWrapper) Dialog.JListDialog(this, "Node to add : ", choices);
+		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(this, "Node to add : ", choices);
 		if (nw != null) {
 			panel.getSpace().addNode(nw.n);
 			panel.getSpace().getRecordQueue().trackDiffs();

@@ -41,7 +41,7 @@ public abstract class GuiElement {
 	private boolean selected;
 
 	public GuiElement(Space space) {
-		this(space.getDrawPanel());
+		this(space != null ? space.getDrawPanel() : null);
 	}
 
 	public GuiElement(Space space, Color backgroundColor, Color color2) {

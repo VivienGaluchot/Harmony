@@ -13,23 +13,37 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data.basicSchemes;
+package harmony.gui.persist.persistors;
 
-import java.util.Map;
+import harmony.gui.graph.elements.Node;
+import harmony.gui.graph.elements.nodes.Constant;
+import harmony.gui.persist.Persistor;
+import harmony.math.Vector2D;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataGenerator;
+public class NodePersistor extends Persistor<Node> {
+	private static final long serialVersionUID = 1L;
+	
+	double posX;
+	double posY;
+	String name;
 
-public class SinScheme extends AScheme {
-
-	@Override
-	public String getDataName() {
-		return "sin(" + a.getDataName() + ")";
+	public NodePersistor(Node source) {
+		super(source);
+		posX = source.pos.x;
+		posY = source.pos.y;
+		name = source.getName();
 	}
 
 	@Override
-	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-			return Math.sin(findValue(a, generatorMap));
+	public Node recreate() {
+		Node n = new Constant(null);
+		update(n);
+		return n;
+	}
+
+	@Override
+	public void update(Node source) {
+		source.pos = new Vector2D(posX, posY);
 	}
 
 }

@@ -22,6 +22,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -43,19 +44,22 @@ import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
 import harmony.gui.graph.elements.nodes.SpaceInputNode;
 import harmony.gui.graph.elements.nodes.SpaceOutputNode;
+import harmony.gui.persist.Persistor;
+import harmony.gui.persist.Persistable;
+import harmony.gui.persist.persistors.SpacePersistor;
 import harmony.gui.record.ChangeRecord;
 import harmony.gui.record.RecordQueue;
 import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 
-public class Space implements Recordable, MouseListener, MouseMotionListener, KeyListener {
+public class Space implements Recordable, Persistable<Space>, MouseListener, MouseMotionListener, KeyListener {
 	private DrawPanel panel;
 	private String name;
 
-	private ArrayList<Node> nodes;
 	private SpaceInputNode inputNode;
 	private SpaceOutputNode outputNode;
+	private ArrayList<Node> nodes;
 	private ArrayList<Link> links;
 
 	private Link draggedLink = null;
@@ -117,6 +121,14 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		return outputNode;
 	}
 	
+	public List<Node> getNodes(){
+		return Collections.unmodifiableList(nodes);
+	}
+	
+	public List<Link> getLinks(){
+		return Collections.unmodifiableList(links);
+	}
+	
 	public String getHoveredElementInfo() {
 		if(hovereds.size() > 0)
 			return hovereds.get(0).toString();
@@ -129,8 +141,22 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 	public RecordQueue getRecordQueue() {
 		return recordQueue;
 	}
+	
+	public void clean() {
+		Iterator<Link> itL = links.listIterator();
+		while(itL.hasNext()){
+			itL.next();
+			itL.remove();
+		}
+		Iterator<Node> itN = nodes.listIterator();
+		while(itN.hasNext()){
+			recordQueue.removeTrackedObject(itN.next());
+			itN.remove();
+		}
+	}
 
 	public void addNode(Node n) {
+		n.setFather(this.getDrawPanel());
 		nodes.add(n);
 		recordQueue.addTrackedObject(n);
 	}
@@ -140,12 +166,12 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 			return;
 		if (n == outputNode)
 			return;
-		Iterator<Link> iter = links.listIterator();
-		while (iter.hasNext()) {
-			Link l = iter.next();
+		Iterator<Link> it = links.listIterator();
+		while (it.hasNext()) {
+			Link l = it.next();
 			if (l.getOutPort().node == n || l.getInPort().node == n) {
 				l.getInPort().setLink(null);
-				iter.remove();
+				it.remove();
 			}
 		}
 		nodes.remove(n);
@@ -227,6 +253,7 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 		for (GuiElement el : hovereds) {
 			el.setHovered(false);
 			// Update distant displays
+			// TODO check
 			if (el.getFather() != this.getDrawPanel())
 				el.getFather().repaint();
 		}
@@ -529,6 +556,13 @@ public class Space implements Recordable, MouseListener, MouseMotionListener, Ke
 				((Space) getFather()).removeLink(l);
 		}
 
+	}
+	
+	// Persistence
+
+	@Override
+	public Persistor<Space> getCurrentPersistRecord() {
+		return new SpacePersistor(this);
 	}
 
 }

@@ -13,23 +13,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data.basicSchemes;
+package harmony.gui.persist;
 
-import java.util.Map;
-
-import harmony.data.DataDescriptor;
-import harmony.data.DataGenerator;
-
-public class SinScheme extends AScheme {
-
-	@Override
-	public String getDataName() {
-		return "sin(" + a.getDataName() + ")";
-	}
-
-	@Override
-	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-			return Math.sin(findValue(a, generatorMap));
-	}
-
+public interface Persistable<T> {
+	
+	public Persistor<T> getCurrentPersistRecord();
+	
 }

@@ -23,6 +23,12 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +37,11 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import harmony.data.basicSchemes.AddScheme;
 import harmony.data.basicSchemes.DivideScheme;
@@ -49,6 +55,7 @@ import harmony.gui.graph.elements.nodes.Display;
 import harmony.gui.graph.elements.nodes.NodeFactory;
 import harmony.gui.graph.elements.nodes.ProcessNode;
 import harmony.gui.graph.elements.nodes.SpaceNode;
+import harmony.gui.persist.Persistor;
 import harmony.gui.graph.elements.nodes.FunctionCallNode;
 import harmony.gui.graph.elements.nodes.FunctionNode;
 import harmony.sound.License;
@@ -186,18 +193,70 @@ public class MainFrame extends JFrame {
 	// ACTIONS
 
 	private void open() {
-		// TODO
-		JOptionPane.showMessageDialog(this, "Open command not already available...");
+		Dialog.displayMessage(this, "Warning, open command experimental...");
+		if (!Dialog.yesNoDialog(this, "Unsaved change will be lost, do you still want to continue ?"))
+			return;
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
+		File inputFile = Dialog.fileDialog(this, filter);
+		if(inputFile == null)
+			return;
+		FileInputStream streamIn = null;
+		ObjectInputStream objectinputstream = null;
+		try {
+		    streamIn = new FileInputStream(inputFile);
+		    objectinputstream = new ObjectInputStream(streamIn);
+		    Persistor<Space> prs = (Persistor<Space>) objectinputstream.readObject();
+		    if (prs != null) {
+		    	panel.getSpace().clean();
+		    	prs.update(panel.getSpace());
+		    }
+		} catch (Exception e) {
+			Dialog.displayError(this, e.getMessage());
+		    e.printStackTrace();
+		} finally {
+		    if(objectinputstream != null){
+		        try {
+					objectinputstream .close();
+				} catch (IOException e) {
+					Dialog.displayError(this, e.getMessage());
+					e.printStackTrace();
+				}
+		    } 
+		}
 	}
 
 	private void save() {
-		// TODO
-		JOptionPane.showMessageDialog(this, "Save command not already available...");
+		Dialog.displayMessage(this, "Warning, save command experimental...");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
+		File outputFile = Dialog.fileDialog(this, filter);
+		if(outputFile == null)
+			return;
+		Persistor<Space> p = panel.getSpace().getCurrentPersistRecord();
+		FileOutputStream fout = null;
+		ObjectOutputStream oos = null;
+		try {
+			fout = new FileOutputStream(outputFile);
+			oos = new ObjectOutputStream(fout);
+			oos.writeObject(p);
+			oos.close();
+		} catch (Exception e) {
+			Dialog.displayError(this, e.getMessage());
+			e.printStackTrace();
+		} finally {
+		    if(oos != null){
+		        try {
+					oos.close();
+				} catch (Exception e) {
+					Dialog.displayError(this, e.getMessage());
+					e.printStackTrace();
+				}
+		    } 
+		}
 	}
 
 	private void saveAs() {
 		// TODO
-		JOptionPane.showMessageDialog(this, "Save-as command not currently available...");
+		Dialog.displayMessage(this, "Save-as command not currently available...");
 	}
 
 	/**
@@ -229,7 +288,7 @@ public class MainFrame extends JFrame {
 		choices.add(new NodeWrapper(new SpaceNode(panel.getSpace(), "SpaceNode")));
 		choices.add(new NodeWrapper(new FunctionNode(panel.getSpace(), "Function")));
 		choices.add(new NodeWrapper(new FunctionCallNode(panel.getSpace())));
-		NodeWrapper nw = (NodeWrapper) Dialog.JListDialog(this, "Node to add : ", choices);
+		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(this, "Node to add : ", choices);
 		if (nw != null) {
 			panel.getSpace().addNode(nw.n);
 			panel.getSpace().getRecordQueue().trackDiffs();

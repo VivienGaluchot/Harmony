@@ -66,13 +66,13 @@ public class Constant extends Node {
 
 	@Override
 	public void showOpt(Component parent) {
-		String name = Dialog.StringDialog(null, "Enter constant name", constantName);
+		String name = Dialog.stringDialog(null, "Enter constant name", constantName);
 		if (name == null)
 			return;
 		constantName = name;
 		setName(constantName);
 
-		Double d = Dialog.DoubleDialog(null, "Enter a value", value.toString());
+		Double d = Dialog.doubleDialog(null, "Enter a value", value.toString());
 		if (d == null)
 			return;
 		setValue(d);
