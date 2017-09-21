@@ -18,7 +18,7 @@ package harmony.sound.generation;
 import harmony.sound.Sample;
 
 public interface SampleGenerator {
-	
+
 	/**
 	 * Reset the sound module
 	 */
@@ -36,5 +36,5 @@ public interface SampleGenerator {
 	 *         generator can't give more samples
 	 */
 	public boolean hasNext();
-	
+
 }

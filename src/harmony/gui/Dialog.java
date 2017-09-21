@@ -28,7 +28,7 @@ public class Dialog {
 	public static void displayMessage(Component frame, String message) {
 		JOptionPane.showMessageDialog(frame, message);
 	}
-	
+
 	public static void displayError(Component frame, String message) {
 		JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
 	}
@@ -68,13 +68,13 @@ public class Dialog {
 		return JOptionPane.showInputDialog(null, text, "Selection", JOptionPane.QUESTION_MESSAGE, null, objects,
 				objects[0]);
 	}
-	
-	public static File fileDialog(Component frame, FileNameExtensionFilter filter){
+
+	public static File fileDialog(Component frame, FileNameExtensionFilter filter) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileFilter(filter);
 		int res = fileChooser.showOpenDialog(frame);
-		if(res==JFileChooser.APPROVE_OPTION)
-		   return fileChooser.getSelectedFile();
+		if (res == JFileChooser.APPROVE_OPTION)
+			return fileChooser.getSelectedFile();
 		return null;
 	}
 }

@@ -51,8 +51,8 @@ public class SpacePersistor extends Persistor<Space> {
 	public void update(Space source) {
 		if (source.getNodes().size() > 0)
 			throw new IllegalArgumentException("Non empty space");
-		for (int i =0; i < nodePersistorArray.length; i++) {
-			if(nodePersistorArray[i] != null)
+		for (int i = 0; i < nodePersistorArray.length; i++) {
+			if (nodePersistorArray[i] != null)
 				source.addNode(nodePersistorArray[i].recreate());
 			else
 				System.out.println("null persistor loaded");

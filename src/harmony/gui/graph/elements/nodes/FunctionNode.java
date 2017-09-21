@@ -37,7 +37,7 @@ public class FunctionNode extends Node {
 
 	public FunctionNode(Space hostSpace, String name) {
 		super(hostSpace, name);
-		
+
 		List<DataGenerator> inputs = new ArrayList<>();
 		inputs.add(new InPort(this, Double.class, "I1"));
 		inputs.add(new InPort(this, Double.class, "I2"));
@@ -47,8 +47,8 @@ public class FunctionNode extends Node {
 		outputs.add(new DataDescriptorModel(Double.class, "O2"));
 
 		insideSpace = new Space(name, inputs, outputs);
-		
-		OutPort modelOutPort = new OutPort(this, FunctionNode.class, "model"){
+
+		OutPort modelOutPort = new OutPort(this, FunctionNode.class, "model") {
 			@Override
 			public Set<DataGenerator> getDataProcessDependencies() {
 				return null;

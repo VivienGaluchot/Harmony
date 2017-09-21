@@ -17,15 +17,16 @@ package harmony.gui.persist;
 
 import java.io.Serializable;
 
-public abstract class Persistor<T> implements Serializable{
+public abstract class Persistor<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	public Class<?> sourceClass;
-	
+
 	public Persistor(T source) {
 		sourceClass = source.getClass();
 	}
-	
+
 	public abstract T recreate();
+
 	public abstract void update(T source);
 }

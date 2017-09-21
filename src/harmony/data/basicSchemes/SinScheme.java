@@ -29,7 +29,7 @@ public class SinScheme extends AScheme {
 
 	@Override
 	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-			return Math.sin(findValue(a, generatorMap));
+		return Math.sin(findValue(a, generatorMap));
 	}
 
 }

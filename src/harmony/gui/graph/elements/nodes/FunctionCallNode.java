@@ -25,7 +25,7 @@ public class FunctionCallNode extends Node {
 
 	public FunctionCallNode(Space space) {
 		super(space, "FunctionCall");
-		
+
 		InPort modelPort = new InPort(this, FunctionNode.class, "model");
 		addInPort(modelPort);
 	}

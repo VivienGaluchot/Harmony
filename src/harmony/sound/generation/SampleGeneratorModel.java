@@ -17,7 +17,7 @@ package harmony.sound.generation;
 
 import harmony.sound.Sample;
 
-public class SampleGeneratorModel implements SampleGenerator{
+public class SampleGeneratorModel implements SampleGenerator {
 
 	WaveGenerator left;
 	WaveGenerator right;
@@ -27,10 +27,12 @@ public class SampleGeneratorModel implements SampleGenerator{
 		this.right = right;
 	}
 
+	@Override
 	public Sample next() {
 		return new Sample(left.next(), right.next());
 	}
 
+	@Override
 	public boolean hasNext() {
 		return left.hasNext() && right.hasNext();
 	}

@@ -22,7 +22,7 @@ import harmony.math.Vector2D;
 
 public class NodePersistor extends Persistor<Node> {
 	private static final long serialVersionUID = 1L;
-	
+
 	double posX;
 	double posY;
 	String name;

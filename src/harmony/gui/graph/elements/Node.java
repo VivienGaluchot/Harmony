@@ -200,7 +200,7 @@ public abstract class Node extends GuiElement implements Recordable, Persistable
 			((Node) getFather()).pos = ((Node) getFather()).pos.add(diffPos);
 		}
 	}
-	
+
 	// Persistence
 
 	@Override

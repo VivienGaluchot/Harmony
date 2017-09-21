@@ -16,7 +16,7 @@
 package harmony.gui.persist;
 
 public interface Persistable<T> {
-	
+
 	public Persistor<T> getCurrentPersistRecord();
-	
+
 }

@@ -120,17 +120,17 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 	public SpaceOutputNode getOutputNode() {
 		return outputNode;
 	}
-	
-	public List<Node> getNodes(){
+
+	public List<Node> getNodes() {
 		return Collections.unmodifiableList(nodes);
 	}
-	
-	public List<Link> getLinks(){
+
+	public List<Link> getLinks() {
 		return Collections.unmodifiableList(links);
 	}
-	
+
 	public String getHoveredElementInfo() {
-		if(hovereds.size() > 0)
+		if (hovereds.size() > 0)
 			return hovereds.get(0).toString();
 		else
 			return "";
@@ -141,15 +141,15 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 	public RecordQueue getRecordQueue() {
 		return recordQueue;
 	}
-	
+
 	public void clean() {
 		Iterator<Link> itL = links.listIterator();
-		while(itL.hasNext()){
+		while (itL.hasNext()) {
 			itL.next();
 			itL.remove();
 		}
 		Iterator<Node> itN = nodes.listIterator();
-		while(itN.hasNext()){
+		while (itN.hasNext()) {
 			recordQueue.removeTrackedObject(itN.next());
 			itN.remove();
 		}
@@ -557,7 +557,7 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		}
 
 	}
-	
+
 	// Persistence
 
 	@Override

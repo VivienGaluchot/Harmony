@@ -20,7 +20,6 @@ import java.util.List;
 
 import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
-import harmony.gui.DrawPanel;
 import harmony.gui.MainFrame;
 import harmony.gui.graph.Space;
 import harmony.sound.Concentrator;

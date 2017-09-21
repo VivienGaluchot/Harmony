@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 
 	private DrawPanel panel;
-	
+
 	public MainFrame(Space space) {
 		this(new DrawPanel(space));
 	}
@@ -198,30 +198,30 @@ public class MainFrame extends JFrame {
 			return;
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
 		File inputFile = Dialog.fileDialog(this, filter);
-		if(inputFile == null)
+		if (inputFile == null)
 			return;
 		FileInputStream streamIn = null;
 		ObjectInputStream objectinputstream = null;
 		try {
-		    streamIn = new FileInputStream(inputFile);
-		    objectinputstream = new ObjectInputStream(streamIn);
-		    Persistor<Space> prs = (Persistor<Space>) objectinputstream.readObject();
-		    if (prs != null) {
-		    	panel.getSpace().clean();
-		    	prs.update(panel.getSpace());
-		    }
+			streamIn = new FileInputStream(inputFile);
+			objectinputstream = new ObjectInputStream(streamIn);
+			Persistor<Space> prs = (Persistor<Space>) objectinputstream.readObject();
+			if (prs != null) {
+				panel.getSpace().clean();
+				prs.update(panel.getSpace());
+			}
 		} catch (Exception e) {
 			Dialog.displayError(this, e.getMessage());
-		    e.printStackTrace();
+			e.printStackTrace();
 		} finally {
-		    if(objectinputstream != null){
-		        try {
-					objectinputstream .close();
+			if (objectinputstream != null) {
+				try {
+					objectinputstream.close();
 				} catch (IOException e) {
 					Dialog.displayError(this, e.getMessage());
 					e.printStackTrace();
 				}
-		    } 
+			}
 		}
 	}
 
@@ -229,7 +229,7 @@ public class MainFrame extends JFrame {
 		Dialog.displayMessage(this, "Warning, save command experimental...");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
 		File outputFile = Dialog.fileDialog(this, filter);
-		if(outputFile == null)
+		if (outputFile == null)
 			return;
 		Persistor<Space> p = panel.getSpace().getCurrentPersistRecord();
 		FileOutputStream fout = null;
@@ -243,14 +243,14 @@ public class MainFrame extends JFrame {
 			Dialog.displayError(this, e.getMessage());
 			e.printStackTrace();
 		} finally {
-		    if(oos != null){
-		        try {
+			if (oos != null) {
+				try {
 					oos.close();
 				} catch (Exception e) {
 					Dialog.displayError(this, e.getMessage());
 					e.printStackTrace();
 				}
-		    } 
+			}
 		}
 	}
 
