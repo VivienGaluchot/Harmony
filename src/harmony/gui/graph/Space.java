@@ -15,7 +15,11 @@
 
 package harmony.gui.graph;
 
+import java.awt.BasicStroke;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -34,7 +38,6 @@ import harmony.data.DataGenerator;
 import harmony.data.DataProcessor;
 import harmony.data.Util;
 import harmony.gui.Dialog;
-import harmony.gui.DrawPanel;
 import harmony.gui.Types;
 import harmony.gui.graph.elements.GuiElement;
 import harmony.gui.graph.elements.InPort;
@@ -53,8 +56,10 @@ import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 
-public class Space implements Recordable, Persistable<Space>, MouseListener, MouseMotionListener, KeyListener {
-	private DrawPanel panel;
+public class Space extends DrawPanel
+		implements Recordable, Persistable<Space>, MouseListener, MouseMotionListener, KeyListener {
+	private static final long serialVersionUID = 1L;
+
 	private String name;
 
 	private SpaceInputNode inputNode;
@@ -99,18 +104,9 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		recordQueue.addTrackedObject(this);
 	}
 
+	@Override
 	public String getName() {
 		return name;
-	}
-
-	public void setDrawPanel(DrawPanel panel) {
-		this.panel = panel;
-		for (GuiElement el : getObjectList())
-			el.setFather(panel);
-	}
-
-	public DrawPanel getDrawPanel() {
-		return panel;
 	}
 
 	public SpaceInputNode getInputNode() {
@@ -142,6 +138,10 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		return recordQueue;
 	}
 
+	public boolean isEmpty() {
+		return links.isEmpty() && nodes.isEmpty();
+	}
+
 	public void clean() {
 		Iterator<Link> itL = links.listIterator();
 		while (itL.hasNext()) {
@@ -153,12 +153,14 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 			recordQueue.removeTrackedObject(itN.next());
 			itN.remove();
 		}
+		repaint();
 	}
 
 	public void addNode(Node n) {
-		n.setFather(this.getDrawPanel());
+		n.setFather(this);
 		nodes.add(n);
 		recordQueue.addTrackedObject(n);
+		repaint();
 	}
 
 	public void removeNode(Node n) {
@@ -176,12 +178,13 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		}
 		nodes.remove(n);
 		recordQueue.removeTrackedObject(n);
+		repaint();
 	}
 
 	public void addLink(Link l) {
 		// Check if link is making loops
 		if (Util.isInDependenciesTree(l.getOutPort(), l.getInPort())) {
-			JOptionPane.showMessageDialog(panel, "Computing loop detected, new link can't be added.", "Error",
+			JOptionPane.showMessageDialog(this, "Computing loop detected, new link can't be added.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			// Do nothing
 			return;
@@ -196,6 +199,7 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		l.getInPort().setLink(l);
 		// Add link
 		links.add(l);
+		repaint();
 	}
 
 	public void removeLink(Link l) {
@@ -203,6 +207,7 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		l.getInPort().setLink(null);
 		// Remove
 		links.remove(l);
+		repaint();
 	}
 
 	private void sequenceNode(Node n, List<GuiElement> list) {
@@ -239,12 +244,33 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		return null;
 	}
 
+	@Override
 	public synchronized void paint(Graphics g) {
-		for (GuiElement hcs : getObjectList())
-			hcs.paint(g);
+		super.paint(g);
 
+		Graphics2D g2d = (Graphics2D) g.create();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+		Font font = new Font("Helvetica", Font.PLAIN, 12);
+		g2d.setFont(font);
+
+		// draw elements
+		Graphics2D g2dTrans = (Graphics2D) g2d.create();
+		g2dTrans.setStroke(new BasicStroke(0.03f));
+		g2dTrans.setFont(font.deriveFont(0.2f));
+		g2dTrans.transform(getCurrentTransform());
+		for (GuiElement hcs : getObjectList())
+			hcs.paint(g2dTrans);
 		if (draggedLink != null)
-			draggedLink.paint(g);
+			draggedLink.paint(g2dTrans);
+		g2dTrans.dispose();
+		
+		// draw overlay
+		g2d.drawString("OverlayToolbar", 10, 20);
+		g2d.drawString(getName() + " | " + getHoveredElementInfo(), 10, getHeight() - 10);
+		g2d.drawString("Harmony Dev0", this.getWidth() - 100, 20);
+		g2d.dispose();
 	}
 
 	// GuiElement handle
@@ -254,7 +280,7 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 			el.setHovered(false);
 			// Update distant displays
 			// TODO check
-			if (el.getFather() != this.getDrawPanel())
+			if (el.getFather() != this)
 				el.getFather().repaint();
 		}
 		hovereds.clear();
@@ -273,9 +299,10 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		for (GuiElement el : hovereds) {
 			el.setHovered(true);
 			// Update distant displays
-			if (el.getFather() != this.getDrawPanel())
+			if (el.getFather() != this)
 				el.getFather().repaint();
 		}
+		repaint();
 	}
 
 	private void setClicked(GuiElement clicked) {
@@ -286,6 +313,7 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		if (this.clicked != null) {
 			this.clicked.setClicked(true);
 		}
+		repaint();
 	}
 
 	private void setSelected(GuiElement selected) {
@@ -294,19 +322,22 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		selecteds.clear();
 		if (selected != null)
 			addToSelecteds(selected);
+		repaint();
 	}
 
 	private void addToSelecteds(GuiElement selected) {
 		selecteds.add(selected);
 		for (GuiElement el : selecteds)
 			el.setSelected(true);
+		repaint();
 	}
 
 	// MouseListener
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		super.mouseDragged(e);
+		Vector2D vecMouse = transformMousePosition(e.getPoint());
 		if (initMousePos != null) {
 			if (clicked instanceof Node) {
 				Node go = (Node) clicked;
@@ -347,25 +378,32 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		super.mouseMoved(e);
+		Vector2D vecMouse = transformMousePosition(e.getPoint());
 		setHovered(getPointedObject(vecMouse));
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		super.mouseClicked(e);
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
+		super.mouseEntered(e);
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
+		super.mouseExited(e);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		Vector2D vecMouse = transformMousePosition(e.getPoint());
+		if(getPointedObject(vecMouse) == null)
+			super.mousePressed(e);
+
 		GuiElement el = getPointedObject(vecMouse);
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			setClicked(el);
@@ -373,7 +411,7 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 		} else if (e.getButton() == MouseEvent.BUTTON3) {
 			if (el instanceof Node) {
 				Node go = (Node) el;
-				go.showOpt(panel);
+				go.showOpt();
 			}
 		}
 		didDrag = false;
@@ -381,7 +419,8 @@ public class Space implements Recordable, Persistable<Space>, MouseListener, Mou
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		Vector2D vecMouse = panel.transformMousePosition(e.getPoint());
+		super.mouseReleased(e);
+		Vector2D vecMouse = transformMousePosition(e.getPoint());
 		GuiElement el = getPointedObject(vecMouse);
 
 		if (el != null && el.isClicked() && !didDrag)

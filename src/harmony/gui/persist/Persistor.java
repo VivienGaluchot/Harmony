@@ -15,12 +15,40 @@
 
 package harmony.gui.persist;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import harmony.gui.graph.Space;
 
 public abstract class Persistor<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public Class<?> sourceClass;
+	
+	public static Persistor<?> load(File inputFile) throws IOException, ClassNotFoundException {
+		FileInputStream streamIn = null;
+		ObjectInputStream objectinputstream = null;
+		streamIn = new FileInputStream(inputFile);
+		objectinputstream = new ObjectInputStream(streamIn);
+		@SuppressWarnings("unchecked")
+		Persistor<?> prs = (Persistor<Space>) objectinputstream.readObject();
+		objectinputstream.close();
+		return prs;
+	}
+	
+	public void persist(File outputFile) throws IOException {
+		FileOutputStream fout = null;
+		ObjectOutputStream oos = null;
+		fout = new FileOutputStream(outputFile);
+		oos = new ObjectOutputStream(fout);
+		oos.writeObject(this);
+		oos.close();
+	}
 
 	public Persistor(T source) {
 		sourceClass = source.getClass();

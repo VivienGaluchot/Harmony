@@ -15,7 +15,6 @@
 
 package harmony.gui.graph.elements.nodes;
 
-import java.awt.Component;
 import java.awt.Graphics;
 import java.util.Set;
 
@@ -65,14 +64,14 @@ public class Constant extends Node {
 	}
 
 	@Override
-	public void showOpt(Component parent) {
-		String name = Dialog.stringDialog(null, "Enter constant name", constantName);
+	public void showOpt() {
+		String name = Dialog.stringDialog(getFather(), "Enter constant name", constantName);
 		if (name == null)
 			return;
 		constantName = name;
 		setName(constantName);
 
-		Double d = Dialog.doubleDialog(null, "Enter a value", value.toString());
+		Double d = Dialog.doubleDialog(getFather(), "Enter a value", value.toString());
 		if (d == null)
 			return;
 		setValue(d);

@@ -16,7 +16,6 @@
 package harmony.gui.graph.elements;
 
 import java.awt.BasicStroke;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -99,7 +98,7 @@ public abstract class Node extends GuiElement implements Recordable, Persistable
 			return false;
 	}
 
-	public abstract void showOpt(Component parent);
+	public abstract void showOpt();
 
 	public List<InPort> getInPorts() {
 		return Collections.unmodifiableList(inPorts);

@@ -15,7 +15,6 @@
 
 package harmony.gui.graph.elements.nodes;
 
-import java.awt.Component;
 import java.awt.Graphics;
 
 import javax.swing.JOptionPane;
@@ -73,8 +72,8 @@ public class Display extends Node {
 	}
 
 	@Override
-	public void showOpt(Component parent) {
-		JOptionPane.showMessageDialog(parent, "Display Node");
+	public void showOpt() {
+		JOptionPane.showMessageDialog(getFather(), "Display Node");
 	}
 
 }

@@ -15,7 +15,6 @@
 
 package harmony.gui.graph.elements.nodes;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -23,8 +22,7 @@ import java.util.Set;
 import harmony.data.DataDescriptor;
 import harmony.data.DataDescriptorModel;
 import harmony.data.DataGenerator;
-import harmony.gui.DrawPanel;
-import harmony.gui.SubFrame;
+import harmony.gui.SpaceEditFrame;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.InPort;
 import harmony.gui.graph.elements.Node;
@@ -33,7 +31,7 @@ import harmony.gui.graph.elements.OutPort;
 public class FunctionNode extends Node {
 
 	private Space insideSpace;
-	private SubFrame editFrame;
+	private SpaceEditFrame editFrame;
 
 	public FunctionNode(Space hostSpace, String name) {
 		super(hostSpace, name);
@@ -63,10 +61,9 @@ public class FunctionNode extends Node {
 	}
 
 	@Override
-	public void showOpt(Component parent) {
+	public void showOpt() {
 		if (editFrame == null) {
-			DrawPanel panel = new DrawPanel(insideSpace);
-			editFrame = new SubFrame(panel);
+			editFrame = new SpaceEditFrame(insideSpace);
 		} else {
 			editFrame.setVisible(true);
 			editFrame.requestFocusInWindow();

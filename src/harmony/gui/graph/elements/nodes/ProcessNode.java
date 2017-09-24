@@ -15,7 +15,6 @@
 
 package harmony.gui.graph.elements.nodes;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -98,8 +97,8 @@ public class ProcessNode extends Node {
 	}
 
 	@Override
-	public void showOpt(Component parent) {
-		JOptionPane.showMessageDialog(parent, "Generic Node");
+	public void showOpt() {
+		JOptionPane.showMessageDialog(getFather(), "Generic Node");
 	}
 
 }

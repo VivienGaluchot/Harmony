@@ -16,7 +16,6 @@
 package harmony.gui.graph.elements.nodes;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -80,7 +79,7 @@ public class SpaceOutputNode extends Node {
 	}
 
 	@Override
-	public void showOpt(Component parent) {
-		JOptionPane.showMessageDialog(parent, "Result must be put in this OutputNode");
+	public void showOpt() {
+		JOptionPane.showMessageDialog(getFather(), "Result must be put in this OutputNode");
 	}
 }

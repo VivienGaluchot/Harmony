@@ -16,7 +16,6 @@
 package harmony.gui.graph.elements.nodes;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -56,8 +55,8 @@ public class SpaceInputNode extends Node {
 	}
 
 	@Override
-	public void showOpt(Component parent) {
-		JOptionPane.showMessageDialog(parent, "Data to process flows out of this InputNode");
+	public void showOpt() {
+		JOptionPane.showMessageDialog(getFather(), "Data to process flows out of this InputNode");
 	}
 
 }

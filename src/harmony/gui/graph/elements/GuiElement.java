@@ -20,7 +20,6 @@ import java.awt.Component;
 import java.awt.Graphics;
 
 import harmony.gui.Types;
-import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
 
 public abstract class GuiElement {
@@ -39,14 +38,6 @@ public abstract class GuiElement {
 	private boolean hovered;
 	private boolean clicked;
 	private boolean selected;
-
-	public GuiElement(Space space) {
-		this(space != null ? space.getDrawPanel() : null);
-	}
-
-	public GuiElement(Space space, Color backgroundColor, Color color2) {
-		this(space.getDrawPanel(), backgroundColor, color2);
-	}
 
 	public GuiElement(Component father) {
 		this(father, Color.white, Color.black);
