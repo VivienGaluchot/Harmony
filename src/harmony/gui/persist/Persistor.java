@@ -29,7 +29,7 @@ public abstract class Persistor<T> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public Class<?> sourceClass;
-	
+
 	public static Persistor<?> load(File inputFile) throws IOException, ClassNotFoundException {
 		FileInputStream streamIn = null;
 		ObjectInputStream objectinputstream = null;
@@ -40,7 +40,7 @@ public abstract class Persistor<T> implements Serializable {
 		objectinputstream.close();
 		return prs;
 	}
-	
+
 	public void persist(File outputFile) throws IOException {
 		FileOutputStream fout = null;
 		ObjectOutputStream oos = null;

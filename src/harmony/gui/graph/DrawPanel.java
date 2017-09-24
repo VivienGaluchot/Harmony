@@ -77,7 +77,7 @@ public class DrawPanel extends JPanel
 		addMouseWheelListener(this);
 		addComponentListener(this);
 	}
-	
+
 	public AffineTransform getCurrentTransform() {
 		return currentTransform;
 	}

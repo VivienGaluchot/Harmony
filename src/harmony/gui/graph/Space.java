@@ -265,7 +265,7 @@ public class Space extends DrawPanel
 		if (draggedLink != null)
 			draggedLink.paint(g2dTrans);
 		g2dTrans.dispose();
-		
+
 		// draw overlay
 		g2d.drawString("OverlayToolbar", 10, 20);
 		g2d.drawString(getName() + " | " + getHoveredElementInfo(), 10, getHeight() - 10);
@@ -401,7 +401,7 @@ public class Space extends DrawPanel
 	@Override
 	public void mousePressed(MouseEvent e) {
 		Vector2D vecMouse = transformMousePosition(e.getPoint());
-		if(getPointedObject(vecMouse) == null)
+		if (getPointedObject(vecMouse) == null)
 			super.mousePressed(e);
 
 		GuiElement el = getPointedObject(vecMouse);

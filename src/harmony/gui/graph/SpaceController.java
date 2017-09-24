@@ -40,11 +40,11 @@ import harmony.gui.persist.Persistor;
 
 public class SpaceController {
 	Space space;
-	
+
 	public SpaceController(Space space) {
 		this.space = space;
 	}
-	
+
 	public void open() {
 		Dialog.displayMessage(space, "Warning, open command experimental...");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
@@ -55,7 +55,8 @@ public class SpaceController {
 			@SuppressWarnings("unchecked")
 			Persistor<Space> prs = (Persistor<Space>) Persistor.load(inputFile);
 			if (prs != null) {
-				if (space.isEmpty() && !Dialog.yesNoDialog(space, "Unsaved change will be lost, do you still want to continue ?"))
+				if (space.isEmpty()
+						&& !Dialog.yesNoDialog(space, "Unsaved change will be lost, do you still want to continue ?"))
 					return;
 				space.clean();
 				prs.update(space);
@@ -88,7 +89,7 @@ public class SpaceController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void undo() {
 		space.getRecordQueue().undo();
 		space.repaint();
@@ -100,23 +101,23 @@ public class SpaceController {
 	}
 
 	public void addNode() {
-	    List<Object> choices = new ArrayList<>();
-	    choices.add(new NodeWrapper(NodeFactory.createTestNode(space)));
-	    choices.add(new NodeWrapper(new ProcessNode(space, "Add", new AddScheme())));
-	    choices.add(new NodeWrapper(new ProcessNode(space, "Substract", new SubstractScheme())));
-	    choices.add(new NodeWrapper(new ProcessNode(space, "Divide", new DivideScheme())));
-	    choices.add(new NodeWrapper(new ProcessNode(space, "Multiply", new MultiplyScheme())));
-	    choices.add(new NodeWrapper(new ProcessNode(space, "Sin", new SinScheme())));
-	    choices.add(new NodeWrapper(new Display(space)));
-	    choices.add(new NodeWrapper(new Constant(space)));
-	    choices.add(new NodeWrapper(new SpaceNode(space, "SpaceNode")));
-	    choices.add(new NodeWrapper(new FunctionNode(space, "Function")));
-	    choices.add(new NodeWrapper(new FunctionCallNode(space)));
-	    NodeWrapper nw = (NodeWrapper) Dialog.listDialog(space, "Node to add : ", choices);
-	    if (nw != null) {
-	      space.addNode(nw.n);
-	      space.getRecordQueue().trackDiffs();
-	    }
+		List<Object> choices = new ArrayList<>();
+		choices.add(new NodeWrapper(NodeFactory.createTestNode(space)));
+		choices.add(new NodeWrapper(new ProcessNode(space, "Add", new AddScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(space, "Substract", new SubstractScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(space, "Divide", new DivideScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(space, "Multiply", new MultiplyScheme())));
+		choices.add(new NodeWrapper(new ProcessNode(space, "Sin", new SinScheme())));
+		choices.add(new NodeWrapper(new Display(space)));
+		choices.add(new NodeWrapper(new Constant(space)));
+		choices.add(new NodeWrapper(new SpaceNode(space, "SpaceNode")));
+		choices.add(new NodeWrapper(new FunctionNode(space, "Function")));
+		choices.add(new NodeWrapper(new FunctionCallNode(space)));
+		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(space, "Node to add : ", choices);
+		if (nw != null) {
+			space.addNode(nw.n);
+			space.getRecordQueue().trackDiffs();
+		}
 	}
 
 	/**
@@ -135,4 +136,3 @@ public class SpaceController {
 		}
 	}
 }
-

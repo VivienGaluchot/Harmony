@@ -49,7 +49,6 @@ public class SpaceEditFrame extends JFrame {
 	protected JMenuItem redo;
 	protected JMenuItem addNode;
 
-
 	public SpaceEditFrame(Space space) {
 		super();
 		controller = new SpaceController(space);
