@@ -69,8 +69,9 @@ public class Dialog {
 				objects[0]);
 	}
 
-	public static File fileDialog(Component frame, FileNameExtensionFilter filter) {
+	public static File fileDialog(Component frame, FileNameExtensionFilter filter, String approveButtonText) {
 		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setApproveButtonText(approveButtonText);
 		fileChooser.setFileFilter(filter);
 		int res = fileChooser.showOpenDialog(frame);
 		if (res == JFileChooser.APPROVE_OPTION)

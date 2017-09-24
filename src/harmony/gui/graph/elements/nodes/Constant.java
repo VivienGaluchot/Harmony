@@ -23,10 +23,16 @@ import harmony.gui.Dialog;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;
+import harmony.gui.persist.Persistor;
+import harmony.gui.persist.persistors.ConstantPersistor;
 
 public class Constant extends Node {
 
 	private Double value = 0.0;
+
+	public Constant() {
+		this(null);
+	}
 
 	public Constant(Space space) {
 		super(space, "Constant");
@@ -39,7 +45,7 @@ public class Constant extends Node {
 
 			@Override
 			public Object getData() {
-				return value;
+				return getValue();
 			}
 
 			@Override
@@ -56,15 +62,26 @@ public class Constant extends Node {
 		addOutPort(out);
 	}
 
+	public Double getValue() {
+		return value;
+	}
+
 	public void setValue(Double x) {
 		value = x;
 	}
 
 	@Override
 	public void showOpt() {
-		Double d = Dialog.doubleDialog(getFather(), "Enter a value", value.toString());
+		Double d = Dialog.doubleDialog(getFather(), "Enter a value", getValue().toString());
 		if (d == null)
 			return;
 		setValue(d);
+	}
+
+	// Persistence
+
+	@Override
+	public Persistor<Node> getCurrentPersistRecord() {
+		return new ConstantPersistor(this);
 	}
 }

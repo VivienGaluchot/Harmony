@@ -33,7 +33,6 @@ import harmony.gui.graph.elements.nodes.Constant;
 import harmony.gui.graph.elements.nodes.Display;
 import harmony.gui.graph.elements.nodes.FunctionCallNode;
 import harmony.gui.graph.elements.nodes.FunctionNode;
-import harmony.gui.graph.elements.nodes.NodeFactory;
 import harmony.gui.graph.elements.nodes.ProcessNode;
 import harmony.gui.graph.elements.nodes.SpaceNode;
 import harmony.gui.persist.Persistor;
@@ -48,7 +47,7 @@ public class SpaceController {
 	public void open() {
 		Dialog.displayMessage(space, "Warning, open command experimental...");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
-		File inputFile = Dialog.fileDialog(space, filter);
+		File inputFile = Dialog.fileDialog(space, filter, "Open");
 		if (inputFile == null)
 			return;
 		try {
@@ -78,7 +77,7 @@ public class SpaceController {
 	public void saveAs() {
 		Dialog.displayMessage(space, "Warning, save command experimental...");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
-		File outputFile = Dialog.fileDialog(space, filter);
+		File outputFile = Dialog.fileDialog(space, filter, "Save as");
 		if (outputFile == null)
 			return;
 		Persistor<Space> p = space.getCurrentPersistRecord();
@@ -102,7 +101,6 @@ public class SpaceController {
 
 	public void addNode() {
 		List<Object> choices = new ArrayList<>();
-		choices.add(new NodeWrapper(NodeFactory.createTestNode(space)));
 		choices.add(new NodeWrapper(new ProcessNode(space, "Add", new AddScheme())));
 		choices.add(new NodeWrapper(new ProcessNode(space, "Substract", new SubstractScheme())));
 		choices.add(new NodeWrapper(new ProcessNode(space, "Divide", new DivideScheme())));

@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
@@ -36,9 +38,7 @@ import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 
-public abstract class Node extends GuiElement implements Recordable, Persistable<Node> {
-
-	public Space space;
+public class Node extends GuiElement implements Recordable, Persistable<Node> {
 
 	public Vector2D pos;
 
@@ -49,10 +49,13 @@ public abstract class Node extends GuiElement implements Recordable, Persistable
 	private ArrayList<OutPort> outPorts;
 
 	private Shape currentShape;
+	
+	public Node() {
+		this(null, null);
+	}
 
 	public Node(Space space, String name) {
 		super(space);
-		this.space = space;
 		this.name = name;
 		pos = new Vector2D(0, 0);
 		size = new Vector2D(3, 2);
@@ -87,7 +90,7 @@ public abstract class Node extends GuiElement implements Recordable, Persistable
 		setSelected(false);
 		setHovered(false);
 		setClicked(false);
-		space.removeNode(this);
+		((Space) getFather()).removeNode(this);
 	}
 
 	@Override
@@ -98,7 +101,9 @@ public abstract class Node extends GuiElement implements Recordable, Persistable
 			return false;
 	}
 
-	public abstract void showOpt();
+	public void showOpt() {
+		JOptionPane.showMessageDialog(getFather(), "Empty node");
+	}
 
 	public List<InPort> getInPorts() {
 		return Collections.unmodifiableList(inPorts);

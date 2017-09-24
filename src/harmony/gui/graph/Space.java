@@ -83,6 +83,9 @@ public class Space extends DrawPanel
 	private RecordQueue recordQueue;
 
 	public Space(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+		super();
+		addKeyListener(this);
+		
 		this.name = name;
 
 		nodes = new ArrayList<>();

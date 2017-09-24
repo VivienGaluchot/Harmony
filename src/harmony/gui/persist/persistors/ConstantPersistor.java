@@ -16,34 +16,32 @@
 package harmony.gui.persist.persistors;
 
 import harmony.gui.graph.elements.Node;
-import harmony.gui.persist.Persistor;
-import harmony.math.Vector2D;
+import harmony.gui.graph.elements.nodes.Constant;
 
-public class NodePersistor extends Persistor<Node> {
+public class ConstantPersistor extends NodePersistor {
 	private static final long serialVersionUID = 1L;
 
-	double posX;
-	double posY;
-	String name;
+	double value;
 
-	public NodePersistor(Node source) {
+	public ConstantPersistor(Constant source) {
 		super(source);
-		posX = source.pos.x;
-		posY = source.pos.y;
-		name = source.getName();
+		value = source.getValue();
 	}
 
 	@Override
 	public Node recreate() {
-		Node n = new Node();
-		update(n);
-		return n;
+		Constant c = new Constant();
+		update(c);
+		return c;
 	}
 
 	@Override
 	public void update(Node source) {
-		source.pos = new Vector2D(posX, posY);
-		source.setName(name);
+		if (!(source instanceof Constant))
+			throw new IllegalArgumentException("Wrong source object class");
+		super.update(source);
+		Constant c = (Constant) source;
+		c.setValue(value);
 	}
 
 }
