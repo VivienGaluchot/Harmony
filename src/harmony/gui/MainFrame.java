@@ -39,20 +39,6 @@ public class MainFrame extends SpaceEditFrame {
 
 	public MainFrame(Space space) {
 		super(space);
-
-		initMenu();
-
-		setTitle("Harmony");
-		setLayout(new GridBagLayout());
-		getContentPane().setBackground(Color.white);
-
-		add(space, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-				new Insets(0, 0, 0, 0), 0, 0));
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(new Dimension(800, 600));
-		setVisible(true);
-		setLocationRelativeTo(null);
 	}
 
 	@Override

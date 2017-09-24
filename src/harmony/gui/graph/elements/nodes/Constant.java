@@ -27,12 +27,9 @@ import harmony.gui.graph.elements.OutPort;
 public class Constant extends Node {
 
 	private Double value = 0.0;
-	private String constantName;
 
 	public Constant(Space space) {
 		super(space, "Constant");
-
-		this.constantName = getName();
 
 		OutPort out = new OutPort(this, Double.class, "value") {
 			@Override
@@ -65,12 +62,6 @@ public class Constant extends Node {
 
 	@Override
 	public void showOpt() {
-		String name = Dialog.stringDialog(getFather(), "Enter constant name", constantName);
-		if (name == null)
-			return;
-		constantName = name;
-		setName(constantName);
-
 		Double d = Dialog.doubleDialog(getFather(), "Enter a value", value.toString());
 		if (d == null)
 			return;
