@@ -29,13 +29,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import harmony.Ressources;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.SpaceController;
 
@@ -66,17 +66,12 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		initMenu();
 		addComponentListener(this);
 		
-		ImageIcon img16 = new ImageIcon(".\\graphics\\icon16.png");
-		ImageIcon img32 = new ImageIcon(".\\graphics\\icon32.png");
-		ImageIcon img64 = new ImageIcon(".\\graphics\\icon64.png");
-		ImageIcon img128 = new ImageIcon(".\\graphics\\icon128.png");
-		ImageIcon img256 = new ImageIcon(".\\graphics\\icon256.png");
 		List<Image> icons = new ArrayList<Image>();
-		icons.add(img16.getImage());
-		icons.add(img32.getImage());
-		icons.add(img64.getImage());
-		icons.add(img128.getImage());
-		icons.add(img256.getImage());
+		icons.add(Ressources.icon16.getImage());
+		icons.add(Ressources.icon32.getImage());
+		icons.add(Ressources.icon64.getImage());
+		icons.add(Ressources.icon128.getImage());
+		icons.add(Ressources.icon256.getImage());
 		setIconImages(icons);
 		
 		setLayout(new GridBagLayout());
