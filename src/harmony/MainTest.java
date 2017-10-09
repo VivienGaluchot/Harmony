@@ -18,6 +18,8 @@ package harmony;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.UIManager;
+
 import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
 import harmony.gui.MainFrame;
@@ -39,6 +41,7 @@ public class MainTest {
 	static Concentrator concentrator;
 
 	public static void main(String[] args) throws Exception {
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		List<DataGenerator> inputs = new ArrayList<>();
 		inputs.add(new DataGenerator() {

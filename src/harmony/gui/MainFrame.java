@@ -30,14 +30,16 @@ import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
+
+import harmony.License;
 import harmony.gui.graph.Space;
-import harmony.sound.License;
 
 public class MainFrame extends SpaceEditFrame {
 	private static final long serialVersionUID = 1L;
 
 	public MainFrame(Space space) {
 		super(space);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
 	@Override
@@ -93,6 +95,14 @@ public class MainFrame extends SpaceEditFrame {
 				licenseFrame.setSize(new Dimension(600, 600));
 				licenseFrame.setVisible(true);
 				licenseFrame.setLocationRelativeTo(null);
+
+				scroll.getVerticalScrollBar().setValue(0);
+
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						scroll.getVerticalScrollBar().setValue(0);
+					}
+				});
 			}
 		});
 	}

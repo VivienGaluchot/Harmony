@@ -16,6 +16,7 @@
 package harmony.gui;
 
 import java.awt.Color;
+import java.text.DecimalFormat;
 
 import harmony.gui.graph.elements.nodes.FunctionNode;
 
@@ -37,6 +38,21 @@ public class Types {
 		else if (type == FunctionNode.class)
 			return Color.MAGENTA;
 		else
-			throw new IllegalArgumentException(type.getName());
+			throw new IllegalArgumentException("Wrong data type : " + type.getName());
+	}
+	
+	public static String getDataString(Object data) {
+		DecimalFormat df = new DecimalFormat("#");
+		df.setMaximumFractionDigits(2);
+		if (data instanceof Integer)
+			return df.format(data);
+		else if (data instanceof Float)
+			return df.format(data);
+		else if (data instanceof Double)
+			return df.format(data);
+		else if (data instanceof FunctionNode)
+			return ((FunctionNode) data).getName();
+		else
+			throw new IllegalArgumentException("Wrong data type : " + data.toString());
 	}
 }

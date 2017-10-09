@@ -58,7 +58,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		super(space);
 		this.name = name;
 		pos = new Vector2D(0, 0);
-		size = new Vector2D(3, 2);
+		size = new Vector2D(2, 2);
 
 		inPorts = new ArrayList<>();
 		outPorts = new ArrayList<>();

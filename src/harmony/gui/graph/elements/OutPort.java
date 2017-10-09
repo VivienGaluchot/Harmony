@@ -23,6 +23,7 @@ import java.util.Set;
 
 import harmony.data.DataGenerator;
 import harmony.data.DataProcessor;
+import harmony.gui.Types;
 import harmony.math.Vector2D;
 
 public abstract class OutPort extends Port implements DataProcessor {
@@ -50,8 +51,9 @@ public abstract class OutPort extends Port implements DataProcessor {
 		g2d.drawString(name, (float) pos.x - 0.2f - (float) nameRect.getWidth(), (float) pos.y + 0.07f);
 
 		if (isHovered()) {
-			if (this.getData() != null) {
-				String dispMsg = this.getData().toString();
+			Object data = this.getData();
+			if (data != null) {
+				String dispMsg = Types.getDataString(data);
 				Vector2D mspPos = pos.clone();
 				g2d.drawString(dispMsg, (float) (mspPos.x + this.radius + 0.05f), (float) (mspPos.y - radius) + 0.05f);
 			}

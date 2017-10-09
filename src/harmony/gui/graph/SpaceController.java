@@ -38,7 +38,8 @@ import harmony.gui.graph.elements.nodes.SpaceNode;
 import harmony.gui.persist.Persistor;
 
 public class SpaceController {
-	Space space;
+	Space space = null;
+	File currentFile = null;
 
 	public SpaceController(Space space) {
 		this.space = space;
@@ -47,7 +48,7 @@ public class SpaceController {
 	public void open() {
 		Dialog.displayMessage(space, "Warning, open command experimental...");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
-		File inputFile = Dialog.fileDialog(space, filter, "Open");
+		File inputFile = Dialog.fileDialog(space, filter, "Open", currentFile);
 		if (inputFile == null)
 			return;
 		try {
@@ -59,6 +60,7 @@ public class SpaceController {
 					return;
 				space.clean();
 				prs.update(space);
+				currentFile = inputFile;
 			}
 		} catch (ClassNotFoundException e) {
 			Dialog.displayError(space, e.getMessage());
@@ -68,25 +70,32 @@ public class SpaceController {
 			e.printStackTrace();
 		}
 	}
+	
+	public File getCurrentFile() {
+		return currentFile;
+	}
 
 	public void save() {
-		// TODO
-		Dialog.displayMessage(space, "Save command not currently available...");
+		if (currentFile == null) {
+			saveAs();
+			return;
+		}
+		Dialog.displayMessage(space, "Warning, save command experimental...");
+		persistSpace(currentFile);
 	}
 
 	public void saveAs() {
-		Dialog.displayMessage(space, "Warning, save command experimental...");
+		Dialog.displayMessage(space, "Warning, save-as command experimental...");
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Harmony project", "hrm");
-		File outputFile = Dialog.fileDialog(space, filter, "Save as");
+		File outputFile = Dialog.fileDialog(space, filter, "Save as", currentFile);
 		if (outputFile == null)
 			return;
-		Persistor<Space> p = space.getCurrentPersistRecord();
-		try {
-			p.persist(outputFile);
-		} catch (IOException e) {
-			Dialog.displayError(space, e.getMessage());
-			e.printStackTrace();
-		}
+		if (getExtension(outputFile.getName()).compareTo("hrm") != 0)
+			outputFile = new File(outputFile.getPath() + ".hrm");
+		if (outputFile.exists()
+				&& !Dialog.yesNoDialog(space, "Warning, file already existing. Do you want to overwrite it ?"))
+			return;
+		persistSpace(outputFile);
 	}
 
 	public void undo() {
@@ -132,5 +141,29 @@ public class SpaceController {
 		public String toString() {
 			return n.getName();
 		}
+	}
+
+	// Utils
+
+	private String getExtension(String fileName) {
+		String extension = "";
+		int i = fileName.lastIndexOf('.');
+		int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+		if (i > p) {
+			extension = fileName.substring(i + 1);
+		}
+		System.out.println(fileName + " " + extension);
+		return extension;
+	}
+
+	private void persistSpace(File path) {
+		Persistor<Space> p = space.getCurrentPersistRecord();
+		try {
+			p.persist(path);
+		} catch (IOException e) {
+			Dialog.displayError(space, e.getMessage());
+			e.printStackTrace();
+		}
+		currentFile = path;
 	}
 }

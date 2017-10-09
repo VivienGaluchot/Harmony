@@ -19,10 +19,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -32,9 +39,10 @@ import javax.swing.KeyStroke;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.SpaceController;
 
-public class SpaceEditFrame extends JFrame {
+public class SpaceEditFrame extends JFrame implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 
+	protected AnimationRunner runner;
 	protected SpaceController controller;
 
 	protected JMenuBar menuBar;
@@ -52,10 +60,25 @@ public class SpaceEditFrame extends JFrame {
 	public SpaceEditFrame(Space space) {
 		super();
 		controller = new SpaceController(space);
-
+		runner = new AnimationRunner(space);
+		
+		updateTitle();
 		initMenu();
-
-		setTitle("Harmony");
+		addComponentListener(this);
+		
+		ImageIcon img16 = new ImageIcon(".\\graphics\\icon16.png");
+		ImageIcon img32 = new ImageIcon(".\\graphics\\icon32.png");
+		ImageIcon img64 = new ImageIcon(".\\graphics\\icon64.png");
+		ImageIcon img128 = new ImageIcon(".\\graphics\\icon128.png");
+		ImageIcon img256 = new ImageIcon(".\\graphics\\icon256.png");
+		List<Image> icons = new ArrayList<Image>();
+		icons.add(img16.getImage());
+		icons.add(img32.getImage());
+		icons.add(img64.getImage());
+		icons.add(img128.getImage());
+		icons.add(img256.getImage());
+		setIconImages(icons);
+		
 		setLayout(new GridBagLayout());
 		getContentPane().setBackground(Color.white);
 
@@ -65,6 +88,8 @@ public class SpaceEditFrame extends JFrame {
 		setSize(new Dimension(800, 600));
 		setVisible(true);
 		setLocationRelativeTo(null);
+		
+		runner.start();
 	}
 
 	protected void initMenu() {
@@ -81,6 +106,7 @@ public class SpaceEditFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				controller.open();
+				updateTitle();
 			}
 		});
 		file.add(open);
@@ -92,6 +118,7 @@ public class SpaceEditFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				controller.save();
+				updateTitle();
 			}
 		});
 		file.add(save);
@@ -104,6 +131,7 @@ public class SpaceEditFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				controller.saveAs();
+				updateTitle();
 			}
 		});
 		file.add(saveAs);
@@ -151,5 +179,43 @@ public class SpaceEditFrame extends JFrame {
 		menuBar.add(edit);
 
 		setJMenuBar(menuBar);
+	}
+	
+	private void updateTitle() {
+		String mainTitle = "Harmony";
+		if (controller != null) {
+			File currentFile = controller.getCurrentFile();
+			if (currentFile != null) {
+				setTitle(mainTitle + " - " + currentFile.toString());
+				return;
+			}
+		}
+		
+		setTitle(mainTitle);
+	}
+	
+	
+	// ComponentListener
+
+	@Override
+	public void componentHidden(ComponentEvent arg0) {
+		updateTitle();
+		runner.pauseAnimation();
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
+		
+	}
+
+	@Override
+	public void componentShown(ComponentEvent arg0) {
+		updateTitle();
+		runner.resumeAnimation();
 	}
 }

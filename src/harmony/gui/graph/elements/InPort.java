@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import harmony.data.DataGenerator;
+import harmony.gui.Types;
 import harmony.math.Vector2D;
 
 public class InPort extends Port {
@@ -72,8 +73,9 @@ public class InPort extends Port {
 		g2d.drawString(name, (float) pos.x + 0.2f, (float) pos.y + 0.07f);
 
 		if (isHovered()) {
-			if (this.getData() != null) {
-				String dispMsg = getData().toString();
+			Object data = this.getData();
+			if (data != null) {
+				String dispMsg = Types.getDataString(data);
 				Rectangle2D bound = g2d.getFontMetrics().getStringBounds(dispMsg, g2d);
 				Vector2D mspPos = pos.clone();
 				g2d.drawString(dispMsg, (float) (mspPos.x - bound.getWidth() - this.radius - 0.05f),
