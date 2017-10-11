@@ -34,6 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+
 import harmony.Ressources;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.SpaceController;
@@ -59,12 +60,12 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 	public SpaceEditFrame(Space space) {
 		super();
 		controller = new SpaceController(space);
-		
+
 		runner = new AnimationRunner(space);
 		runner.start();
 		runner.pauseAnimation();
-		
-		GeneralInformationGenerator infoGenerator = new GeneralInformationGenerator(){
+
+		GeneralInformationGenerator infoGenerator = new GeneralInformationGenerator() {
 			@Override
 			public float getCurrentFrameRate() {
 				return runner.getTrueFrameRate();

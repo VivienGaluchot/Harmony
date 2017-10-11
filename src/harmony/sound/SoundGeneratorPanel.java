@@ -12,17 +12,17 @@ import harmony.sound.generation.SampleGenerator;
 
 public class SoundGeneratorPanel extends Space {
 	private static final long serialVersionUID = 1L;
-	
+
 	double globalTime = 0;
 	Concentrator concentrator;
-	
+
 	private DataDescriptor rightSignal;
 	private DataDescriptor leftSignal;
 
 	public SoundGeneratorPanel() {
 		super();
 		init("SoundGenerator", createInputs(), createOutputs());
-		
+
 		try {
 			concentrator = new Concentrator(getSampleGenerator());
 			concentrator.listen();
@@ -30,8 +30,8 @@ public class SoundGeneratorPanel extends Space {
 			e.printStackTrace();
 		}
 	}
-	
-	private List<DataGenerator> createInputs(){
+
+	private List<DataGenerator> createInputs() {
 		List<DataGenerator> inputs = new ArrayList<>();
 		inputs.add(new DataGenerator() {
 			@Override
@@ -51,8 +51,8 @@ public class SoundGeneratorPanel extends Space {
 		});
 		return inputs;
 	}
-	
-	private List<DataDescriptor> createOutputs(){
+
+	private List<DataDescriptor> createOutputs() {
 		List<DataDescriptor> outputs = new ArrayList<>();
 		rightSignal = new DataDescriptor() {
 			@Override
@@ -81,7 +81,7 @@ public class SoundGeneratorPanel extends Space {
 		outputs.add(leftSignal);
 		return outputs;
 	}
-	
+
 	private SampleGenerator getSampleGenerator() {
 		SampleGenerator sampleGenerator = new SampleGenerator() {
 			@Override

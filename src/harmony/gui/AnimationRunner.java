@@ -67,16 +67,16 @@ public class AnimationRunner extends Thread {
 		try {
 			while (!shouldStop) {
 				runSem.acquire();
-				
+
 				lastRepaintStart = System.currentTimeMillis();
 				panel.repaint();
 				repaintTime = System.currentTimeMillis() - lastRepaintStart;
 				if (desiredRepaintPeriod > repaintTime)
 					Thread.sleep(desiredRepaintPeriod - repaintTime);
 				cycleTime = System.currentTimeMillis() - lastRepaintStart;
-				
+
 				trueFrameRate = (float) (1000.0 / cycleTime) * 0.1f + trueFrameRate * 0.9f;
-						
+
 				runSem.release();
 			}
 		} catch (InterruptedException e1) {

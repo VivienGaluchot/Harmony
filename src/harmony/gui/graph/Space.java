@@ -38,7 +38,6 @@ import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
 import harmony.data.DataProcessor;
 import harmony.data.Util;
-import harmony.gui.AnimationRunner;
 import harmony.gui.Dialog;
 import harmony.gui.GeneralInformationGenerator;
 import harmony.gui.Types;
@@ -50,8 +49,8 @@ import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
 import harmony.gui.graph.elements.nodes.SpaceInputNode;
 import harmony.gui.graph.elements.nodes.SpaceOutputNode;
-import harmony.gui.persist.Persistor;
 import harmony.gui.persist.Persistable;
+import harmony.gui.persist.Persistor;
 import harmony.gui.persist.persistors.SpacePersistor;
 import harmony.gui.record.ChangeRecord;
 import harmony.gui.record.RecordQueue;
@@ -91,11 +90,11 @@ public class Space extends DrawPanel
 		this();
 		init(name, inputs, outputs);
 	}
-	
+
 	public Space() {
 		super();
 		addKeyListener(this);
-		
+
 		nodes = new ArrayList<>();
 		links = new ArrayList<>();
 
@@ -104,7 +103,7 @@ public class Space extends DrawPanel
 
 		recordQueue = new RecordQueue();
 	}
-	
+
 	protected void init(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
 		this.name = name;
 
@@ -248,7 +247,7 @@ public class Space extends DrawPanel
 	}
 
 	// Display
-	
+
 	public void setGeneralInformationGenerator(GeneralInformationGenerator infoGenerator) {
 		this.infoGenerator = infoGenerator;
 	}
