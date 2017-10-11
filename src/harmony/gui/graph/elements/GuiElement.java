@@ -39,15 +39,15 @@ public abstract class GuiElement {
 	private boolean hovered;
 	private boolean clicked;
 	private boolean selected;
-	
+
 	public GuiElement() {
-		this(null, null , Color.white, Color.black);
+		this(null, null, Color.white, Color.black);
 	}
 
 	public GuiElement(Component father_component) {
-		this(father_component, null , Color.white, Color.black);
+		this(father_component, null, Color.white, Color.black);
 	}
-	
+
 	public GuiElement(GuiElement father) {
 		this(father, Color.white, Color.black);
 	}
@@ -55,7 +55,7 @@ public abstract class GuiElement {
 	public GuiElement(Component father_component, Color backgroundColor, Color color2) {
 		this(father_component, null, backgroundColor, color2);
 	}
-	
+
 	public GuiElement(GuiElement father, Color backgroundColor, Color color2) {
 		this(null, father, backgroundColor, color2);
 	}

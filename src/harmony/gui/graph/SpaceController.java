@@ -70,7 +70,7 @@ public class SpaceController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public File getCurrentFile() {
 		return currentFile;
 	}

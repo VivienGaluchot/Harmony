@@ -32,7 +32,6 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
 import harmony.License;
-import harmony.Ressources;
 import harmony.gui.graph.Space;
 
 public class MainFrame extends SpaceEditFrame {
@@ -100,6 +99,7 @@ public class MainFrame extends SpaceEditFrame {
 				scroll.getVerticalScrollBar().setValue(0);
 
 				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					@Override
 					public void run() {
 						scroll.getVerticalScrollBar().setValue(0);
 					}

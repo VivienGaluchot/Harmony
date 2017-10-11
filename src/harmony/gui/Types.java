@@ -40,7 +40,7 @@ public class Types {
 		else
 			throw new IllegalArgumentException("Wrong data type : " + type.getName());
 	}
-	
+
 	public static String getDataString(Object data) {
 		DecimalFormat df = new DecimalFormat("#");
 		df.setMaximumFractionDigits(2);

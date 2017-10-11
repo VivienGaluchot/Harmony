@@ -49,7 +49,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 	private ArrayList<OutPort> outPorts;
 
 	private Shape currentShape;
-	
+
 	public Node() {
 		this(null, null);
 	}

@@ -30,7 +30,7 @@ public class Display extends Node {
 	private InPort in1;
 	private InPort in2;
 	private InPort in3;
-	
+
 	public Display() {
 		this(null);
 	}

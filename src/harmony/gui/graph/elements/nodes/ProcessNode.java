@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
@@ -59,7 +58,7 @@ public class ProcessNode extends Node {
 		inPortsMap = new HashMap<>();
 
 		// Compute all dependencies
-		TreeSet<DataDescriptor> inDescriptors = new TreeSet<>(new Comparator<DataDescriptor>(){
+		TreeSet<DataDescriptor> inDescriptors = new TreeSet<>(new Comparator<DataDescriptor>() {
 			@Override
 			public int compare(DataDescriptor a, DataDescriptor b) {
 				return a.getDataName().compareTo(b.getDataName());

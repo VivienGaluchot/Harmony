@@ -85,7 +85,7 @@ public class Space extends DrawPanel
 	public Space(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
 		super();
 		addKeyListener(this);
-		
+
 		this.name = name;
 
 		nodes = new ArrayList<>();

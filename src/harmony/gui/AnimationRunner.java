@@ -8,7 +8,7 @@ class AnimationRunner extends Thread {
 	private boolean shouldStop;
 	private boolean pause;
 	private DrawPanel panel;
-	
+
 	public AnimationRunner(DrawPanel panel) {
 		this.panel = panel;
 	}
@@ -25,6 +25,7 @@ class AnimationRunner extends Thread {
 		pause = false;
 	}
 
+	@Override
 	public void run() {
 		shouldStop = false;
 		pause = false;

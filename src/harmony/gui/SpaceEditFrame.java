@@ -34,8 +34,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-
 import harmony.Ressources;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.SpaceController;
@@ -62,11 +60,11 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		super();
 		controller = new SpaceController(space);
 		runner = new AnimationRunner(space);
-		
+
 		updateTitle();
 		initMenu();
 		addComponentListener(this);
-		
+
 		List<Image> icons = new ArrayList<Image>();
 		icons.add(Ressources.icon16.getImage());
 		icons.add(Ressources.icon32.getImage());
@@ -74,7 +72,7 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		icons.add(Ressources.icon128.getImage());
 		icons.add(Ressources.icon256.getImage());
 		setIconImages(icons);
-		
+
 		setLayout(new GridBagLayout());
 		getContentPane().setBackground(Color.white);
 
@@ -84,7 +82,7 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		setSize(new Dimension(800, 600));
 		setVisible(true);
 		setLocationRelativeTo(null);
-		
+
 		runner.start();
 	}
 
@@ -94,7 +92,7 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		// FILE
 		file = new JMenu("File");
 		file.setMnemonic('F');
-		
+
 		open = new JMenuItem("Open");
 		open.setToolTipText("Open an existing project");
 		open.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.Event.CTRL_MASK));
@@ -176,7 +174,7 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 
 		setJMenuBar(menuBar);
 	}
-	
+
 	private void updateTitle() {
 		String mainTitle = "Harmony";
 		if (controller != null) {
@@ -186,11 +184,10 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 				return;
 			}
 		}
-		
+
 		setTitle(mainTitle);
 	}
-	
-	
+
 	// ComponentListener
 
 	@Override
@@ -201,12 +198,12 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
-		
+
 	}
 
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		
+
 	}
 
 	@Override
