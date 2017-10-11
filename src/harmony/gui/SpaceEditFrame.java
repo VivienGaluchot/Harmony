@@ -59,7 +59,18 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 	public SpaceEditFrame(Space space) {
 		super();
 		controller = new SpaceController(space);
+		
 		runner = new AnimationRunner(space);
+		runner.start();
+		runner.pauseAnimation();
+		
+		GeneralInformationGenerator infoGenerator = new GeneralInformationGenerator(){
+			@Override
+			public float getCurrentFrameRate() {
+				return runner.getTrueFrameRate();
+			}
+		};
+		space.setGeneralInformationGenerator(infoGenerator);
 
 		updateTitle();
 		initMenu();
@@ -82,8 +93,6 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		setSize(new Dimension(800, 600));
 		setVisible(true);
 		setLocationRelativeTo(null);
-
-		runner.start();
 	}
 
 	protected void initMenu() {

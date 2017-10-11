@@ -25,6 +25,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -37,7 +38,9 @@ import harmony.data.DataDescriptor;
 import harmony.data.DataGenerator;
 import harmony.data.DataProcessor;
 import harmony.data.Util;
+import harmony.gui.AnimationRunner;
 import harmony.gui.Dialog;
+import harmony.gui.GeneralInformationGenerator;
 import harmony.gui.Types;
 import harmony.gui.graph.elements.GuiElement;
 import harmony.gui.graph.elements.InPort;
@@ -60,12 +63,12 @@ public class Space extends DrawPanel
 		implements Recordable, Persistable<Space>, MouseListener, MouseMotionListener, KeyListener {
 	private static final long serialVersionUID = 1L;
 
-	private String name;
+	private String name = null;
 
-	private SpaceInputNode inputNode;
-	private SpaceOutputNode outputNode;
-	private ArrayList<Node> nodes;
-	private ArrayList<Link> links;
+	private SpaceInputNode inputNode = null;
+	private SpaceOutputNode outputNode = null;
+	private ArrayList<Node> nodes = null;
+	private ArrayList<Link> links = null;
 
 	private Link draggedLink = null;
 
@@ -76,18 +79,23 @@ public class Space extends DrawPanel
 	private boolean alt_key_pressed = false;
 	private boolean ctrl_key_pressed = false;
 
-	private List<GuiElement> hovereds;
-	private List<GuiElement> selecteds;
+	private List<GuiElement> hovereds = null;
+	private List<GuiElement> selecteds = null;
 	private GuiElement clicked = null;
 
 	private RecordQueue recordQueue;
 
+	private GeneralInformationGenerator infoGenerator;
+
 	public Space(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+		this();
+		init(name, inputs, outputs);
+	}
+	
+	public Space() {
 		super();
 		addKeyListener(this);
-
-		this.name = name;
-
+		
 		nodes = new ArrayList<>();
 		links = new ArrayList<>();
 
@@ -95,6 +103,10 @@ public class Space extends DrawPanel
 		selecteds = new ArrayList<>();
 
 		recordQueue = new RecordQueue();
+	}
+	
+	protected void init(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+		this.name = name;
 
 		inputNode = new SpaceInputNode(this, inputs);
 		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
@@ -236,6 +248,10 @@ public class Space extends DrawPanel
 	}
 
 	// Display
+	
+	public void setGeneralInformationGenerator(GeneralInformationGenerator infoGenerator) {
+		this.infoGenerator = infoGenerator;
+	}
 
 	public GuiElement getPointedObject(Vector2D p) {
 		List<GuiElement> list = getObjectList();
@@ -270,7 +286,11 @@ public class Space extends DrawPanel
 		g2dTrans.dispose();
 
 		// draw overlay
-		g2d.drawString("OverlayToolbar", 10, 20);
+
+		DecimalFormat df = new DecimalFormat("#");
+		df.setMaximumFractionDigits(1);
+		g2d.drawString("OverlayToolbar", 50, 20);
+		g2d.drawString(df.format(infoGenerator.getCurrentFrameRate()), 10, 20);
 		g2d.drawString(getName() + " | " + getHoveredElementInfo(), 10, getHeight() - 10);
 		g2d.drawString("Harmony Dev0", this.getWidth() - 100, 20);
 		g2d.dispose();

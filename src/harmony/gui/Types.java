@@ -44,6 +44,7 @@ public class Types {
 	public static String getDataString(Object data) {
 		DecimalFormat df = new DecimalFormat("#");
 		df.setMaximumFractionDigits(2);
+		df.setMinimumFractionDigits(2);
 		if (data instanceof Integer)
 			return df.format(data);
 		else if (data instanceof Float)
