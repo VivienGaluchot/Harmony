@@ -21,7 +21,7 @@ import javax.swing.ImageIcon;
 
 public class Ressources {
 	public static URL licenseUrl;
-	
+
 	public static ImageIcon icon16;
 	public static ImageIcon icon32;
 	public static ImageIcon icon64;
@@ -30,9 +30,9 @@ public class Ressources {
 
 	public static void init() {
 		URL url = null;
-		
+
 		licenseUrl = Ressources.class.getResource("/LICENSE");
-				
+
 		url = Ressources.class.getResource("/icon16.png");
 		icon16 = new ImageIcon(url);
 		url = Ressources.class.getResource("/icon32.png");
