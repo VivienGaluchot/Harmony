@@ -56,7 +56,7 @@ public class SpaceInputNode extends Node {
 
 	@Override
 	public void showOpt() {
-		JOptionPane.showMessageDialog(getFather(), "Data to process flows out of this InputNode");
+		JOptionPane.showMessageDialog(getFatherComponent(), "Data to process flows out of this InputNode");
 	}
 
 }

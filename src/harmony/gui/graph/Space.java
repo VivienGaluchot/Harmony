@@ -160,7 +160,7 @@ public class Space extends DrawPanel
 	}
 
 	public void addNode(Node n) {
-		n.setFather(this);
+		n.setFatherComponent(this);
 		nodes.add(n);
 		recordQueue.addTrackedObject(n);
 		repaint();
@@ -283,8 +283,8 @@ public class Space extends DrawPanel
 			el.setHovered(false);
 			// Update distant displays
 			// TODO check
-			if (el.getFather() != this)
-				el.getFather().repaint();
+			if (el.getFatherComponent() != this)
+				el.getFatherComponent().repaint();
 		}
 		hovereds.clear();
 
@@ -302,8 +302,8 @@ public class Space extends DrawPanel
 		for (GuiElement el : hovereds) {
 			el.setHovered(true);
 			// Update distant displays
-			if (el.getFather() != this)
-				el.getFather().repaint();
+			if (el.getFatherComponent() != this)
+				el.getFatherComponent().repaint();
 		}
 		repaint();
 	}

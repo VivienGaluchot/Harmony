@@ -34,6 +34,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.UIManager;
 
 import harmony.Ressources;
 import harmony.gui.graph.Space;
@@ -93,7 +94,7 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		// FILE
 		file = new JMenu("File");
 		file.setMnemonic('F');
-
+		
 		open = new JMenuItem("Open");
 		open.setToolTipText("Open an existing project");
 		open.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.Event.CTRL_MASK));

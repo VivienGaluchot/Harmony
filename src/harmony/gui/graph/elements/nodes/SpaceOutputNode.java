@@ -80,6 +80,6 @@ public class SpaceOutputNode extends Node {
 
 	@Override
 	public void showOpt() {
-		JOptionPane.showMessageDialog(getFather(), "Result must be put in this OutputNode");
+		JOptionPane.showMessageDialog(getFatherComponent(), "Result must be put in this OutputNode");
 	}
 }

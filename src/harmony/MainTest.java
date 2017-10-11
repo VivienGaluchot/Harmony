@@ -41,6 +41,7 @@ public class MainTest {
 	static Concentrator concentrator;
 
 	public static void main(String[] args) throws Exception {
+		Ressources.init();
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
 		List<DataGenerator> inputs = new ArrayList<>();

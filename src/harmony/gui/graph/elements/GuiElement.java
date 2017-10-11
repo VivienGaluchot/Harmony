@@ -24,7 +24,8 @@ import harmony.math.Vector2D;
 
 public abstract class GuiElement {
 
-	private Component father;
+	private Component father_component;
+	private GuiElement father;
 
 	private Color backgroundColor;
 	private Color color;
@@ -38,13 +39,30 @@ public abstract class GuiElement {
 	private boolean hovered;
 	private boolean clicked;
 	private boolean selected;
+	
+	public GuiElement() {
+		this(null, null , Color.white, Color.black);
+	}
 
-	public GuiElement(Component father) {
+	public GuiElement(Component father_component) {
+		this(father_component, null , Color.white, Color.black);
+	}
+	
+	public GuiElement(GuiElement father) {
 		this(father, Color.white, Color.black);
 	}
 
-	public GuiElement(Component father, Color backgroundColor, Color color2) {
+	public GuiElement(Component father_component, Color backgroundColor, Color color2) {
+		this(father_component, null, backgroundColor, color2);
+	}
+	
+	public GuiElement(GuiElement father, Color backgroundColor, Color color2) {
+		this(null, father, backgroundColor, color2);
+	}
+
+	private GuiElement(Component father_component, GuiElement father, Color backgroundColor, Color color2) {
 		this.father = father;
+		this.father_component = father_component;
 
 		this.backgroundColor = backgroundColor;
 		this.color = color2;
@@ -60,12 +78,27 @@ public abstract class GuiElement {
 		selected = false;
 	}
 
-	public void setFather(Component father) {
+	public void setFather(GuiElement father) {
+		if (this.father_component != null)
+			throw new IllegalArgumentException("Component shouldn't have two fathers");
 		this.father = father;
 	}
 
-	public Component getFather() {
+	public void setFatherComponent(Component father_component) {
+		if (this.father != null)
+			throw new IllegalArgumentException("Component shouldn't have two fathers");
+		this.father_component = father_component;
+	}
+
+	public GuiElement getFather() {
 		return father;
+	}
+
+	public Component getFatherComponent() {
+		GuiElement el = this;
+		while (el.getFather() != null)
+			el = getFather();
+		return el.father_component;
 	}
 
 	public abstract boolean contains(Vector2D p);

@@ -22,12 +22,18 @@ import javax.swing.JOptionPane;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.InPort;
 import harmony.gui.graph.elements.Node;
+import harmony.gui.persist.Persistor;
+import harmony.gui.persist.persistors.DisplayPersistor;
 
 public class Display extends Node {
 
 	private InPort in1;
 	private InPort in2;
 	private InPort in3;
+	
+	public Display() {
+		this(null);
+	}
 
 	public Display(Space space) {
 		super(space, "Display");
@@ -73,7 +79,13 @@ public class Display extends Node {
 
 	@Override
 	public void showOpt() {
-		JOptionPane.showMessageDialog(getFather(), "Display Node");
+		JOptionPane.showMessageDialog(getFatherComponent(), "Display Node");
 	}
 
+	// Persistence
+
+	@Override
+	public Persistor<Node> getCurrentPersistRecord() {
+		return new DisplayPersistor(this);
+	}
 }

@@ -25,17 +25,17 @@ public class Ressources {
 	public static ImageIcon icon64;
 	public static ImageIcon icon128;
 	public static ImageIcon icon256;
-	
+
 	public static void init() {
-	    URL url16 = Ressources.class.getResource("/icon16.png");
-	    URL url32 = Ressources.class.getResource("/icon32.png");
-	    URL url64 = Ressources.class.getResource("/icon64.png");
-	    URL url128 = Ressources.class.getResource("/icon128.png");
-	    URL url256 = Ressources.class.getResource("/icon256.png");
-	    icon16 = new ImageIcon(url16);
-	    icon32 = new ImageIcon(url32);
-	    icon64 = new ImageIcon(url64);
-	    icon128 = new ImageIcon(url128);
-	    icon256 = new ImageIcon(url256);
+		URL url = Ressources.class.getResource("/icon16.png");
+		icon16 = new ImageIcon(url);
+		url = Ressources.class.getResource("/icon32.png");
+		icon32 = new ImageIcon(url);
+		url = Ressources.class.getResource("/icon64.png");
+		icon64 = new ImageIcon(url);
+		url = Ressources.class.getResource("/icon128.png");
+		icon128 = new ImageIcon(url);
+		url = Ressources.class.getResource("/icon256.png");
+		icon256 = new ImageIcon(url);
 	}
 }

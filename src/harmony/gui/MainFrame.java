@@ -32,6 +32,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
 import harmony.License;
+import harmony.Ressources;
 import harmony.gui.graph.Space;
 
 public class MainFrame extends SpaceEditFrame {

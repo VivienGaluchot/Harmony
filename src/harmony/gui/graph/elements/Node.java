@@ -90,7 +90,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		setSelected(false);
 		setHovered(false);
 		setClicked(false);
-		((Space) getFather()).removeNode(this);
+		((Space) getFatherComponent()).removeNode(this);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 	}
 
 	public void showOpt() {
-		JOptionPane.showMessageDialog(getFather(), "Empty node");
+		JOptionPane.showMessageDialog(getFatherComponent(), "Empty node");
 	}
 
 	public List<InPort> getInPorts() {

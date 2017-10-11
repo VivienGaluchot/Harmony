@@ -72,7 +72,7 @@ public class Constant extends Node {
 
 	@Override
 	public void showOpt() {
-		Double d = Dialog.doubleDialog(getFather(), "Enter a value", getValue().toString());
+		Double d = Dialog.doubleDialog(getFatherComponent(), "Enter a value", getValue().toString());
 		if (d == null)
 			return;
 		setValue(d);

@@ -33,7 +33,7 @@ public abstract class Port extends GuiElement implements DataProcessor {
 	public Double radius;
 
 	public Port(Node node, Class<?> type, String name) {
-		super(node.getFather(), Types.getDataColor(type), Types.getDataColor(type).darker());
+		super(node, Types.getDataColor(type), Types.getDataColor(type).darker());
 		this.node = node;
 		this.name = name;
 		this.type = type;

@@ -16,11 +16,14 @@
 package harmony.gui.graph.elements.nodes;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.swing.JOptionPane;
 
@@ -56,11 +59,20 @@ public class ProcessNode extends Node {
 		inPortsMap = new HashMap<>();
 
 		// Compute all dependencies
-		Set<DataDescriptor> inDescriptors = new HashSet<>();
+		TreeSet<DataDescriptor> inDescriptors = new TreeSet<>(new Comparator<DataDescriptor>(){
+			@Override
+			public int compare(DataDescriptor a, DataDescriptor b) {
+				return a.getDataName().compareTo(b.getDataName());
+			}
+		});
 		for (ProcessScheme pr : schemes) {
 			Set<DataDescriptor> dep = pr.getDependencies();
-			if (dep != null)
-				inDescriptors.addAll(dep);
+			if (dep != null) {
+				for (DataDescriptor dd : dep) {
+					if (!inDescriptors.contains(dd))
+						inDescriptors.add(dd);
+				}
+			}
 		}
 
 		// Create InPorts
@@ -98,7 +110,7 @@ public class ProcessNode extends Node {
 
 	@Override
 	public void showOpt() {
-		JOptionPane.showMessageDialog(getFather(), "Generic Node");
+		JOptionPane.showMessageDialog(getFatherComponent(), "Generic Node");
 	}
 
 }
