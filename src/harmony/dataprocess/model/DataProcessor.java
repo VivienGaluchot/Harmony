@@ -13,10 +13,12 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data;
+package harmony.dataprocess.model;
 
-public interface DataGenerator extends DataDescriptor {
+import java.util.Set;
 
-	public Object getData();
+public interface DataProcessor extends DataGenerator {
+
+	public Set<DataGenerator> getDataProcessDependencies();
 
 }

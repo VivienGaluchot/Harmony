@@ -13,10 +13,14 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data;
+package harmony.dataprocess.implem;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import harmony.dataprocess.model.DataDescriptor;
+import harmony.dataprocess.model.DataGenerator;
+import harmony.dataprocess.model.DataProcessor;
 
 public class Util {
 

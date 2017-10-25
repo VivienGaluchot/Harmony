@@ -18,7 +18,7 @@ package harmony.gui.graph.elements.nodes;
 import java.awt.Graphics;
 import java.util.Set;
 
-import harmony.data.DataGenerator;
+import harmony.dataprocess.model.DataGenerator;
 import harmony.gui.Dialog;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.Node;

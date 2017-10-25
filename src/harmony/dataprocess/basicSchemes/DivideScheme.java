@@ -13,23 +13,27 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data.basicSchemes;
+package harmony.dataprocess.basicSchemes;
 
 import java.util.Map;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataGenerator;
+import harmony.dataprocess.model.DataDescriptor;
+import harmony.dataprocess.model.DataGenerator;
 
-public class MultiplyScheme extends ABScheme {
+public class DivideScheme extends ABScheme {
 
 	@Override
 	public String getDataName() {
-		return a.getDataName() + " * " + b.getDataName();
+		return a.getDataName() + " / " + b.getDataName();
 	}
 
 	@Override
 	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
-		return findValue(a, generatorMap) * findValue(b, generatorMap);
+		Double bValue = findValue(b, generatorMap);
+		if (bValue != 0)
+			return findValue(a, generatorMap) / bValue;
+		else
+			return null;
 	}
 
 }

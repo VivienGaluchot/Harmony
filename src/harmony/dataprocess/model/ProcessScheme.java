@@ -13,12 +13,15 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data;
+package harmony.dataprocess.model;
 
-public interface DataDescriptor {
+import java.util.Map;
+import java.util.Set;
 
-	public Class<?> getDataClass();
+public interface ProcessScheme extends DataDescriptor {
 
-	public String getDataName();
+	public Set<DataDescriptor> getDependencies();
+
+	public Object process(Map<DataDescriptor, DataGenerator> generatorMap);
 
 }

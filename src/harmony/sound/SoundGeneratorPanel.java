@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.sound.sampled.LineUnavailableException;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataGenerator;
+import harmony.dataprocess.model.DataDescriptor;
+import harmony.dataprocess.model.DataGenerator;
 import harmony.gui.graph.Space;
 import harmony.sound.generation.SampleGenerator;
 

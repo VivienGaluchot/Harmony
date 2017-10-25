@@ -13,25 +13,23 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data.basicSchemes;
+package harmony.dataprocess.basicSchemes;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataDescriptorModel;
-import harmony.data.DataGenerator;
-import harmony.data.ProcessScheme;
+import harmony.dataprocess.implem.DataDescriptorModel;
+import harmony.dataprocess.model.DataDescriptor;
+import harmony.dataprocess.model.DataGenerator;
+import harmony.dataprocess.model.ProcessScheme;
 
-public abstract class ABScheme implements ProcessScheme {
+public abstract class AScheme implements ProcessScheme {
 
 	protected DataDescriptor a;
-	protected DataDescriptor b;
 
-	public ABScheme() {
+	public AScheme() {
 		a = new DataDescriptorModel(Double.class, "a");
-		b = new DataDescriptorModel(Double.class, "b");
 	}
 
 	@Override
@@ -43,7 +41,6 @@ public abstract class ABScheme implements ProcessScheme {
 	public Set<DataDescriptor> getDependencies() {
 		Set<DataDescriptor> dep = new HashSet<>();
 		dep.add(a);
-		dep.add(b);
 		return dep;
 	}
 

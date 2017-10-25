@@ -34,10 +34,10 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataGenerator;
-import harmony.data.DataProcessor;
-import harmony.data.Util;
+import harmony.dataprocess.implem.Util;
+import harmony.dataprocess.model.DataDescriptor;
+import harmony.dataprocess.model.DataGenerator;
+import harmony.dataprocess.model.DataProcessor;
 import harmony.gui.Dialog;
 import harmony.gui.GeneralInformationGenerator;
 import harmony.gui.Types;

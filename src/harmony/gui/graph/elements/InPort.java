@@ -21,7 +21,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.HashSet;
 import java.util.Set;
 
-import harmony.data.DataGenerator;
+import harmony.dataprocess.model.DataGenerator;
 import harmony.gui.Types;
 import harmony.math.Vector2D;
 

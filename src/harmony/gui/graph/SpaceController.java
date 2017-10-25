@@ -22,11 +22,11 @@ import java.util.List;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import harmony.data.basicSchemes.AddScheme;
-import harmony.data.basicSchemes.DivideScheme;
-import harmony.data.basicSchemes.MultiplyScheme;
-import harmony.data.basicSchemes.SinScheme;
-import harmony.data.basicSchemes.SubstractScheme;
+import harmony.dataprocess.basicSchemes.AddScheme;
+import harmony.dataprocess.basicSchemes.DivideScheme;
+import harmony.dataprocess.basicSchemes.MultiplyScheme;
+import harmony.dataprocess.basicSchemes.SinScheme;
+import harmony.dataprocess.basicSchemes.SubstractScheme;
 import harmony.gui.Dialog;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.nodes.Constant;

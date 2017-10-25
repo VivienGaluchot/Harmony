@@ -22,8 +22,8 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import harmony.data.DataGenerator;
-import harmony.data.DataProcessor;
+import harmony.dataprocess.model.DataGenerator;
+import harmony.dataprocess.model.DataProcessor;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;

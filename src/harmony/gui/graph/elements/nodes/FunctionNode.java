@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import harmony.data.DataDescriptor;
-import harmony.data.DataDescriptorModel;
-import harmony.data.DataGenerator;
+import harmony.dataprocess.implem.DataDescriptorModel;
+import harmony.dataprocess.model.DataDescriptor;
+import harmony.dataprocess.model.DataGenerator;
 import harmony.gui.SpaceEditFrame;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.elements.InPort;

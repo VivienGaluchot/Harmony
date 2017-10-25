@@ -13,12 +13,23 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.data;
+package harmony.dataprocess.basicSchemes;
 
-import java.util.Set;
+import java.util.Map;
 
-public interface DataProcessor extends DataGenerator {
+import harmony.dataprocess.model.DataDescriptor;
+import harmony.dataprocess.model.DataGenerator;
 
-	public Set<DataGenerator> getDataProcessDependencies();
+public class SubstractScheme extends ABScheme {
+
+	@Override
+	public String getDataName() {
+		return a.getDataName() + " - " + b.getDataName();
+	}
+
+	@Override
+	public Object process(Map<DataDescriptor, DataGenerator> generatorMap) {
+		return findValue(a, generatorMap) - findValue(b, generatorMap);
+	}
 
 }

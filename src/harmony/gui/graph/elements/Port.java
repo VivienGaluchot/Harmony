@@ -20,7 +20,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
-import harmony.data.DataProcessor;
+import harmony.dataprocess.model.DataProcessor;
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.math.Vector2D;
