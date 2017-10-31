@@ -15,6 +15,12 @@
 
 package harmony.dataProcess2;
 
+import harmony.dataProcess2.data.DataArray;
+import harmony.dataProcess2.data.DataPattern;
+import harmony.dataProcess2.data.DataType;
+import harmony.dataProcess2.process.AtomicProcess;
+import harmony.dataProcess2.process.ComputeUnit;
+
 public class DataProcessTest {
 	public static void main(String[] args) throws Exception {
 		AtomicProcess consts = new AtomicProcess("consts", new ComputeUnit() {

@@ -13,34 +13,29 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2;
+package harmony.dataProcess2.data;
 
-public class Dependencie {
-	private AtomicProcess process;
-	private int id;
+public enum DataType {
+	Double (Double.class, new Double(0.0)),
+	Integer (Integer.class, new Integer(0));
 
-	public Dependencie(AtomicProcess process, int outputID) {
-		if (process == null)
-			throw new NullPointerException("computeUnit can't be null");
-		if (outputID < 0 || outputID > process.getOutputPattern().size())
-			throw new IllegalArgumentException("id out of bounds : " + outputID);
-		this.process = process;
-		this.id = outputID;
+	private Class<?> valueClass;
+	private Object neuter;
+	
+	private DataType(Class<?> valueClass, Object neuter) {
+		this.valueClass = valueClass;
+		this.neuter = neuter;
 	}
 	
-	public AtomicProcess getProcess() {
-		return process;
+	public Class<?> getValueClass() {
+		return valueClass;
 	}
 	
-	public int getId() {
-		return id;
+	public Object getNeuter() {
+		return neuter;
 	}
 
-	public Object getValue() {
-		return process.getValue(id);
-	}
-
-	public String toString() {
-		return process.getName() + "[" + id + "]";
+	public String toString(){
+		return valueClass.getSimpleName();
 	}
 }

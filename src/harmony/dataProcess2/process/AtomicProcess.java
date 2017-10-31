@@ -13,7 +13,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2;
+package harmony.dataProcess2.process;
+
+import harmony.dataProcess2.data.DataArray;
+import harmony.dataProcess2.data.DataPattern;
 
 public class AtomicProcess implements ComputeUnit {
 	// info

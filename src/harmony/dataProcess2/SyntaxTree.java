@@ -15,27 +15,17 @@
 
 package harmony.dataProcess2;
 
-public enum DataType {
-	Double (Double.class, new Double(0.0)),
-	Integer (Integer.class, new Integer(0));
+import harmony.dataProcess2.process.AtomicProcess;
 
-	private Class<?> valueClass;
-	private Object neuter;
+public class SyntaxTree {
+	// TODO
+	private AtomicProcess root;
 	
-	private DataType(Class<?> valueClass, Object neuter) {
-		this.valueClass = valueClass;
-		this.neuter = neuter;
+	public SyntaxTree(AtomicProcess root) {
+		this.root = root;
 	}
 	
-	public Class<?> getValueClass() {
-		return valueClass;
-	}
-	
-	public Object getNeuter() {
-		return neuter;
-	}
-
-	public String toString(){
-		return valueClass.getSimpleName();
+	public String toString() {
+		return "";
 	}
 }
