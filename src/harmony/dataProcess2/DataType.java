@@ -13,12 +13,29 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataprocess.model;
+package harmony.dataProcess2;
 
-public interface ComputeUnit<T> {
+public enum DataType {
+	Double (Double.class, new Double(0.0)),
+	Integer (Integer.class, new Integer(0));
+
+	private Class<?> valueClass;
+	private Object neuter;
 	
-	public Class<?>[] getInputsClassPattern();
+	private DataType(Class<?> valueClass, Object neuter) {
+		this.valueClass = valueClass;
+		this.neuter = neuter;
+	}
 	
-	public T computeValue(Object[] inputValues);
+	public Class<?> getValueClass() {
+		return valueClass;
+	}
 	
+	public Object getNeuter() {
+		return neuter;
+	}
+
+	public String toString(){
+		return valueClass.getSimpleName();
+	}
 }
