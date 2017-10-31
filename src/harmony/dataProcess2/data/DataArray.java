@@ -22,11 +22,11 @@ public class DataArray {
 	public DataArray(DataPattern pattern) {
 		if (pattern == null)
 			throw new NullPointerException("pattern can't be null");
-		
+
 		this.pattern = pattern;
-		
+
 		values = new Object[pattern.size()];
-		for (int i = 0 ; i < pattern.size(); i++) {
+		for (int i = 0; i < pattern.size(); i++) {
 			values[i] = pattern.getType(i).getNeuter();
 		}
 	}
@@ -45,7 +45,7 @@ public class DataArray {
 	public int size() {
 		return values.length;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer buff = new StringBuffer();

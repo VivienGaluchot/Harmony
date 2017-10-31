@@ -44,7 +44,7 @@ public class DataPattern {
 	public int size() {
 		return size;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer buff = new StringBuffer();

@@ -86,7 +86,7 @@ public class AtomicProcess implements ComputeUnit {
 	}
 
 	public Object getValue(int i) {
-		if(valuated)
+		if (valuated)
 			return values.getValue(i);
 		else
 			return getValues().getValue(i);
@@ -106,6 +106,7 @@ public class AtomicProcess implements ComputeUnit {
 		return false;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}

@@ -16,26 +16,26 @@
 package harmony.dataProcess2.data;
 
 public enum DataType {
-	Double (Double.class, new Double(0.0)),
-	Integer (Integer.class, new Integer(0));
+	Double(Double.class, new Double(0.0)), Integer(Integer.class, new Integer(0));
 
 	private Class<?> valueClass;
 	private Object neuter;
-	
+
 	private DataType(Class<?> valueClass, Object neuter) {
 		this.valueClass = valueClass;
 		this.neuter = neuter;
 	}
-	
+
 	public Class<?> getValueClass() {
 		return valueClass;
 	}
-	
+
 	public Object getNeuter() {
 		return neuter;
 	}
 
-	public String toString(){
+	@Override
+	public String toString() {
 		return valueClass.getSimpleName();
 	}
 }

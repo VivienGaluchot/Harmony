@@ -27,11 +27,11 @@ public class Dependencie {
 		this.process = process;
 		this.id = outputID;
 	}
-	
+
 	public AtomicProcess getProcess() {
 		return process;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -40,6 +40,7 @@ public class Dependencie {
 		return process.getValue(id);
 	}
 
+	@Override
 	public String toString() {
 		return process.getName() + "[" + id + "]";
 	}

@@ -18,19 +18,19 @@ package harmony.dataprocess.implem;
 import harmony.dataprocess.model.DataGenerator;
 
 public class DataGeneratorModel extends DataDescriptorModel implements DataGenerator {
-	
+
 	private Object data;
 
 	public DataGeneratorModel() {
 		super();
 		data = null;
 	}
-	
+
 	public DataGeneratorModel(Class<?> dataClass, String name, Object data) {
 		super(dataClass, name);
 		this.data = data;
 	}
-	
+
 	public void setData(Object data) {
 		this.data = data;
 	}
@@ -39,7 +39,7 @@ public class DataGeneratorModel extends DataDescriptorModel implements DataGener
 	public Object getData() {
 		return data;
 	}
-	
+
 	@Override
 	public String toString() {
 		return super.toString() + " = " + data;

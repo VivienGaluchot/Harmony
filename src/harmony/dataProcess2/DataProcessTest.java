@@ -28,14 +28,17 @@ public class DataProcessTest {
 			public String getName() {
 				return "c";
 			}
+
 			@Override
 			public DataPattern getInputPattern() {
 				return new DataPattern();
 			}
+
 			@Override
 			public DataPattern getOutputPattern() {
 				return new DataPattern(new DataType[] { DataType.Double, DataType.Double });
 			}
+
 			@Override
 			public DataArray compute(DataArray inputValues) {
 				DataArray da = new DataArray(getOutputPattern());
@@ -54,14 +57,17 @@ public class DataProcessTest {
 			public String getName() {
 				return "add";
 			}
+
 			@Override
 			public DataPattern getInputPattern() {
 				return new DataPattern(new DataType[] { DataType.Double, DataType.Double });
 			}
+
 			@Override
 			public DataPattern getOutputPattern() {
 				return new DataPattern(new DataType[] { DataType.Double });
 			}
+
 			@Override
 			public DataArray compute(DataArray inputValues) {
 				DataArray da = new DataArray(getOutputPattern());
@@ -73,18 +79,18 @@ public class DataProcessTest {
 		};
 		AtomicProcess add = new AtomicProcess("sum1", addUnit);
 		System.out.println(add);
-		if(!add.getValue(0).equals(DataType.Double.getNeuter()))
+		if (!add.getValue(0).equals(DataType.Double.getNeuter()))
 			throw new RuntimeException("Error");
 		else
 			System.out.println("ok");
-		
+
 		add.setDependencie(0, consts, 0);
 		System.out.println(add);
-		if(!add.getValue(0).equals(consts.getValue(0)))
+		if (!add.getValue(0).equals(consts.getValue(0)))
 			throw new RuntimeException("Error");
 		else
 			System.out.println("ok");
-		
+
 		add.setDependencie(1, consts, 1);
 		System.out.println(add);
 		add.setDependencie(1, null);
@@ -92,7 +98,7 @@ public class DataProcessTest {
 		add.setDependencie(1, consts, 1);
 		System.out.println(add);
 		System.out.println(add.getValues());
-		if(!add.getValue(0).equals(new Double(15 + 20)))
+		if (!add.getValue(0).equals(new Double(15 + 20)))
 			throw new RuntimeException("Error");
 		else
 			System.out.println("ok");

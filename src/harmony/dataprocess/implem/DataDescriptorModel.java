@@ -26,16 +26,16 @@ public class DataDescriptorModel implements DataDescriptor {
 		this.dataClass = null;
 		this.name = null;
 	}
-	
+
 	public DataDescriptorModel(Class<?> dataClass, String name) {
 		this.dataClass = dataClass;
 		this.name = name;
 	}
-	
+
 	public void setDataClass(Class<?> dataClass) {
 		this.dataClass = dataClass;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -49,7 +49,7 @@ public class DataDescriptorModel implements DataDescriptor {
 	public String getDataName() {
 		return name;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "(" + this.getDataClass().getSimpleName() + ") " + this.getDataName();

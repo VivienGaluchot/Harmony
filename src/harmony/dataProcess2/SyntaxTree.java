@@ -20,11 +20,12 @@ import harmony.dataProcess2.process.AtomicProcess;
 public class SyntaxTree {
 	// TODO
 	private AtomicProcess root;
-	
+
 	public SyntaxTree(AtomicProcess root) {
 		this.root = root;
 	}
-	
+
+	@Override
 	public String toString() {
 		return "";
 	}

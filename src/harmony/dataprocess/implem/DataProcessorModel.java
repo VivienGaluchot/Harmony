@@ -21,19 +21,19 @@ import harmony.dataprocess.model.DataGenerator;
 import harmony.dataprocess.model.DataProcessor;
 
 public class DataProcessorModel extends DataGeneratorModel implements DataProcessor {
-	
+
 	private Set<DataGenerator> processDependencies;
 
 	public DataProcessorModel() {
 		super();
 		processDependencies = null;
 	}
-	
+
 	public DataProcessorModel(Class<?> dataClass, String name, Object data, Set<DataGenerator> processDependencies) {
 		super(dataClass, name, data);
 		this.processDependencies = processDependencies;
 	}
-	
+
 	public void setDataProcessDependencies(Set<DataGenerator> processDependencies) {
 		this.processDependencies = processDependencies;
 	}
@@ -42,7 +42,7 @@ public class DataProcessorModel extends DataGeneratorModel implements DataProces
 	public Set<DataGenerator> getDataProcessDependencies() {
 		return processDependencies;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuffer buff = new StringBuffer();
