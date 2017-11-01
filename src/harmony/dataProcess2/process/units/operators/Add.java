@@ -13,40 +13,45 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process;
+package harmony.dataProcess2.process.units.operators;
 
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
+import harmony.dataProcess2.data.DataType;
+import harmony.dataProcess2.process.ComputeUnit;
 
-public class ComplexProcess implements ComputeUnit {
-	// info
-	private String name;
-	
-	public ComplexProcess(String name) {
-		this.name = name;
+public class Add implements ComputeUnit {
+
+	private DataPattern inPattern;
+	private DataPattern outPattern;
+
+	public Add() {
+		inPattern = new DataPattern(new DataType[] { DataType.Double, DataType.Double });
+		outPattern = new DataPattern(new DataType[] { DataType.Double });
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return "add";
 	}
 
 	@Override
 	public DataPattern getInputPattern() {
-		// TODO Auto-generated method stub
-		return null;
+		return inPattern;
 	}
 
 	@Override
 	public DataPattern getOutputPattern() {
-		// TODO Auto-generated method stub
-		return null;
+		return outPattern;
 	}
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		// TODO Auto-generated method stub
-		return null;
+		DataArray da = new DataArray(getOutputPattern());
+		Double a = (Double) inputValues.getValue(0);
+		Double b = (Double) inputValues.getValue(1);
+		da.setValue(0, a + b);
+		return da;
 	}
-	// TODO
+
 }

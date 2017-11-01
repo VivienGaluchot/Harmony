@@ -13,40 +13,42 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process;
+package harmony.dataProcess2.process.units;
 
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
+import harmony.dataProcess2.data.DataType;
+import harmony.dataProcess2.process.ComputeUnit;
 
-public class ComplexProcess implements ComputeUnit {
-	// info
-	private String name;
-	
-	public ComplexProcess(String name) {
-		this.name = name;
+public class ConstantUnit implements ComputeUnit {
+
+	private DataArray dataArray;
+	private DataPattern outPattern;
+
+	public ConstantUnit(DataType type, Object value) {
+		outPattern = new DataPattern(type);
+		dataArray = new DataArray(outPattern);
+		dataArray.setValue(0, value);
 	}
 
 	@Override
 	public String getName() {
-		return name;
+		return "constant";
 	}
 
 	@Override
 	public DataPattern getInputPattern() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public DataPattern getOutputPattern() {
-		// TODO Auto-generated method stub
-		return null;
+		return outPattern;
 	}
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		// TODO Auto-generated method stub
-		return null;
+		return dataArray;
 	}
-	// TODO
+
 }

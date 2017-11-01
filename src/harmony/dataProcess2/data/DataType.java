@@ -34,6 +34,10 @@ public enum DataType {
 		return neuter;
 	}
 
+	public boolean contains(Object value) {
+		return value.getClass().equals(getValueClass());
+	}
+
 	@Override
 	public String toString() {
 		return valueClass.getSimpleName();

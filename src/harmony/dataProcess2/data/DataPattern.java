@@ -20,11 +20,25 @@ public class DataPattern {
 	private int size;
 
 	public DataPattern() {
-		this(null);
+		this.types = null;
+		this.size = 0;
+	}
+
+	public DataPattern(DataType type) {
+		if (type != null) {
+			this.types = new DataType[] { type };
+			this.size = 1;
+		} else {
+			this.types = null;
+			this.size = 0;
+		}
 	}
 
 	public DataPattern(DataType[] types) {
 		if (types != null) {
+			for (DataType dt : types) {
+				assert dt != null : "type value can't be null";
+			}
 			this.types = types;
 			this.size = types.length;
 		} else {
@@ -33,8 +47,12 @@ public class DataPattern {
 		}
 	}
 
-	public boolean isValid(int id, Object value) {
-		return value.getClass() == types[id].getValueClass();
+	public boolean isTypeConsistent(int id, DataType type) {
+		return type.equals(types[id]);
+	}
+
+	public boolean isValueConsistent(int id, Object value) {
+		return types[id].contains(value);
 	}
 
 	public DataType getType(int i) {
@@ -43,6 +61,24 @@ public class DataPattern {
 
 	public int size() {
 		return size;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (!(o instanceof DataPattern))
+			return false;
+		DataPattern other = (DataPattern) o;
+
+		if (other.size() != size())
+			return false;
+
+		for (int i = 0; i < size(); i++)
+			if (!getType(i).equals(other.getType(i)))
+				return false;
+
+		return true;
 	}
 
 	@Override

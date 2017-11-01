@@ -20,6 +20,7 @@ import harmony.dataProcess2.data.DataPattern;
 import harmony.dataProcess2.data.DataType;
 import harmony.dataProcess2.process.AtomicProcess;
 import harmony.dataProcess2.process.ComputeUnit;
+import harmony.dataProcess2.process.units.ConstantUnit;
 
 public class DataProcessTest {
 	public static void main(String[] args) throws Exception {
@@ -31,7 +32,7 @@ public class DataProcessTest {
 
 			@Override
 			public DataPattern getInputPattern() {
-				return new DataPattern();
+				return null;
 			}
 
 			@Override
@@ -137,6 +138,19 @@ public class DataProcessTest {
 		add.setDependencie(0, add2);
 		try {
 			add2.setDependencie(0, add);
+			throw new RuntimeException("Error");
+		} catch (Exception e) {
+			System.out.println(e);
+			System.out.println("ok");
+		}
+
+		AtomicProcess consts2 = new AtomicProcess("consts", new ConstantUnit(DataType.Integer, new Integer(123)));
+		System.out.println(consts2);
+		System.out.println(consts2.getInputPattern());
+		System.out.println(consts2.getOutputPattern());
+		System.out.println(consts2.getValues());
+		try {
+			add2.setDependencie(0, consts2);
 			throw new RuntimeException("Error");
 		} catch (Exception e) {
 			System.out.println(e);

@@ -20,8 +20,7 @@ public class DataArray {
 	private DataPattern pattern;
 
 	public DataArray(DataPattern pattern) {
-		if (pattern == null)
-			throw new NullPointerException("pattern can't be null");
+		assert pattern != null : "pattern can't be null";
 
 		this.pattern = pattern;
 
@@ -32,8 +31,7 @@ public class DataArray {
 	}
 
 	public void setValue(int id, Object value) {
-		if (!pattern.isValid(id, value))
-			throw new IllegalArgumentException("wrong value type");
+		assert pattern.isValueConsistent(id, value) : "inconsistent value type";
 
 		values[id] = value;
 	}
@@ -44,6 +42,24 @@ public class DataArray {
 
 	public int size() {
 		return values.length;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null)
+			return false;
+		if (!(o instanceof DataArray))
+			return false;
+		DataArray other = (DataArray) o;
+		
+		if (other.size() != size())
+			return false;
+		
+		for (int i = 0; i < size(); i++)
+			if(!getValue(i).equals(other.getValue(i)))
+				return false;
+		
+		return true;
 	}
 
 	@Override
