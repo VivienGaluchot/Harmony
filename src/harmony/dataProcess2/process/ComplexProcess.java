@@ -22,8 +22,16 @@ public class ComplexProcess implements ComputeUnit {
 	// info
 	private String name;
 	
-	public ComplexProcess(String name) {
+	// inputs
+	private DataPattern inputPattern;
+	
+	// outputs
+	private DataPattern outputPattern;
+	
+	public ComplexProcess(String name, DataPattern inputPattern, DataPattern outputPattern) {
 		this.name = name;
+		this.inputPattern = inputPattern;
+		this.outputPattern = outputPattern;
 	}
 
 	@Override
