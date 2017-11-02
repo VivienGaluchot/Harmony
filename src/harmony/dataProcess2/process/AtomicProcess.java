@@ -39,17 +39,17 @@ public class AtomicProcess implements ComputeUnit {
 		this.name = name;
 		this.computeUnit = computeUnit;
 
-		DataPattern inputPattern = computeUnit.getInputPattern();
+		DataPattern inputPattern = getInputPattern();
 		if (inputPattern != null) {
 			inputDependencies = new Dependencie[inputPattern.size()];
 		} else {
 			inputDependencies = new Dependencie[0];
 		}
 
-		values = new DataArray(computeUnit.getOutputPattern());
+		values = new DataArray(getOutputPattern());
 		valuated = false;
 	}
-	
+
 	// Dependencies
 
 	public void setDependencie(int inputId, AtomicProcess process) {
@@ -58,8 +58,9 @@ public class AtomicProcess implements ComputeUnit {
 
 	public void setDependencie(int inputId, AtomicProcess process, int processOutputId) {
 		if (process != null) {
-			DataPattern inputClassPattern = this.computeUnit.getInputPattern();
-			if (inputClassPattern == null || !inputClassPattern.isTypeConsistent(inputId, process.getOutputPattern().getType(processOutputId)))
+			DataPattern inputClassPattern = getInputPattern();
+			if (inputClassPattern == null || !inputClassPattern.isTypeConsistent(inputId,
+					process.getOutputPattern().getType(processOutputId)))
 				throw new IllegalArgumentException("inconsistent class type");
 			if (process.isInDependenciesTree(this))
 				throw new IllegalArgumentException("dependencie detected");
@@ -68,7 +69,7 @@ public class AtomicProcess implements ComputeUnit {
 			inputDependencies[inputId] = null;
 		}
 	}
-	
+
 	public Dependencie getDependencie(int inputId) {
 		return inputDependencies[inputId];
 	}
@@ -86,13 +87,13 @@ public class AtomicProcess implements ComputeUnit {
 		}
 		return false;
 	}
-	
+
 	// Values
 
 	public DataArray getValues() {
 		if (!valuated) {
-			DataPattern inputClassPattern = this.computeUnit.getInputPattern();
-			DataArray inputValues;
+			DataArray inputValues = null;
+			DataPattern inputClassPattern = getInputPattern();
 			if (inputClassPattern != null) {
 				inputValues = new DataArray(inputClassPattern);
 				for (int i = 0; i < inputValues.size(); i++) {
@@ -100,10 +101,8 @@ public class AtomicProcess implements ComputeUnit {
 						inputValues.setValue(i, inputDependencies[i].getValue());
 					}
 				}
-			} else {
-				inputValues = null;
 			}
-			values = computeUnit.compute(inputValues);
+			values = compute(inputValues);
 			// TODO implement lazy reevaluation
 			// valuated = true;
 		}
@@ -117,8 +116,8 @@ public class AtomicProcess implements ComputeUnit {
 		else
 			return getValues().getValue(i);
 	}
-	
-	// Other
+
+	// ComputeUnit
 
 	@Override
 	public String getName() {
@@ -126,11 +125,31 @@ public class AtomicProcess implements ComputeUnit {
 	}
 
 	@Override
+	public DataPattern getInputPattern() {
+		return computeUnit.getInputPattern();
+	}
+
+	@Override
+	public DataPattern getOutputPattern() {
+		return computeUnit.getOutputPattern();
+	}
+
+	@Override
+	public DataArray compute(DataArray inputValues) {
+		assert inputValues == null || inputValues.getPattern().equals(computeUnit.getInputPattern()) : "inconsistent input values type";
+		DataArray outputValues = computeUnit.compute(inputValues);
+		assert outputValues.getPattern().equals(computeUnit.getOutputPattern()) : "inconsistent output values type";
+		return outputValues;
+	}
+
+	// Other
+
+	@Override
 	public String toString() {
 		StringBuffer buff = new StringBuffer();
 		buff.append(getName());
 		buff.append(" = ");
-		buff.append(computeUnit.getName());
+		buff.append(getName());
 		if (inputDependencies.length > 0) {
 			buff.append('(');
 			if (inputDependencies[0] != null)
@@ -147,20 +166,5 @@ public class AtomicProcess implements ComputeUnit {
 			buff.append(')');
 		}
 		return buff.toString();
-	}
-
-	@Override
-	public DataPattern getInputPattern() {
-		return computeUnit.getInputPattern();
-	}
-
-	@Override
-	public DataPattern getOutputPattern() {
-		return computeUnit.getOutputPattern();
-	}
-
-	@Override
-	public DataArray compute(DataArray inputValues) {
-		return computeUnit.compute(inputValues);
 	}
 }

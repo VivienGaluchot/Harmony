@@ -20,7 +20,8 @@ public class DataArray {
 	private DataPattern pattern;
 
 	public DataArray(DataPattern pattern) {
-		assert pattern != null : "pattern can't be null";
+		if (pattern == null)
+			pattern = new DataPattern();
 
 		this.pattern = pattern;
 
@@ -30,9 +31,15 @@ public class DataArray {
 		}
 	}
 
+	public void setValues(DataArray other) {
+		assert pattern.equals(other.getPattern()) : "inconsistent pattern";
+		for (int i = 0; i < size(); i++) {
+			values[i] = other.getValue(i);
+		}
+	}
+
 	public void setValue(int id, Object value) {
 		assert pattern.isValueConsistent(id, value) : "inconsistent value type";
-
 		values[id] = value;
 	}
 
@@ -40,8 +47,20 @@ public class DataArray {
 		return values[i];
 	}
 
+	public DataPattern getPattern() {
+		return pattern;
+	}
+
 	public int size() {
 		return values.length;
+	}
+	
+	@Override
+	public DataArray clone() {
+		DataArray clone = new DataArray(getPattern());
+		clone.setValues(this);
+		assert clone.equals(this) : "non equal clone generated";
+		return clone;
 	}
 
 	@Override
@@ -51,14 +70,14 @@ public class DataArray {
 		if (!(o instanceof DataArray))
 			return false;
 		DataArray other = (DataArray) o;
-		
+
 		if (other.size() != size())
 			return false;
-		
+
 		for (int i = 0; i < size(); i++)
-			if(!getValue(i).equals(other.getValue(i)))
+			if (!getValue(i).equals(other.getValue(i)))
 				return false;
-		
+
 		return true;
 	}
 

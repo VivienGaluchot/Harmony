@@ -20,12 +20,12 @@ import harmony.dataProcess2.data.DataPattern;
 import harmony.dataProcess2.data.DataType;
 import harmony.dataProcess2.process.ComputeUnit;
 
-public class ConstantUnit implements ComputeUnit {
+public class Constant implements ComputeUnit {
 
 	private DataArray dataArray;
 	private DataPattern outPattern;
 
-	public ConstantUnit(DataType type, Object value) {
+	public Constant(DataType type, Object value) {
 		outPattern = new DataPattern(type);
 		dataArray = new DataArray(outPattern);
 		dataArray.setValue(0, value);

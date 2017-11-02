@@ -17,6 +17,8 @@ package harmony.dataProcess2.process;
 
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
+import harmony.dataProcess2.process.units.InputBuffer;
+import harmony.dataProcess2.process.units.OutputBuffer;
 
 public class ComplexProcess implements ComputeUnit {
 	// info
@@ -24,15 +26,35 @@ public class ComplexProcess implements ComputeUnit {
 	
 	// inputs
 	private DataPattern inputPattern;
+	private InputBuffer inputBuffer;
+	private AtomicProcess inputProcess;
 	
 	// outputs
 	private DataPattern outputPattern;
+	private OutputBuffer outputBuffer;
+	private AtomicProcess outputProcess;
 	
 	public ComplexProcess(String name, DataPattern inputPattern, DataPattern outputPattern) {
 		this.name = name;
 		this.inputPattern = inputPattern;
+		inputBuffer = new InputBuffer(inputPattern);
+		inputProcess = new AtomicProcess("input", inputBuffer);
 		this.outputPattern = outputPattern;
+		outputBuffer = new OutputBuffer(outputPattern);
+		outputProcess = new AtomicProcess("output", outputBuffer);
 	}
+	
+	// Allows to build-up intern compute process
+	
+	public AtomicProcess getInputProcess() {
+		return inputProcess;
+	}
+	
+	public AtomicProcess getOutputProcess() {
+		return outputProcess;
+	}
+	
+	// ComputeUnit, extern access
 
 	@Override
 	public String getName() {
@@ -41,20 +63,39 @@ public class ComplexProcess implements ComputeUnit {
 
 	@Override
 	public DataPattern getInputPattern() {
-		// TODO Auto-generated method stub
-		return null;
+		return inputPattern;
 	}
 
 	@Override
 	public DataPattern getOutputPattern() {
-		// TODO Auto-generated method stub
-		return null;
+		return outputPattern;
 	}
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		// TODO Auto-generated method stub
-		return null;
+		assert inputValues == null || inputValues.getPattern().equals(getInputPattern()) : "inconsistent input values type";
+		
+		// push input values in input buffer
+		inputBuffer.setValues(inputValues);
+		// now inputProcess can be user and contain inputValues
+		
+		// excecute
+		outputProcess.getValues();
+		
+		// extract values from output buffer
+		DataArray outputValues = outputBuffer.clone();
+		
+		assert outputValues.getPattern().equals(getOutputPattern()) : "inconsistent output values type";
+		return outputValues;
 	}
-	// TODO
+
+	// Other
+
+	@Override
+	public String toString() {
+		StringBuffer buff = new StringBuffer();
+		buff.append(getName());
+		// TODO
+		return buff.toString();
+	}
 }

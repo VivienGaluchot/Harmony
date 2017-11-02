@@ -42,6 +42,9 @@ public class Dependencie {
 
 	@Override
 	public String toString() {
-		return process.getName() + "[" + id + "]";
+		if (process.getOutputPattern().size() > 1)
+			return process.getName() + "[" + id + "]";
+		else
+			return process.getName();
 	}
 }
