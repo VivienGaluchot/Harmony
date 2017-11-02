@@ -23,17 +23,17 @@ import harmony.dataProcess2.process.units.OutputBuffer;
 public class ComplexProcess implements ComputeUnit {
 	// info
 	private String name;
-	
+
 	// inputs
 	private DataPattern inputPattern;
 	private InputBuffer inputBuffer;
 	private AtomicProcess inputProcess;
-	
+
 	// outputs
 	private DataPattern outputPattern;
 	private OutputBuffer outputBuffer;
 	private AtomicProcess outputProcess;
-	
+
 	public ComplexProcess(String name, DataPattern inputPattern, DataPattern outputPattern) {
 		this.name = name;
 		this.inputPattern = inputPattern;
@@ -43,17 +43,17 @@ public class ComplexProcess implements ComputeUnit {
 		outputBuffer = new OutputBuffer(outputPattern);
 		outputProcess = new AtomicProcess("output", outputBuffer);
 	}
-	
+
 	// Allows to build-up intern compute process
-	
+
 	public AtomicProcess getInputProcess() {
 		return inputProcess;
 	}
-	
+
 	public AtomicProcess getOutputProcess() {
 		return outputProcess;
 	}
-	
+
 	// ComputeUnit, extern access
 
 	@Override
@@ -73,18 +73,19 @@ public class ComplexProcess implements ComputeUnit {
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		assert inputValues == null || inputValues.getPattern().equals(getInputPattern()) : "inconsistent input values type";
-		
+		assert inputValues == null
+				|| inputValues.getPattern().equals(getInputPattern()) : "inconsistent input values type";
+
 		// push input values in input buffer
 		inputBuffer.setValues(inputValues);
 		// now inputProcess can be user and contain inputValues
-		
+
 		// excecute
 		outputProcess.getValues();
-		
+
 		// extract values from output buffer
 		DataArray outputValues = outputBuffer.clone();
-		
+
 		assert outputValues.getPattern().equals(getOutputPattern()) : "inconsistent output values type";
 		return outputValues;
 	}

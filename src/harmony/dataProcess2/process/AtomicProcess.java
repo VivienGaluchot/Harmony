@@ -135,9 +135,11 @@ public class AtomicProcess implements ComputeUnit {
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		assert inputValues == null || inputValues.getPattern().equals(computeUnit.getInputPattern()) : "inconsistent input values type";
+		assert inputValues == null
+				|| inputValues.getPattern().equals(computeUnit.getInputPattern()) : "inconsistent input values type";
 		DataArray outputValues = computeUnit.compute(inputValues);
-		assert outputValues == null || outputValues.getPattern().equals(computeUnit.getOutputPattern()) : "inconsistent output values type";
+		assert outputValues == null
+				|| outputValues.getPattern().equals(computeUnit.getOutputPattern()) : "inconsistent output values type";
 		return outputValues;
 	}
 

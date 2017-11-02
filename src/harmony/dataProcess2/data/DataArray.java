@@ -54,7 +54,7 @@ public class DataArray {
 	public int size() {
 		return values.length;
 	}
-	
+
 	@Override
 	public DataArray clone() {
 		DataArray clone = new DataArray(getPattern());

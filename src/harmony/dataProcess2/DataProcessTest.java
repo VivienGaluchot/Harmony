@@ -161,7 +161,7 @@ public class DataProcessTest {
 			System.out.println(e);
 			System.out.println("ok");
 		}
-		
+
 		// test buffers
 		InputBuffer buff1 = new InputBuffer(new DataPattern(new DataType[] { DataType.Double, DataType.Double }));
 		AtomicProcess buffProcess1 = new AtomicProcess("buffProcess1", buff1);
@@ -198,16 +198,16 @@ public class DataProcessTest {
 		complex1.getOutputProcess().setDependencie(0, add4, 0);
 		complex1.getOutputProcess().setDependencie(1, sub4, 0);
 		System.out.println(complex1);
-		
+
 		AtomicProcess complexProcess1 = new AtomicProcess("complexProcess1", complex1);
-		complexProcess1.setDependencie(0, new AtomicProcess("a" ,new Constant(DataType.Double, 10.5)), 0);
-		complexProcess1.setDependencie(1, new AtomicProcess("b" ,new Constant(DataType.Double, 9.5)), 0);
+		complexProcess1.setDependencie(0, new AtomicProcess("a", new Constant(DataType.Double, 10.5)), 0);
+		complexProcess1.setDependencie(1, new AtomicProcess("b", new Constant(DataType.Double, 9.5)), 0);
 		System.out.println(complexProcess1);
 		System.out.println(complexProcess1.getValues());
-		
+
 		AtomicProcess complexProcess2 = new AtomicProcess("complexProcess2", complex1);
-		complexProcess2.setDependencie(0, new AtomicProcess("c" ,new Constant(DataType.Double, 5.0)), 0);
-		complexProcess2.setDependencie(1, new AtomicProcess("d" ,new Constant(DataType.Double, 17.5)), 0);
+		complexProcess2.setDependencie(0, new AtomicProcess("c", new Constant(DataType.Double, 5.0)), 0);
+		complexProcess2.setDependencie(1, new AtomicProcess("d", new Constant(DataType.Double, 17.5)), 0);
 		System.out.println(complexProcess2);
 		System.out.println(complexProcess2.getValues());
 
