@@ -66,7 +66,7 @@ public class DataPattern {
 	@Override
 	public boolean equals(Object o) {
 		if (o == null)
-			return false;
+			return this.size() == 0;
 		if (!(o instanceof DataPattern))
 			return false;
 		DataPattern other = (DataPattern) o;

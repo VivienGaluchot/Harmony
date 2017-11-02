@@ -106,7 +106,6 @@ public class AtomicProcess implements ComputeUnit {
 			// TODO implement lazy reevaluation
 			// valuated = true;
 		}
-		assert values != null : "null value returned";
 		return values;
 	}
 
@@ -138,7 +137,7 @@ public class AtomicProcess implements ComputeUnit {
 	public DataArray compute(DataArray inputValues) {
 		assert inputValues == null || inputValues.getPattern().equals(computeUnit.getInputPattern()) : "inconsistent input values type";
 		DataArray outputValues = computeUnit.compute(inputValues);
-		assert outputValues.getPattern().equals(computeUnit.getOutputPattern()) : "inconsistent output values type";
+		assert outputValues == null || outputValues.getPattern().equals(computeUnit.getOutputPattern()) : "inconsistent output values type";
 		return outputValues;
 	}
 

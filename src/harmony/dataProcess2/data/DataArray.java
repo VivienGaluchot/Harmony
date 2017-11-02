@@ -66,7 +66,7 @@ public class DataArray {
 	@Override
 	public boolean equals(Object o) {
 		if (o == null)
-			return false;
+			return this.size() == 0;
 		if (!(o instanceof DataArray))
 			return false;
 		DataArray other = (DataArray) o;
