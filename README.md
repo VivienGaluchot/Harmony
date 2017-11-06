@@ -1,6 +1,5 @@
 # Harmony
-Procedural sound wave development tool.
+Graphical live coding and data processing.
+Initialy made for procedural sound wave generation.
 
-Not released, curently in active conception. Works with Java8.
-_______
-By Vivien Galuchot
+In active conception.
