@@ -18,6 +18,7 @@ package harmony.dataProcess2;
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
 import harmony.dataProcess2.data.DataType;
+import harmony.dataProcess2.data.DataTypes;
 import harmony.dataProcess2.process.ComputeUnit;
 import harmony.dataProcess2.process.ProceduralUnit;
 import harmony.dataProcess2.process.Process;
@@ -42,7 +43,7 @@ public class DataProcessTest {
 
 			@Override
 			public DataPattern getOutputPattern() {
-				return new DataPattern(new DataType[] { DataType.Double, DataType.Double });
+				return new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double });
 			}
 
 			@Override
@@ -66,12 +67,12 @@ public class DataProcessTest {
 
 			@Override
 			public DataPattern getInputPattern() {
-				return new DataPattern(new DataType[] { DataType.Double, DataType.Double });
+				return new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double });
 			}
 
 			@Override
 			public DataPattern getOutputPattern() {
-				return new DataPattern(new DataType[] { DataType.Double });
+				return new DataPattern(new DataType[] { DataTypes.Double });
 			}
 
 			@Override
@@ -85,7 +86,7 @@ public class DataProcessTest {
 		};
 		Process add = new Process("sum1", addUnit);
 		System.out.println(add);
-		if (!add.getValue(0).equals(DataType.Double.getNeuter()))
+		if (!add.getValue(0).equals(DataTypes.Double.getNeuter()))
 			throw new RuntimeException("Error");
 		else
 			System.out.println("ok");
@@ -149,7 +150,7 @@ public class DataProcessTest {
 			System.out.println("ok");
 		}
 
-		Process consts2 = new Process("consts", new Constant(DataType.Integer, new Integer(123)));
+		Process consts2 = new Process("consts", new Constant(DataTypes.Integer, new Integer(123)));
 		System.out.println(consts2);
 		System.out.println(consts2.getInputPattern());
 		System.out.println(consts2.getOutputPattern());
@@ -163,7 +164,7 @@ public class DataProcessTest {
 		}
 
 		// test buffers
-		InputBuffer buff1 = new InputBuffer(new DataPattern(new DataType[] { DataType.Double, DataType.Double }));
+		InputBuffer buff1 = new InputBuffer(new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
 		Process buffProcess1 = new Process("buffProcess1", buff1);
 		System.out.println(buffProcess1);
 		System.out.println(buffProcess1.getValues());
@@ -171,9 +172,9 @@ public class DataProcessTest {
 		System.out.println(buffProcess1);
 		System.out.println(buffProcess1.getValues());
 
-		OutputBuffer buff2 = new OutputBuffer(new DataPattern(new DataType[] { DataType.Double, DataType.Double }));
+		OutputBuffer buff2 = new OutputBuffer(new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
 		Process buffProcess2 = new Process("buffProcess2", buff2);
-		Process consts3 = new Process("consts3", new Constant(DataType.Double, 12.5));
+		Process consts3 = new Process("consts3", new Constant(DataTypes.Double, 12.5));
 		System.out.println(buff2.getValue(0));
 		buffProcess2.setDependencie(0, consts3.getOutput(0));
 		System.out.println(buff2.getValue(0));
@@ -185,8 +186,8 @@ public class DataProcessTest {
 
 		// test complex processes
 		ProceduralUnit complex1 = new ProceduralUnit("complex1",
-				new DataPattern(new DataType[] { DataType.Double, DataType.Double }),
-				new DataPattern(new DataType[] { DataType.Double, DataType.Double }));
+				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }),
+				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
 		Process add4 = new Process("add4", new Add());
 		add4.setDependencie(0, complex1.getInputProcess().getOutput(0));
 		add4.setDependencie(1, complex1.getInputProcess().getOutput(1));
@@ -200,14 +201,14 @@ public class DataProcessTest {
 		System.out.println(complex1);
 
 		Process complexProcess1 = new Process("complexProcess1", complex1);
-		complexProcess1.setDependencie(0, new Process("a", new Constant(DataType.Double, 10.5)).getOutput(0));
-		complexProcess1.setDependencie(1, new Process("b", new Constant(DataType.Double, 9.5)).getOutput(0));
+		complexProcess1.setDependencie(0, new Process("a", new Constant(DataTypes.Double, 10.5)).getOutput(0));
+		complexProcess1.setDependencie(1, new Process("b", new Constant(DataTypes.Double, 9.5)).getOutput(0));
 		System.out.println(complexProcess1);
 		System.out.println(complexProcess1.getValues());
 
 		Process complexProcess2 = new Process("complexProcess2", complex1);
-		complexProcess2.setDependencie(0, new Process("c", new Constant(DataType.Double, 5.0)).getOutput(0));
-		complexProcess2.setDependencie(1, new Process("d", new Constant(DataType.Double, 17.5)).getOutput(0));
+		complexProcess2.setDependencie(0, new Process("c", new Constant(DataTypes.Double, 5.0)).getOutput(0));
+		complexProcess2.setDependencie(1, new Process("d", new Constant(DataTypes.Double, 17.5)).getOutput(0));
 		System.out.println(complexProcess2);
 		System.out.println(complexProcess2.getValues());
 

@@ -15,10 +15,9 @@
 
 package harmony.dataProcess2.data;
 
-public interface DataType {
-	public Object getNeuter();
+public class DataTypes {
+	// Numbers
+	public final static DataType Double = new SimpleDataType(Double.class, new Double(0.0));
+	public final static DataType Integer = new SimpleDataType(Integer.class, new Integer(0));
 
-	public boolean contains(Object value);
-	
-	public boolean includes(DataType type);
 }

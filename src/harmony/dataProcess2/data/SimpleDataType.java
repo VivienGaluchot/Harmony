@@ -15,10 +15,35 @@
 
 package harmony.dataProcess2.data;
 
-public interface DataType {
-	public Object getNeuter();
+public class SimpleDataType implements DataType {
 
-	public boolean contains(Object value);
-	
-	public boolean includes(DataType type);
+	private Class<?> valueClass;
+	private Object neuter;
+
+	public SimpleDataType(Class<?> valueClass, Object neuter) {
+		this.valueClass = valueClass;
+		this.neuter = neuter;
+	}
+
+	public Class<?> getValueClass() {
+		return valueClass;
+	}
+
+	public Object getNeuter() {
+		return neuter;
+	}
+
+	public boolean contains(Object value) {
+		return value.getClass().equals(getValueClass());
+	}
+
+	@Override
+	public boolean includes(DataType type) {
+		return this.equals(type);
+	}
+
+	@Override
+	public String toString() {
+		return valueClass.getSimpleName();
+	}
 }

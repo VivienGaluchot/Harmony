@@ -18,6 +18,7 @@ package harmony.dataProcess2.process.units.maths;
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
 import harmony.dataProcess2.data.DataType;
+import harmony.dataProcess2.data.DataTypes;
 import harmony.dataProcess2.process.ComputeUnit;
 
 public class Add implements ComputeUnit {
@@ -26,8 +27,8 @@ public class Add implements ComputeUnit {
 	private DataPattern outPattern;
 
 	public Add() {
-		inPattern = new DataPattern(new DataType[] { DataType.Double, DataType.Double });
-		outPattern = new DataPattern(new DataType[] { DataType.Double });
+		inPattern = new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double });
+		outPattern = new DataPattern(new DataType[] { DataTypes.Double });
 	}
 
 	@Override
