@@ -29,10 +29,12 @@ public class SimpleDataType implements DataType {
 		return valueClass;
 	}
 
+	@Override
 	public Object getNeuter() {
 		return neuter;
 	}
 
+	@Override
 	public boolean contains(Object value) {
 		return value.getClass().equals(getValueClass());
 	}

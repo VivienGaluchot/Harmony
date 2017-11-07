@@ -41,7 +41,7 @@ public class ProcessOutput {
 	public Object getValue() {
 		return process.getValue(id);
 	}
-	
+
 	public DataType getOutputType() {
 		return process.getOutputPattern().getType(id);
 	}

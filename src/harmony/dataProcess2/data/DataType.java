@@ -19,6 +19,6 @@ public interface DataType {
 	public Object getNeuter();
 
 	public boolean contains(Object value);
-	
+
 	public boolean includes(DataType type);
 }

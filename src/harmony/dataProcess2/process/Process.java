@@ -51,7 +51,7 @@ public class Process implements ComputeUnit {
 	}
 
 	// Dependencies
-	
+
 	public ProcessOutput getOutput(int outputId) {
 		return new ProcessOutput(this, outputId);
 	}
@@ -59,7 +59,7 @@ public class Process implements ComputeUnit {
 	public void resetDependencie(int inputId) {
 		this.setDependencie(inputId, null);
 	}
-	
+
 	public void setDependencie(int inputId, ProcessOutput dependencie) {
 		if (dependencie != null) {
 			DataPattern inputClassPattern = getInputPattern();
@@ -120,7 +120,7 @@ public class Process implements ComputeUnit {
 	}
 
 	// ComputeUnit
-	
+
 	public ComputeUnit getComputeUnit() {
 		return computeUnit;
 	}

@@ -50,7 +50,7 @@ public class DataPattern {
 	public boolean isTypeConsistent(int id, DataType type) {
 		return getType(id).includes(type);
 	}
-	
+
 	public boolean isValueConsistent(int id, Object value) {
 		return types[id].contains(value);
 	}
