@@ -18,12 +18,12 @@ package harmony.dataProcess2.process;
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
 
-public class AtomicProcess implements ComputeUnit {
+public class Process implements ComputeUnit {
 	// info
 	private String name;
 
 	// inputs
-	private Dependencie[] inputDependencies;
+	private ProcessOutput[] inputDependencies;
 
 	// compute
 	private ComputeUnit computeUnit;
@@ -32,7 +32,7 @@ public class AtomicProcess implements ComputeUnit {
 	private boolean valuated;
 	private DataArray values;
 
-	public AtomicProcess(String name, ComputeUnit computeUnit) {
+	public Process(String name, ComputeUnit computeUnit) {
 		assert name != null : "name can't be null";
 		assert computeUnit != null : "computeUnit can't be null";
 
@@ -41,9 +41,9 @@ public class AtomicProcess implements ComputeUnit {
 
 		DataPattern inputPattern = getInputPattern();
 		if (inputPattern != null) {
-			inputDependencies = new Dependencie[inputPattern.size()];
+			inputDependencies = new ProcessOutput[inputPattern.size()];
 		} else {
-			inputDependencies = new Dependencie[0];
+			inputDependencies = new ProcessOutput[0];
 		}
 
 		values = new DataArray(getOutputPattern());
@@ -51,35 +51,38 @@ public class AtomicProcess implements ComputeUnit {
 	}
 
 	// Dependencies
-
-	public void setDependencie(int inputId, AtomicProcess process) {
-		this.setDependencie(inputId, process, 0);
+	
+	public ProcessOutput getOutput(int outputId) {
+		return new ProcessOutput(this, outputId);
 	}
 
-	public void setDependencie(int inputId, AtomicProcess process, int processOutputId) {
-		if (process != null) {
+	public void resetDependencie(int inputId) {
+		this.setDependencie(inputId, null);
+	}
+	
+	public void setDependencie(int inputId, ProcessOutput dependencie) {
+		if (dependencie != null) {
 			DataPattern inputClassPattern = getInputPattern();
-			if (inputClassPattern == null || !inputClassPattern.isTypeConsistent(inputId,
-					process.getOutputPattern().getType(processOutputId)))
+			if (inputClassPattern == null || !inputClassPattern.isTypeConsistent(inputId, dependencie.getOutputType()))
 				throw new IllegalArgumentException("inconsistent class type");
-			if (process.isInDependenciesTree(this))
+			if (dependencie.getProcess().isInDependenciesTree(this))
 				throw new IllegalArgumentException("dependencie detected");
-			inputDependencies[inputId] = new Dependencie(process, processOutputId);
+			inputDependencies[inputId] = dependencie;
 		} else {
 			inputDependencies[inputId] = null;
 		}
 	}
 
-	public Dependencie getDependencie(int inputId) {
+	public ProcessOutput getDependencie(int inputId) {
 		return inputDependencies[inputId];
 	}
 
-	public boolean isInDependenciesTree(AtomicProcess process) {
+	public boolean isInDependenciesTree(Process process) {
 		if (process != null) {
 			if (process == this) {
 				return true;
 			} else {
-				for (Dependencie directDep : inputDependencies) {
+				for (ProcessOutput directDep : inputDependencies) {
 					if (directDep != null)
 						return directDep.getProcess().isInDependenciesTree(process);
 				}
@@ -117,6 +120,10 @@ public class AtomicProcess implements ComputeUnit {
 	}
 
 	// ComputeUnit
+	
+	public ComputeUnit getComputeUnit() {
+		return computeUnit;
+	}
 
 	@Override
 	public String getName() {

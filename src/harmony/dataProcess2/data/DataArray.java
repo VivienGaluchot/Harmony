@@ -27,7 +27,7 @@ public class DataArray {
 
 		values = new Object[pattern.size()];
 		for (int i = 0; i < pattern.size(); i++) {
-			values[i] = pattern.getType(i).getNeuter();
+			values[i] = pattern.getNeuter(i);
 		}
 	}
 

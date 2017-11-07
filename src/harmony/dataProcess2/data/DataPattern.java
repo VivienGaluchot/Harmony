@@ -48,19 +48,23 @@ public class DataPattern {
 	}
 
 	public boolean isTypeConsistent(int id, DataType type) {
-		return type.equals(types[id]);
+		return type.equals(getType(id));
 	}
-
+	
 	public boolean isValueConsistent(int id, Object value) {
 		return types[id].contains(value);
 	}
 
-	public DataType getType(int i) {
-		return types[i];
-	}
-
 	public int size() {
 		return size;
+	}
+
+	public Object getNeuter(int id) {
+		return types[id].getNeuter();
+	}
+
+	public DataType getType(int i) {
+		return types[i];
 	}
 
 	@Override

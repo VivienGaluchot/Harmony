@@ -15,11 +15,13 @@
 
 package harmony.dataProcess2.process;
 
-public class Dependencie {
-	private AtomicProcess process;
+import harmony.dataProcess2.data.DataType;
+
+public class ProcessOutput {
+	private Process process;
 	private int id;
 
-	public Dependencie(AtomicProcess process, int outputID) {
+	public ProcessOutput(Process process, int outputID) {
 		if (process == null)
 			throw new NullPointerException("computeUnit can't be null");
 		if (outputID < 0 || outputID > process.getOutputPattern().size())
@@ -28,7 +30,7 @@ public class Dependencie {
 		this.id = outputID;
 	}
 
-	public AtomicProcess getProcess() {
+	public Process getProcess() {
 		return process;
 	}
 
@@ -38,6 +40,10 @@ public class Dependencie {
 
 	public Object getValue() {
 		return process.getValue(id);
+	}
+	
+	public DataType getOutputType() {
+		return process.getOutputPattern().getType(id);
 	}
 
 	@Override

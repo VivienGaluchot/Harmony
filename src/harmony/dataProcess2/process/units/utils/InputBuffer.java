@@ -13,45 +13,36 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process.units.operators;
+package harmony.dataProcess2.process.units.utils;
 
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
-import harmony.dataProcess2.data.DataType;
 import harmony.dataProcess2.process.ComputeUnit;
 
-public class Sub implements ComputeUnit {
+public class InputBuffer extends DataArray implements ComputeUnit {
 
-	private DataPattern inPattern;
-	private DataPattern outPattern;
-
-	public Sub() {
-		inPattern = new DataPattern(new DataType[] { DataType.Double, DataType.Double });
-		outPattern = new DataPattern(new DataType[] { DataType.Double });
+	public InputBuffer(DataPattern pattern) {
+		super(pattern);
 	}
 
 	@Override
 	public String getName() {
-		return "sub";
+		return "buffer";
 	}
 
 	@Override
 	public DataPattern getInputPattern() {
-		return inPattern;
+		return null;
 	}
 
 	@Override
 	public DataPattern getOutputPattern() {
-		return outPattern;
+		return getPattern();
 	}
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		DataArray da = new DataArray(getOutputPattern());
-		Double a = (Double) inputValues.getValue(0);
-		Double b = (Double) inputValues.getValue(1);
-		da.setValue(0, a - b);
-		return da;
+		return this.clone();
 	}
 
 }

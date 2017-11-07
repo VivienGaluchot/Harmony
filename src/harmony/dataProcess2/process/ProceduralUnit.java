@@ -17,40 +17,40 @@ package harmony.dataProcess2.process;
 
 import harmony.dataProcess2.data.DataArray;
 import harmony.dataProcess2.data.DataPattern;
-import harmony.dataProcess2.process.units.InputBuffer;
-import harmony.dataProcess2.process.units.OutputBuffer;
+import harmony.dataProcess2.process.units.utils.InputBuffer;
+import harmony.dataProcess2.process.units.utils.OutputBuffer;
 
-public class ComplexProcess implements ComputeUnit {
+public class ProceduralUnit implements ComputeUnit {
 	// info
 	private String name;
 
 	// inputs
 	private DataPattern inputPattern;
 	private InputBuffer inputBuffer;
-	private AtomicProcess inputProcess;
+	private Process inputProcess;
 
 	// outputs
 	private DataPattern outputPattern;
 	private OutputBuffer outputBuffer;
-	private AtomicProcess outputProcess;
+	private Process outputProcess;
 
-	public ComplexProcess(String name, DataPattern inputPattern, DataPattern outputPattern) {
+	public ProceduralUnit(String name, DataPattern inputPattern, DataPattern outputPattern) {
 		this.name = name;
 		this.inputPattern = inputPattern;
 		inputBuffer = new InputBuffer(inputPattern);
-		inputProcess = new AtomicProcess("input", inputBuffer);
+		inputProcess = new Process("input", inputBuffer);
 		this.outputPattern = outputPattern;
 		outputBuffer = new OutputBuffer(outputPattern);
-		outputProcess = new AtomicProcess("output", outputBuffer);
+		outputProcess = new Process("output", outputBuffer);
 	}
 
 	// Allows to build-up intern compute process
 
-	public AtomicProcess getInputProcess() {
+	public Process getInputProcess() {
 		return inputProcess;
 	}
 
-	public AtomicProcess getOutputProcess() {
+	public Process getOutputProcess() {
 		return outputProcess;
 	}
 
@@ -78,7 +78,7 @@ public class ComplexProcess implements ComputeUnit {
 
 		// push input values in input buffer
 		inputBuffer.setValues(inputValues);
-		// now inputProcess can be user and contain inputValues
+		// now inputProcess can be used and contain inputValues
 
 		// excecute
 		outputProcess.getValues();
