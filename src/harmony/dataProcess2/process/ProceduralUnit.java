@@ -96,7 +96,9 @@ public class ProceduralUnit implements ComputeUnit {
 	public String toString() {
 		StringBuffer buff = new StringBuffer();
 		buff.append(getName());
-		// TODO
+		buff.append(getInputPattern());
+		buff.append(" -> ");
+		buff.append(getOutputPattern());
 		return buff.toString();
 	}
 }
