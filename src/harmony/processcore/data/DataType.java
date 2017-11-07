@@ -13,17 +13,12 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process;
+package harmony.processcore.data;
 
-import harmony.dataProcess2.data.DataArray;
-import harmony.dataProcess2.data.DataPattern;
+public interface DataType {
+	public Object getNeuter();
 
-public interface ComputeUnit {
-	public String getName();
+	public boolean contains(Object value);
 
-	public DataPattern getInputPattern();
-
-	public DataPattern getOutputPattern();
-
-	public DataArray compute(DataArray inputValues);
+	public boolean includes(DataType type);
 }

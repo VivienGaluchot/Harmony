@@ -13,20 +13,20 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2;
+package harmony.processcore;
 
-import harmony.dataProcess2.data.DataArray;
-import harmony.dataProcess2.data.DataPattern;
-import harmony.dataProcess2.data.DataType;
-import harmony.dataProcess2.data.DataTypes;
-import harmony.dataProcess2.process.ComputeUnit;
-import harmony.dataProcess2.process.ProceduralUnit;
-import harmony.dataProcess2.process.Process;
-import harmony.dataProcess2.process.units.maths.Add;
-import harmony.dataProcess2.process.units.maths.Constant;
-import harmony.dataProcess2.process.units.maths.Sub;
-import harmony.dataProcess2.process.units.utils.InputBuffer;
-import harmony.dataProcess2.process.units.utils.OutputBuffer;
+import harmony.processcore.data.DataArray;
+import harmony.processcore.data.DataPattern;
+import harmony.processcore.data.DataType;
+import harmony.processcore.data.DataTypes;
+import harmony.processcore.process.ComputeUnit;
+import harmony.processcore.process.ProceduralUnit;
+import harmony.processcore.process.Process;
+import harmony.processcore.process.units.maths.Add;
+import harmony.processcore.process.units.maths.Constant;
+import harmony.processcore.process.units.maths.Sub;
+import harmony.processcore.process.units.utils.InputBuffer;
+import harmony.processcore.process.units.utils.OutputBuffer;
 
 public class DataProcessTest {
 	public static void main(String[] args) throws Exception {

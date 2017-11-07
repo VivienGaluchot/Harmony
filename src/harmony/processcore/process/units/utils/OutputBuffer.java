@@ -13,11 +13,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process.units.utils;
+package harmony.processcore.process.units.utils;
 
-import harmony.dataProcess2.data.DataArray;
-import harmony.dataProcess2.data.DataPattern;
-import harmony.dataProcess2.process.ComputeUnit;
+import harmony.processcore.data.DataArray;
+import harmony.processcore.data.DataPattern;
+import harmony.processcore.process.ComputeUnit;
 
 public class OutputBuffer extends DataArray implements ComputeUnit {
 

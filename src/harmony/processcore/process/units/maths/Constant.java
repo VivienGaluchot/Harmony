@@ -13,21 +13,27 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process.units.utils;
+package harmony.processcore.process.units.maths;
 
-import harmony.dataProcess2.data.DataArray;
-import harmony.dataProcess2.data.DataPattern;
-import harmony.dataProcess2.process.ComputeUnit;
+import harmony.processcore.data.DataArray;
+import harmony.processcore.data.DataPattern;
+import harmony.processcore.data.DataType;
+import harmony.processcore.process.ComputeUnit;
 
-public class InputBuffer extends DataArray implements ComputeUnit {
+public class Constant implements ComputeUnit {
 
-	public InputBuffer(DataPattern pattern) {
-		super(pattern);
+	private DataArray dataArray;
+	private DataPattern outPattern;
+
+	public Constant(DataType type, Object value) {
+		outPattern = new DataPattern(type);
+		dataArray = new DataArray(outPattern);
+		dataArray.setValue(0, value);
 	}
 
 	@Override
 	public String getName() {
-		return "buffer";
+		return "constant";
 	}
 
 	@Override
@@ -37,12 +43,12 @@ public class InputBuffer extends DataArray implements ComputeUnit {
 
 	@Override
 	public DataPattern getOutputPattern() {
-		return getPattern();
+		return outPattern;
 	}
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		return this.clone();
+		return dataArray;
 	}
 
 }

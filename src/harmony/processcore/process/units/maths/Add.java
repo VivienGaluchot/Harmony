@@ -13,27 +13,27 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process.units.maths;
+package harmony.processcore.process.units.maths;
 
-import harmony.dataProcess2.data.DataArray;
-import harmony.dataProcess2.data.DataPattern;
-import harmony.dataProcess2.data.DataType;
-import harmony.dataProcess2.data.DataTypes;
-import harmony.dataProcess2.process.ComputeUnit;
+import harmony.processcore.data.DataArray;
+import harmony.processcore.data.DataPattern;
+import harmony.processcore.data.DataType;
+import harmony.processcore.data.DataTypes;
+import harmony.processcore.process.ComputeUnit;
 
-public class Sub implements ComputeUnit {
+public class Add implements ComputeUnit {
 
 	private DataPattern inPattern;
 	private DataPattern outPattern;
 
-	public Sub() {
+	public Add() {
 		inPattern = new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double });
 		outPattern = new DataPattern(new DataType[] { DataTypes.Double });
 	}
 
 	@Override
 	public String getName() {
-		return "sub";
+		return "add";
 	}
 
 	@Override
@@ -51,7 +51,7 @@ public class Sub implements ComputeUnit {
 		DataArray da = new DataArray(getOutputPattern());
 		Double a = (Double) inputValues.getValue(0);
 		Double b = (Double) inputValues.getValue(1);
-		da.setValue(0, a - b);
+		da.setValue(0, a + b);
 		return da;
 	}
 

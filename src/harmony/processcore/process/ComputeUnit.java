@@ -13,39 +13,17 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.data;
+package harmony.processcore.process;
 
-public class SimpleDataType implements DataType {
+import harmony.processcore.data.DataArray;
+import harmony.processcore.data.DataPattern;
 
-	private Class<?> valueClass;
-	private Object neuter;
+public interface ComputeUnit {
+	public String getName();
 
-	public SimpleDataType(Class<?> valueClass, Object neuter) {
-		this.valueClass = valueClass;
-		this.neuter = neuter;
-	}
+	public DataPattern getInputPattern();
 
-	public Class<?> getValueClass() {
-		return valueClass;
-	}
+	public DataPattern getOutputPattern();
 
-	@Override
-	public Object getNeuter() {
-		return neuter;
-	}
-
-	@Override
-	public boolean contains(Object value) {
-		return value.getClass().equals(getValueClass());
-	}
-
-	@Override
-	public boolean includes(DataType type) {
-		return this.equals(type);
-	}
-
-	@Override
-	public String toString() {
-		return valueClass.getSimpleName();
-	}
+	public DataArray compute(DataArray inputValues);
 }

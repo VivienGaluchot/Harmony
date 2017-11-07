@@ -1,4 +1,4 @@
-package harmony.dataProcess2.data;
+package harmony.processcore.data;
 
 public class HierarchicalDataType implements DataType {
 	// TODO

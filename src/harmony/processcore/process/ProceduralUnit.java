@@ -13,12 +13,12 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process;
+package harmony.processcore.process;
 
-import harmony.dataProcess2.data.DataArray;
-import harmony.dataProcess2.data.DataPattern;
-import harmony.dataProcess2.process.units.utils.InputBuffer;
-import harmony.dataProcess2.process.units.utils.OutputBuffer;
+import harmony.processcore.data.DataArray;
+import harmony.processcore.data.DataPattern;
+import harmony.processcore.process.units.utils.InputBuffer;
+import harmony.processcore.process.units.utils.OutputBuffer;
 
 public class ProceduralUnit implements ComputeUnit {
 	// info

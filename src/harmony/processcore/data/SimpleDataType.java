@@ -13,11 +13,39 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.data;
+package harmony.processcore.data;
 
-public class DataTypes {
-	// Numbers
-	public final static DataType Double = new SimpleDataType(Double.class, new Double(0.0));
-	public final static DataType Integer = new SimpleDataType(Integer.class, new Integer(0));
+public class SimpleDataType implements DataType {
 
+	private Class<?> valueClass;
+	private Object neuter;
+
+	public SimpleDataType(Class<?> valueClass, Object neuter) {
+		this.valueClass = valueClass;
+		this.neuter = neuter;
+	}
+
+	public Class<?> getValueClass() {
+		return valueClass;
+	}
+
+	@Override
+	public Object getNeuter() {
+		return neuter;
+	}
+
+	@Override
+	public boolean contains(Object value) {
+		return value.getClass().equals(getValueClass());
+	}
+
+	@Override
+	public boolean includes(DataType type) {
+		return this.equals(type);
+	}
+
+	@Override
+	public String toString() {
+		return valueClass.getSimpleName();
+	}
 }

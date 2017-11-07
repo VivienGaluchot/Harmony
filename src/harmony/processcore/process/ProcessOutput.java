@@ -13,9 +13,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.dataProcess2.process;
+package harmony.processcore.process;
 
-import harmony.dataProcess2.data.DataType;
+import harmony.processcore.data.DataType;
 
 public class ProcessOutput {
 	private Process process;
