@@ -45,4 +45,21 @@ public class InputBuffer extends DataArray implements ComputeUnit {
 		return this.clone();
 	}
 
+	@Override
+	public String toString() {
+		StringBuffer buff = new StringBuffer();
+		buff.append(getName());
+		buff.append(" : ");
+		if (getInputPattern() != null)
+			buff.append(getInputPattern());
+		else
+			buff.append('_');
+		buff.append(" -> ");
+		if (getOutputPattern() != null)
+			buff.append(getOutputPattern());
+		else
+			buff.append('_');
+		return buff.toString();
+	}
+
 }

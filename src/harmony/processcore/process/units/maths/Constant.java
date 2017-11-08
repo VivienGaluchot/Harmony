@@ -18,32 +18,15 @@ package harmony.processcore.process.units.maths;
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 import harmony.processcore.data.DataType;
-import harmony.processcore.process.ComputeUnit;
+import harmony.processcore.process.DefaultComputeUnit;
 
-public class Constant implements ComputeUnit {
-
+public class Constant extends DefaultComputeUnit {
 	private DataArray dataArray;
-	private DataPattern outPattern;
 
 	public Constant(DataType type, Object value) {
-		outPattern = new DataPattern(type);
-		dataArray = new DataArray(outPattern);
+		super("constant", null, new DataPattern(type));
+		dataArray = new DataArray(getOutputPattern());
 		dataArray.setValue(0, value);
-	}
-
-	@Override
-	public String getName() {
-		return "constant";
-	}
-
-	@Override
-	public DataPattern getInputPattern() {
-		return null;
-	}
-
-	@Override
-	public DataPattern getOutputPattern() {
-		return outPattern;
 	}
 
 	@Override

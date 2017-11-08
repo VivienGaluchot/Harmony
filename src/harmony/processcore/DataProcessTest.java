@@ -165,6 +165,7 @@ public class DataProcessTest {
 
 		// test buffers
 		InputBuffer buff1 = new InputBuffer(new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
+		System.out.println(buff1);
 		Process buffProcess1 = new Process("buffProcess1", buff1);
 		System.out.println(buffProcess1);
 		System.out.println(buffProcess1.getValues());

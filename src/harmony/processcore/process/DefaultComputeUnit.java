@@ -13,38 +13,47 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.processcore.process.units.utils;
+package harmony.processcore.process;
 
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
-import harmony.processcore.process.ComputeUnit;
 
-public class OutputBuffer extends DataArray implements ComputeUnit {
-
-	public OutputBuffer(DataPattern pattern) {
-		super(pattern);
+public abstract class DefaultComputeUnit implements ComputeUnit {
+	
+	// infos
+	private String name;
+	// inputs
+	private DataPattern inputPattern;
+	// outputs
+	private DataPattern outputPattern;
+	
+	public DefaultComputeUnit(String name, DataPattern inputPattern, DataPattern outputPattern) {
+		this.name = name;
+		this.inputPattern = inputPattern;
+		this.outputPattern = outputPattern;
 	}
+	
+	// ComputeUnit
 
 	@Override
 	public String getName() {
-		return "buffer";
+		return name;
 	}
 
 	@Override
 	public DataPattern getInputPattern() {
-		return getPattern();
+		return inputPattern;
 	}
 
 	@Override
 	public DataPattern getOutputPattern() {
-		return null;
+		return outputPattern;
 	}
 
 	@Override
-	public DataArray compute(DataArray inputValues) {
-		this.setValues(inputValues);
-		return null;
-	}
+	public abstract DataArray compute(DataArray inputValues);
+
+	// Other
 
 	@Override
 	public String toString() {

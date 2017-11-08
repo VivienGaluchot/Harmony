@@ -157,19 +157,19 @@ public class Process implements ComputeUnit {
 		StringBuffer buff = new StringBuffer();
 		buff.append(getName());
 		buff.append(" = ");
-		buff.append(getName());
+		buff.append(computeUnit.getName());
 		if (inputDependencies.length > 0) {
 			buff.append('(');
 			if (inputDependencies[0] != null)
 				buff.append(inputDependencies[0]);
 			else
-				buff.append('_');
+				buff.append(getInputPattern().getType(0).getNeuter());
 			for (int i = 1; i < inputDependencies.length; i++) {
 				buff.append(", ");
 				if (inputDependencies[i] != null)
 					buff.append(inputDependencies[i]);
 				else
-					buff.append('_');
+					buff.append(getInputPattern().getType(i).getNeuter());
 			}
 			buff.append(')');
 		}

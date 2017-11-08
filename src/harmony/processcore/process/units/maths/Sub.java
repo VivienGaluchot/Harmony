@@ -19,31 +19,13 @@ import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 import harmony.processcore.data.DataType;
 import harmony.processcore.data.DataTypes;
-import harmony.processcore.process.ComputeUnit;
+import harmony.processcore.process.DefaultComputeUnit;
 
-public class Sub implements ComputeUnit {
-
-	private DataPattern inPattern;
-	private DataPattern outPattern;
+public class Sub extends DefaultComputeUnit {
 
 	public Sub() {
-		inPattern = new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double });
-		outPattern = new DataPattern(new DataType[] { DataTypes.Double });
-	}
-
-	@Override
-	public String getName() {
-		return "sub";
-	}
-
-	@Override
-	public DataPattern getInputPattern() {
-		return inPattern;
-	}
-
-	@Override
-	public DataPattern getOutputPattern() {
-		return outPattern;
+		super("sub", new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }),
+				new DataPattern(new DataType[] { DataTypes.Double }));
 	}
 
 	@Override

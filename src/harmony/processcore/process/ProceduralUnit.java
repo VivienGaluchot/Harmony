@@ -20,26 +20,19 @@ import harmony.processcore.data.DataPattern;
 import harmony.processcore.process.units.utils.InputBuffer;
 import harmony.processcore.process.units.utils.OutputBuffer;
 
-public class ProceduralUnit implements ComputeUnit {
-	// info
-	private String name;
-
+public class ProceduralUnit extends DefaultComputeUnit {
 	// inputs
-	private DataPattern inputPattern;
 	private InputBuffer inputBuffer;
 	private Process inputProcess;
 
 	// outputs
-	private DataPattern outputPattern;
 	private OutputBuffer outputBuffer;
 	private Process outputProcess;
 
 	public ProceduralUnit(String name, DataPattern inputPattern, DataPattern outputPattern) {
-		this.name = name;
-		this.inputPattern = inputPattern;
+		super(name, inputPattern, outputPattern);
 		inputBuffer = new InputBuffer(inputPattern);
 		inputProcess = new Process("input", inputBuffer);
-		this.outputPattern = outputPattern;
 		outputBuffer = new OutputBuffer(outputPattern);
 		outputProcess = new Process("output", outputBuffer);
 	}
@@ -55,21 +48,6 @@ public class ProceduralUnit implements ComputeUnit {
 	}
 
 	// ComputeUnit, extern access
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public DataPattern getInputPattern() {
-		return inputPattern;
-	}
-
-	@Override
-	public DataPattern getOutputPattern() {
-		return outputPattern;
-	}
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
@@ -88,17 +66,5 @@ public class ProceduralUnit implements ComputeUnit {
 
 		assert outputValues.getPattern().equals(getOutputPattern()) : "inconsistent output values type";
 		return outputValues;
-	}
-
-	// Other
-
-	@Override
-	public String toString() {
-		StringBuffer buff = new StringBuffer();
-		buff.append(getName());
-		buff.append(getInputPattern());
-		buff.append(" -> ");
-		buff.append(getOutputPattern());
-		return buff.toString();
 	}
 }
