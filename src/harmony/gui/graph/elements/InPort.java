@@ -18,44 +18,22 @@ package harmony.gui.graph.elements;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.HashSet;
-import java.util.Set;
 
-import harmony.dataprocess.model.DataGenerator;
 import harmony.gui.Types;
 import harmony.math.Vector2D;
+import harmony.processcore.data.DataType;
 
 public class InPort extends Port {
 	private Link link;
 
-	public InPort(Node node, Class<?> dataType, String name) {
+	public InPort(Node node, DataType dataType, String name) {
 		super(node, dataType, name);
 		link = null;
 	}
 
-	@Override
-	public Object getData() {
-		if (link == null)
-			return null;
-		Object v = link.getValue();
-		if (v != null && v.getClass() != type)
-			throw new IllegalArgumentException();
-		return v;
-	}
-
-	@Override
-	public Set<DataGenerator> getDataProcessDependencies() {
-		Set<DataGenerator> dep = new HashSet<>();
-		if (link != null)
-			dep.add(link.getOutPort());
-		return dep;
-	}
-
 	public void setLink(Link link) {
-		if (link != null && link.type != this.type)
-			throw new IllegalArgumentException();
-		else
-			this.link = link;
+		assert link == null || link.type.equals(this.type) : "wrong link type";
+		this.link = link;
 	}
 
 	public Link getLink() {
@@ -73,7 +51,7 @@ public class InPort extends Port {
 		g2d.drawString(name, (float) pos.x + 0.2f, (float) pos.y + 0.07f);
 
 		if (isHovered()) {
-			Object data = this.getData();
+			Object data = "_";
 			if (data != null) {
 				String dispMsg = Types.getDataString(data);
 				Rectangle2D bound = g2d.getFontMetrics().getStringBounds(dispMsg, g2d);

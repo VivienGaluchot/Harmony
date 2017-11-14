@@ -43,7 +43,7 @@ public class SpacePersistor extends Persistor<Space> {
 
 	@Override
 	public Space recreate() {
-		Space s = new Space(name, null, null);
+		Space s = new Space(name, null);
 		return s;
 	}
 

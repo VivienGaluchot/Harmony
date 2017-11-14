@@ -19,24 +19,16 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Set;
 
-import harmony.dataprocess.model.DataGenerator;
-import harmony.dataprocess.model.DataProcessor;
 import harmony.gui.Types;
 import harmony.math.Vector2D;
+import harmony.processcore.data.DataType;
 
-public abstract class OutPort extends Port implements DataProcessor {
+public class OutPort extends Port {
 
-	public OutPort(Node node, Class<?> dataType, String name) {
+	public OutPort(Node node, DataType dataType, String name) {
 		super(node, dataType, name);
 	}
-
-	@Override
-	public abstract Set<DataGenerator> getDataProcessDependencies();
-
-	@Override
-	public abstract Object getData();
 
 	@Override
 	public void paint(Graphics g) {
@@ -51,7 +43,7 @@ public abstract class OutPort extends Port implements DataProcessor {
 		g2d.drawString(name, (float) pos.x - 0.2f - (float) nameRect.getWidth(), (float) pos.y + 0.07f);
 
 		if (isHovered()) {
-			Object data = this.getData();
+			Object data = "_";
 			if (data != null) {
 				String dispMsg = Types.getDataString(data);
 				Vector2D mspPos = pos.clone();

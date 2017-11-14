@@ -25,6 +25,7 @@ import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
 import harmony.math.Vector2D;
+import harmony.processcore.data.DataType;
 
 public class Link extends GuiElement {
 
@@ -35,11 +36,11 @@ public class Link extends GuiElement {
 	private OutPort outPort;
 	private InPort inPort;
 
-	public Class<?> type;
+	public DataType type;
 
 	private Shape shape;
 
-	public Link(Space space, Class<?> type, OutPort start, InPort end) {
+	public Link(Space space, DataType type, OutPort start, InPort end) {
 		super(space, Types.getDataColor(type), Types.getDataColor(type));
 		this.space = space;
 
@@ -51,13 +52,6 @@ public class Link extends GuiElement {
 		setInPort(end);
 
 		shape = null;
-	}
-
-	public Object getValue() {
-		Object v = getOutPort().getData();
-		if (v != null && v.getClass() != type)
-			throw new IllegalArgumentException();
-		return v;
 	}
 
 	public OutPort getOutPort() {

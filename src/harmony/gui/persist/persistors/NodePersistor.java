@@ -17,7 +17,6 @@ package harmony.gui.persist.persistors;
 
 import harmony.gui.graph.elements.Node;
 import harmony.gui.persist.Persistor;
-import harmony.math.Vector2D;
 
 public class NodePersistor extends Persistor<Node> {
 	private static final long serialVersionUID = 1L;
@@ -35,15 +34,13 @@ public class NodePersistor extends Persistor<Node> {
 
 	@Override
 	public Node recreate() {
-		Node n = new Node();
-		update(n);
-		return n;
+		// TODO
+		return null;
 	}
 
 	@Override
 	public void update(Node source) {
-		source.pos = new Vector2D(posX, posY);
-		source.setName(name);
+		// TODO
 	}
 
 }

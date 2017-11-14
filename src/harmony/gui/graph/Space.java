@@ -30,14 +30,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import harmony.dataprocess.implem.Util;
-import harmony.dataprocess.model.DataDescriptor;
-import harmony.dataprocess.model.DataGenerator;
-import harmony.dataprocess.model.DataProcessor;
 import harmony.gui.Dialog;
 import harmony.gui.GeneralInformationGenerator;
 import harmony.gui.Types;
@@ -47,8 +42,6 @@ import harmony.gui.graph.elements.Link;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.graph.elements.OutPort;
 import harmony.gui.graph.elements.Port;
-import harmony.gui.graph.elements.nodes.SpaceInputNode;
-import harmony.gui.graph.elements.nodes.SpaceOutputNode;
 import harmony.gui.persist.Persistable;
 import harmony.gui.persist.Persistor;
 import harmony.gui.persist.persistors.SpacePersistor;
@@ -57,6 +50,8 @@ import harmony.gui.record.RecordQueue;
 import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
+import harmony.processcore.process.HrmProcess;
+import harmony.processcore.process.ProceduralUnit;
 
 public class Space extends DrawPanel
 		implements Recordable, Persistable<Space>, MouseListener, MouseMotionListener, KeyListener {
@@ -64,8 +59,8 @@ public class Space extends DrawPanel
 
 	private String name = null;
 
-	private SpaceInputNode inputNode = null;
-	private SpaceOutputNode outputNode = null;
+	private Node inputNode = null;
+	private Node outputNode = null;
 	private ArrayList<Node> nodes = null;
 	private ArrayList<Link> links = null;
 
@@ -86,9 +81,9 @@ public class Space extends DrawPanel
 
 	private GeneralInformationGenerator infoGenerator;
 
-	public Space(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+	public Space(String name, ProceduralUnit proceduralUnit) {
 		this();
-		init(name, inputs, outputs);
+		init(name, proceduralUnit);
 	}
 
 	public Space() {
@@ -104,14 +99,14 @@ public class Space extends DrawPanel
 		recordQueue = new RecordQueue();
 	}
 
-	protected void init(String name, List<DataGenerator> inputs, List<DataDescriptor> outputs) {
+	protected void init(String name, ProceduralUnit proceduralUnit) {
 		this.name = name;
 
-		inputNode = new SpaceInputNode(this, inputs);
+		inputNode = new Node(this, proceduralUnit.getInputProcess());
 		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
 		recordQueue.addTrackedObject(inputNode);
 
-		outputNode = new SpaceOutputNode(this, outputs);
+		outputNode = new Node(this, proceduralUnit.getOutputProcess());
 		outputNode.pos = outputNode.pos.add(new Vector2D(5, 0));
 		recordQueue.addTrackedObject(outputNode);
 
@@ -123,11 +118,11 @@ public class Space extends DrawPanel
 		return name;
 	}
 
-	public SpaceInputNode getInputNode() {
+	public Node getInputNode() {
 		return inputNode;
 	}
 
-	public SpaceOutputNode getOutputNode() {
+	public Node getOutputNode() {
 		return outputNode;
 	}
 
@@ -185,7 +180,7 @@ public class Space extends DrawPanel
 		Iterator<Link> it = links.listIterator();
 		while (it.hasNext()) {
 			Link l = it.next();
-			if (l.getOutPort().node == n || l.getInPort().node == n) {
+			if (l.getOutPort().getNode() == n || l.getInPort().getNode() == n) {
 				l.getInPort().setLink(null);
 				it.remove();
 			}
@@ -197,7 +192,9 @@ public class Space extends DrawPanel
 
 	public void addLink(Link l) {
 		// Check if link is making loops
-		if (Util.isInDependenciesTree(l.getOutPort(), l.getInPort())) {
+		HrmProcess inProcess = l.getInPort().getNode().getProcess();
+		HrmProcess outProcess = l.getOutPort().getNode().getProcess();
+		if (outProcess.isInDependenciesTree(inProcess)) {
 			JOptionPane.showMessageDialog(this, "Computing loop detected, new link can't be added.", "Error",
 					JOptionPane.ERROR_MESSAGE);
 			// Do nothing
@@ -309,14 +306,6 @@ public class Space extends DrawPanel
 
 		if (hovered != null) {
 			hovereds.add(hovered);
-			if (hovered instanceof DataProcessor) {
-				Set<DataDescriptor> dependencies = Util.getDependencies((DataProcessor) hovered);
-				for (DataDescriptor des : dependencies) {
-					if (des instanceof GuiElement) {
-						hovereds.add((GuiElement) des);
-					}
-				}
-			}
 		}
 		for (GuiElement el : hovereds) {
 			el.setHovered(true);
@@ -382,14 +371,14 @@ public class Space extends DrawPanel
 			} else if (clicked instanceof InPort) {
 				InPort inPort = (InPort) clicked;
 				if (draggedLink == null)
-					draggedLink = new Link(this, inPort.type, null, inPort);
+					draggedLink = new Link(this, inPort.getDataType(), null, inPort);
 				draggedLink.setClicked(true);
 				draggedLink.setLoosePoint(vecMouse);
 
 			} else if (clicked instanceof OutPort) {
 				OutPort outPort = (OutPort) clicked;
 				if (draggedLink == null)
-					draggedLink = new Link(this, outPort.type, outPort, null);
+					draggedLink = new Link(this, outPort.getDataType(), outPort, null);
 				draggedLink.setClicked(true);
 				draggedLink.setLoosePoint(vecMouse);
 			}
@@ -457,13 +446,13 @@ public class Space extends DrawPanel
 		if (draggedLink != null) {
 			if (el != null && el instanceof InPort) {
 				InPort inPort = (InPort) el;
-				if (draggedLink.getInPort() == null && inPort.type == draggedLink.type)
+				if (draggedLink.getInPort() == null && inPort.getDataType() == draggedLink.type)
 					draggedLink.setInPort(inPort);
 				else
 					Dialog.displayError(null, "Incompatible port types. The new link can't be added.");
 			} else if (el != null && el instanceof OutPort) {
 				OutPort outPort = (OutPort) el;
-				if (draggedLink.getOutPort() == null && outPort.type == draggedLink.type)
+				if (draggedLink.getOutPort() == null && outPort.getDataType() == draggedLink.type)
 					draggedLink.setOutPort(outPort);
 				else
 					Dialog.displayError(null, "Incompatible port types. The new link can't be added.");

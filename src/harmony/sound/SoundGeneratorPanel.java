@@ -1,13 +1,14 @@
 package harmony.sound;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.sound.sampled.LineUnavailableException;
 
-import harmony.dataprocess.model.DataDescriptor;
-import harmony.dataprocess.model.DataGenerator;
 import harmony.gui.graph.Space;
+import harmony.processcore.data.DataArray;
+import harmony.processcore.data.DataPattern;
+import harmony.processcore.data.DataType;
+import harmony.processcore.data.DataTypes;
+import harmony.processcore.process.HrmProcess;
+import harmony.processcore.process.ProceduralUnit;
 import harmony.sound.generation.SampleGenerator;
 
 public class SoundGeneratorPanel extends Space {
@@ -16,12 +17,14 @@ public class SoundGeneratorPanel extends Space {
 	double globalTime = 0;
 	Concentrator concentrator;
 
-	private DataDescriptor rightSignal;
-	private DataDescriptor leftSignal;
+	private HrmProcess process;
 
 	public SoundGeneratorPanel() {
 		super();
-		init("SoundGenerator", createInputs(), createOutputs());
+		ProceduralUnit soundUnit = new ProceduralUnit("soundUnit", new DataPattern(new DataType[] { DataTypes.Double }),
+				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
+		process = new HrmProcess("soundProcess", soundUnit);
+		init("SoundGenerator", soundUnit);
 
 		try {
 			concentrator = new Concentrator(getSampleGenerator());
@@ -29,57 +32,6 @@ public class SoundGeneratorPanel extends Space {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-	}
-
-	private List<DataGenerator> createInputs() {
-		List<DataGenerator> inputs = new ArrayList<>();
-		inputs.add(new DataGenerator() {
-			@Override
-			public Class<?> getDataClass() {
-				return Double.class;
-			}
-
-			@Override
-			public String getDataName() {
-				return "Time (s)";
-			}
-
-			@Override
-			public Object getData() {
-				return globalTime;
-			}
-		});
-		return inputs;
-	}
-
-	private List<DataDescriptor> createOutputs() {
-		List<DataDescriptor> outputs = new ArrayList<>();
-		rightSignal = new DataDescriptor() {
-			@Override
-			public Class<?> getDataClass() {
-				return Double.class;
-			}
-
-			@Override
-			public String getDataName() {
-				return "Right signal";
-			}
-		};
-
-		leftSignal = new DataDescriptor() {
-			@Override
-			public Class<?> getDataClass() {
-				return Double.class;
-			}
-
-			@Override
-			public String getDataName() {
-				return "Left signal";
-			}
-		};
-		outputs.add(rightSignal);
-		outputs.add(leftSignal);
-		return outputs;
 	}
 
 	private SampleGenerator getSampleGenerator() {
@@ -91,12 +43,11 @@ public class SoundGeneratorPanel extends Space {
 
 			@Override
 			public Sample next() {
+				DataArray output = process.getValues();
 				// TODO redesign time to avoid loss of precision
 				globalTime = globalTime + 1 / (Sample.sampleRate);
-				Object rightObject = getOutputNode().getData(rightSignal);
-				Object leftObject = getOutputNode().getData(leftSignal);
-				double right = rightObject != null ? (double) rightObject : 0.0;
-				double left = leftObject != null ? (double) leftObject : 0.0;
+				Double right = (Double) output.getValue(0);
+				Double left = (Double) output.getValue(1);
 				return new Sample(right, left);
 			}
 

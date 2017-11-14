@@ -18,7 +18,8 @@ package harmony.gui;
 import java.awt.Color;
 import java.text.DecimalFormat;
 
-import harmony.gui.graph.elements.nodes.FunctionNode;
+import harmony.processcore.data.DataType;
+import harmony.processcore.data.DataTypes;
 
 public class Types {
 
@@ -28,17 +29,15 @@ public class Types {
 		DELETE
 	}
 
-	public static Color getDataColor(Class<?> type) {
-		if (type == Integer.class)
+	public static Color getDataColor(DataType type) {
+		if (type == DataTypes.Integer)
 			return Color.RED;
-		else if (type == Float.class)
-			return Color.GREEN;
-		else if (type == Double.class)
+		else if (type == DataTypes.Double)
 			return DoubleColor;
-		else if (type == FunctionNode.class)
+		else if (type == DataTypes.Boolean)
 			return Color.MAGENTA;
 		else
-			throw new IllegalArgumentException("Wrong data type : " + type.getName());
+			throw new IllegalArgumentException("Wrong data type : " + type);
 	}
 
 	public static String getDataString(Object data) {
@@ -51,9 +50,9 @@ public class Types {
 			return df.format(data);
 		else if (data instanceof Double)
 			return df.format(data);
-		else if (data instanceof FunctionNode)
-			return ((FunctionNode) data).getName();
+		else if (data == null)
+			return "_";
 		else
-			throw new IllegalArgumentException("Wrong data type : " + data.toString());
+			return data.toString();
 	}
 }

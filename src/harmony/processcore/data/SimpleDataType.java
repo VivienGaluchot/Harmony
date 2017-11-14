@@ -36,6 +36,8 @@ public class SimpleDataType implements DataType {
 
 	@Override
 	public boolean contains(Object value) {
+		if (value == null)
+			return false;
 		return value.getClass().equals(getValueClass());
 	}
 

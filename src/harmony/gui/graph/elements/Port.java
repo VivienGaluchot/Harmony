@@ -20,23 +20,23 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 
-import harmony.dataprocess.model.DataProcessor;
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.math.Vector2D;
+import harmony.processcore.data.DataType;
 
-public abstract class Port extends GuiElement implements DataProcessor {
-	public Node node;
-	public Class<?> type;
-	public String name;
+public abstract class Port extends GuiElement {
+	protected Node node;
+	protected DataType type;
+	protected String name;
 
-	public Double radius;
+	protected Double radius;
 
-	public Port(Node node, Class<?> type, String name) {
+	public Port(Node node, DataType type, String name) {
 		super(node, Types.getDataColor(type), Types.getDataColor(type).darker());
 		this.node = node;
-		this.name = name;
 		this.type = type;
+		this.name = name;
 		radius = 0.1;
 	}
 
@@ -44,14 +44,16 @@ public abstract class Port extends GuiElement implements DataProcessor {
 		return node.getPortPos(this);
 	}
 
-	@Override
-	public Class<?> getDataClass() {
+	public DataType getDataType() {
 		return type;
 	}
-
-	@Override
-	public String getDataName() {
+	
+	public String getName() {
 		return name;
+	}
+	
+	public Node getNode() {
+		return node;
 	}
 
 	@Override

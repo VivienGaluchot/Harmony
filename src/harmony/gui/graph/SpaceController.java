@@ -22,20 +22,12 @@ import java.util.List;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import harmony.dataprocess.basicSchemes.AddScheme;
-import harmony.dataprocess.basicSchemes.DivideScheme;
-import harmony.dataprocess.basicSchemes.MultiplyScheme;
-import harmony.dataprocess.basicSchemes.SinScheme;
-import harmony.dataprocess.basicSchemes.SubstractScheme;
 import harmony.gui.Dialog;
 import harmony.gui.graph.elements.Node;
-import harmony.gui.graph.elements.nodes.Constant;
-import harmony.gui.graph.elements.nodes.Display;
-import harmony.gui.graph.elements.nodes.FunctionCallNode;
-import harmony.gui.graph.elements.nodes.FunctionNode;
-import harmony.gui.graph.elements.nodes.ProcessNode;
-import harmony.gui.graph.elements.nodes.SpaceNode;
 import harmony.gui.persist.Persistor;
+import harmony.processcore.process.HrmProcess;
+import harmony.processcore.process.units.maths.Add;
+import harmony.processcore.process.units.maths.Sub;
 
 public class SpaceController {
 	Space space = null;
@@ -110,16 +102,8 @@ public class SpaceController {
 
 	public void addNode() {
 		List<Object> choices = new ArrayList<>();
-		choices.add(new NodeWrapper(new ProcessNode(space, "Add", new AddScheme())));
-		choices.add(new NodeWrapper(new ProcessNode(space, "Substract", new SubstractScheme())));
-		choices.add(new NodeWrapper(new ProcessNode(space, "Divide", new DivideScheme())));
-		choices.add(new NodeWrapper(new ProcessNode(space, "Multiply", new MultiplyScheme())));
-		choices.add(new NodeWrapper(new ProcessNode(space, "Sin", new SinScheme())));
-		choices.add(new NodeWrapper(new Display(space)));
-		choices.add(new NodeWrapper(new Constant(space)));
-		choices.add(new NodeWrapper(new SpaceNode(space, "SpaceNode")));
-		choices.add(new NodeWrapper(new FunctionNode(space, "Function")));
-		choices.add(new NodeWrapper(new FunctionCallNode(space)));
+		choices.add(new Node(space, new HrmProcess("add", new Add())));
+		choices.add(new Node(space, new HrmProcess("sub", new Sub())));
 		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(space, "Node to add : ", choices);
 		if (nw != null) {
 			space.addNode(nw.n);

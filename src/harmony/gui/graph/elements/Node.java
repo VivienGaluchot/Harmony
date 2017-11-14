@@ -37,52 +37,57 @@ import harmony.gui.record.ChangeRecord;
 import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
+import harmony.processcore.data.DataPattern;
+import harmony.processcore.process.HrmProcess;
 
 public class Node extends GuiElement implements Recordable, Persistable<Node> {
-
-	public Vector2D pos;
-
-	private Vector2D size;
-	private String name;
+	
+	private HrmProcess process;
 
 	private ArrayList<InPort> inPorts;
 	private ArrayList<OutPort> outPorts;
 
+	public Vector2D pos;
+	private Vector2D size;
 	private Shape currentShape;
 
-	public Node() {
-		this(null, null);
-	}
-
-	public Node(Space space, String name) {
+	public Node(Space space, HrmProcess process) {
 		super(space);
-		this.name = name;
+		this.process = process;
 		pos = new Vector2D(0, 0);
 		size = new Vector2D(2, 2);
 
 		inPorts = new ArrayList<>();
+		DataPattern inPattern = process.getInputPattern();
+		if(inPattern != null) {
+			for(int i = 0; i < inPattern.size(); i++) {
+				inPorts.add(new InPort(this, inPattern.getType(i), "i" + i));
+			}
+		}
+		
 		outPorts = new ArrayList<>();
+		DataPattern outPattern = process.getOutputPattern();
+		if(outPattern != null) {
+			for(int i = 0; i < outPattern.size(); i++) {
+				outPorts.add(new OutPort(this, outPattern.getType(i), "o" + i));
+			}
+		}
+		
+		adjustSize();
 	}
 
 	public String getName() {
-		return name;
+		if (process != null)
+			return process.getName();
+		else
+			return "_";
+	}
+	
+	public HrmProcess getProcess() {
+		return process;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	protected void addInPort(InPort ip) {
-		inPorts.add(ip);
-		adjustSize();
-	}
-
-	protected void addOutPort(OutPort op) {
-		outPorts.add(op);
-		adjustSize();
-	}
-
-	protected void adjustSize() {
+	private void adjustSize() {
 		size.y = 0.8 + Math.max(inPorts.size(), outPorts.size()) * 0.25;
 	}
 
@@ -144,7 +149,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		Font currentFont = new Font("Arial", Font.PLAIN, 1);
 		Font newFont = currentFont.deriveFont(0.3f);
 		g2d.setFont(newFont);
-		g2d.drawString(name, (float) topLeft.x + 0.1f, (float) topLeft.y + 0.4f);
+		g2d.drawString(getName(), (float) topLeft.x + 0.1f, (float) topLeft.y + 0.4f);
 		if (isSelected()) {
 			float dash1[] = { 0.1f };
 			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1, 0.0f);
