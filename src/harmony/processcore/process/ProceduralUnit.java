@@ -23,27 +23,27 @@ import harmony.processcore.process.units.utils.OutputBuffer;
 public class ProceduralUnit extends DefaultComputeUnit {
 	// inputs
 	private InputBuffer inputBuffer;
-	private Process inputProcess;
+	private HrmProcess inputProcess;
 
 	// outputs
 	private OutputBuffer outputBuffer;
-	private Process outputProcess;
+	private HrmProcess outputProcess;
 
 	public ProceduralUnit(String name, DataPattern inputPattern, DataPattern outputPattern) {
 		super(name, inputPattern, outputPattern);
 		inputBuffer = new InputBuffer(inputPattern);
-		inputProcess = new Process("input", inputBuffer);
+		inputProcess = new HrmProcess("input", inputBuffer);
 		outputBuffer = new OutputBuffer(outputPattern);
-		outputProcess = new Process("output", outputBuffer);
+		outputProcess = new HrmProcess("output", outputBuffer);
 	}
 
 	// Allows to build-up intern compute process
 
-	public Process getInputProcess() {
+	public HrmProcess getInputProcess() {
 		return inputProcess;
 	}
 
-	public Process getOutputProcess() {
+	public HrmProcess getOutputProcess() {
 		return outputProcess;
 	}
 

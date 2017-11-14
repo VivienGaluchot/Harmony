@@ -18,19 +18,17 @@ package harmony.processcore.process;
 import harmony.processcore.data.DataType;
 
 public class ProcessOutput {
-	private Process process;
+	private HrmProcess process;
 	private int id;
 
-	public ProcessOutput(Process process, int outputID) {
-		if (process == null)
-			throw new NullPointerException("computeUnit can't be null");
-		if (outputID < 0 || outputID > process.getOutputPattern().size())
-			throw new IllegalArgumentException("id out of bounds : " + outputID);
+	public ProcessOutput(HrmProcess process, int outputID) {
+		assert (process != null) : "computeUnit can't be null";
+		assert (outputID >= 0 && outputID < process.getOutputPattern().size()) : ("id out of bounds : " + outputID);
 		this.process = process;
 		this.id = outputID;
 	}
 
-	public Process getProcess() {
+	public HrmProcess getProcess() {
 		return process;
 	}
 

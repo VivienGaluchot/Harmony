@@ -15,13 +15,16 @@
 
 package harmony.processcore;
 
+import java.io.PrintWriter;
+
+import harmony.processcore.code.ProcessWriter;
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 import harmony.processcore.data.DataType;
 import harmony.processcore.data.DataTypes;
 import harmony.processcore.process.ComputeUnit;
 import harmony.processcore.process.ProceduralUnit;
-import harmony.processcore.process.Process;
+import harmony.processcore.process.HrmProcess;
 import harmony.processcore.process.units.maths.Add;
 import harmony.processcore.process.units.maths.Constant;
 import harmony.processcore.process.units.maths.Sub;
@@ -30,7 +33,7 @@ import harmony.processcore.process.units.utils.OutputBuffer;
 
 public class DataProcessTest {
 	public static void main(String[] args) throws Exception {
-		Process consts = new Process("consts", new ComputeUnit() {
+		HrmProcess consts = new HrmProcess("consts", new ComputeUnit() {
 			@Override
 			public String getName() {
 				return "c";
@@ -84,7 +87,7 @@ public class DataProcessTest {
 				return da;
 			}
 		};
-		Process add = new Process("sum1", addUnit);
+		HrmProcess add = new HrmProcess("sum1", addUnit);
 		System.out.println(add);
 		if (!add.getValue(0).equals(DataTypes.Double.getNeuter()))
 			throw new RuntimeException("Error");
@@ -125,8 +128,8 @@ public class DataProcessTest {
 			System.out.println("ok");
 		}
 
-		Process add2 = new Process("sum2", addUnit);
-		Process add3 = new Process("sum3", addUnit);
+		HrmProcess add2 = new HrmProcess("sum2", addUnit);
+		HrmProcess add3 = new HrmProcess("sum3", addUnit);
 		add2.setDependencie(0, add.getOutput(0));
 		add2.setDependencie(1, add.getOutput(0));
 		add3.setDependencie(1, add2.getOutput(0));
@@ -150,7 +153,7 @@ public class DataProcessTest {
 			System.out.println("ok");
 		}
 
-		Process consts2 = new Process("consts", new Constant(DataTypes.Integer, new Integer(123)));
+		HrmProcess consts2 = new HrmProcess("consts", new Constant(DataTypes.Integer, new Integer(123)));
 		System.out.println(consts2);
 		System.out.println(consts2.getInputPattern());
 		System.out.println(consts2.getOutputPattern());
@@ -166,7 +169,7 @@ public class DataProcessTest {
 		// test buffers
 		InputBuffer buff1 = new InputBuffer(new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
 		System.out.println(buff1);
-		Process buffProcess1 = new Process("buffProcess1", buff1);
+		HrmProcess buffProcess1 = new HrmProcess("buffProcess1", buff1);
 		System.out.println(buffProcess1);
 		System.out.println(buffProcess1.getValues());
 		buff1.setValue(0, 15.2);
@@ -174,8 +177,8 @@ public class DataProcessTest {
 		System.out.println(buffProcess1.getValues());
 
 		OutputBuffer buff2 = new OutputBuffer(new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
-		Process buffProcess2 = new Process("buffProcess2", buff2);
-		Process consts3 = new Process("consts3", new Constant(DataTypes.Double, 12.5));
+		HrmProcess buffProcess2 = new HrmProcess("buffProcess2", buff2);
+		HrmProcess consts3 = new HrmProcess("consts3", new Constant(DataTypes.Double, 12.5));
 		System.out.println(buff2.getValue(0));
 		buffProcess2.setDependencie(0, consts3.getOutput(0));
 		System.out.println(buff2.getValue(0));
@@ -189,10 +192,10 @@ public class DataProcessTest {
 		ProceduralUnit complex1 = new ProceduralUnit("complex1",
 				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }),
 				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
-		Process add4 = new Process("add4", new Add());
+		HrmProcess add4 = new HrmProcess("add4", new Add());
 		add4.setDependencie(0, complex1.getInputProcess().getOutput(0));
 		add4.setDependencie(1, complex1.getInputProcess().getOutput(1));
-		Process sub4 = new Process("sub4", new Sub());
+		HrmProcess sub4 = new HrmProcess("sub4", new Sub());
 		add4.setDependencie(0, complex1.getInputProcess().getOutput(0));
 		add4.setDependencie(1, complex1.getInputProcess().getOutput(1));
 		sub4.setDependencie(0, complex1.getInputProcess().getOutput(0));
@@ -201,17 +204,49 @@ public class DataProcessTest {
 		complex1.getOutputProcess().setDependencie(1, sub4.getOutput(0));
 		System.out.println(complex1);
 
-		Process complexProcess1 = new Process("complexProcess1", complex1);
-		complexProcess1.setDependencie(0, new Process("a", new Constant(DataTypes.Double, 10.5)).getOutput(0));
-		complexProcess1.setDependencie(1, new Process("b", new Constant(DataTypes.Double, 9.5)).getOutput(0));
+		HrmProcess complexProcess1 = new HrmProcess("complexProcess1", complex1);
+		complexProcess1.setDependencie(0, new HrmProcess("a", new Constant(DataTypes.Double, 10.5)).getOutput(0));
+		complexProcess1.setDependencie(1, new HrmProcess("b", new Constant(DataTypes.Double, 9.5)).getOutput(0));
 		System.out.println(complexProcess1);
 		System.out.println(complexProcess1.getValues());
 
-		Process complexProcess2 = new Process("complexProcess2", complex1);
-		complexProcess2.setDependencie(0, new Process("c", new Constant(DataTypes.Double, 5.0)).getOutput(0));
-		complexProcess2.setDependencie(1, new Process("d", new Constant(DataTypes.Double, 17.5)).getOutput(0));
+		HrmProcess complexProcess2 = new HrmProcess("complexProcess2", complex1);
+		complexProcess2.setDependencie(0, new HrmProcess("c", new Constant(DataTypes.Double, 5.0)).getOutput(0));
+		complexProcess2.setDependencie(1, new HrmProcess("d", new Constant(DataTypes.Double, 17.5)).getOutput(0));
 		System.out.println(complexProcess2);
 		System.out.println(complexProcess2.getValues());
+		
+		complexProcess1.setDependencie(0, complexProcess2.getOutput(0));
+		System.out.println(complexProcess1);
+		System.out.println(complexProcess1.getValues());
+
+		try {
+			complexProcess2.setDependencie(0, complexProcess1.getOutput(0));
+			throw new RuntimeException("Error");
+		} catch (Exception e) {
+			System.out.println(e);
+			System.out.println("ok");
+		}
+		
+		// TODO Intern dependencies detection
+		// complex1.getOutputProcess().setDependencie(0, complexProcess2.getOutput(0));
+		// System.out.println(complexProcess1);
+		// System.out.println(complexProcess1.getValues());
+		
+		
+		// ProcessWriter
+		ProcessWriter testWriter = new ProcessWriter(new PrintWriter(System.out));
+		HrmProcess A = new HrmProcess("A", new Constant(DataTypes.Double, 10.0));
+		System.out.println("--------------");
+		testWriter.write(A);
+		System.out.println("--------------");
+		HrmProcess add5 = new HrmProcess("add5", new Add());
+		add5.setDependencie(0, A.getOutput(0));
+		add5.setDependencie(1, A.getOutput(0));
+		testWriter.write(add5);
+		System.out.println("--------------");
+		testWriter.write(complexProcess1);
+		System.out.println("--------------");
 
 	}
 }

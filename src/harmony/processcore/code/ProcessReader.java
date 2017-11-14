@@ -13,19 +13,8 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.processcore.data;
+package harmony.processcore.code;
 
-import harmony.math.Vector2D;
-
-public class DataTypes {
-	// Base types
-	public final static DataType Double = new SimpleDataType(Double.class, new Double(0.0));
-	public final static DataType Integer = new SimpleDataType(Integer.class, new Integer(0));
-	public final static DataType Boolean = new SimpleDataType(Boolean.class, new Boolean(false));
-	
-	// Math
-	public final static DataType Vector2D = new SimpleDataType(Vector2D.class, new Vector2D());
-	
-	// List
-	public final static DataType[] dataTypes = {Double, Integer};
+public class ProcessReader {
+	// TODO
 }

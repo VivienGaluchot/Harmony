@@ -18,7 +18,7 @@ package harmony.processcore.process;
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 
-public class Process implements ComputeUnit {
+public class HrmProcess implements ComputeUnit {
 	// info
 	private String name;
 
@@ -32,7 +32,7 @@ public class Process implements ComputeUnit {
 	private boolean valuated;
 	private DataArray values;
 
-	public Process(String name, ComputeUnit computeUnit) {
+	public HrmProcess(String name, ComputeUnit computeUnit) {
 		assert name != null : "name can't be null";
 		assert computeUnit != null : "computeUnit can't be null";
 
@@ -77,7 +77,7 @@ public class Process implements ComputeUnit {
 		return inputDependencies[inputId];
 	}
 
-	public boolean isInDependenciesTree(Process process) {
+	public boolean isInDependenciesTree(HrmProcess process) {
 		if (process != null) {
 			if (process == this) {
 				return true;
