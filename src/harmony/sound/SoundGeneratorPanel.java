@@ -7,6 +7,8 @@ import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 import harmony.processcore.data.DataType;
 import harmony.processcore.data.DataTypes;
+import harmony.processcore.process.ComputeUnit;
+import harmony.processcore.process.DefaultComputeUnit;
 import harmony.processcore.process.HrmProcess;
 import harmony.processcore.process.ProceduralUnit;
 import harmony.sound.generation.SampleGenerator;
@@ -23,7 +25,20 @@ public class SoundGeneratorPanel extends Space {
 		super();
 		ProceduralUnit soundUnit = new ProceduralUnit("soundUnit", new DataPattern(new DataType[] { DataTypes.Double }),
 				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
+		
+		ComputeUnit timeUnit = new DefaultComputeUnit("time", null,
+				new DataPattern(new DataType[] { DataTypes.Double })) {
+			@Override
+			public DataArray compute(DataArray inputValues) {
+				DataArray timeArray = new DataArray(this.getOutputPattern());
+				timeArray.setValue(0, globalTime);
+				return timeArray;
+			}
+		};
+		
 		process = new HrmProcess("soundProcess", soundUnit);
+		process.setDependencie(0, new HrmProcess("time", timeUnit).getOutput(0));
+
 		init("SoundGenerator", soundUnit);
 
 		try {

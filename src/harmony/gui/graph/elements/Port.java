@@ -27,18 +27,22 @@ import harmony.processcore.data.DataType;
 
 public abstract class Port extends GuiElement {
 	protected Node node;
+	private int id;
 	protected DataType type;
 	protected String name;
 
 	protected Double radius;
 
-	public Port(Node node, DataType type, String name) {
+	public Port(Node node, int id, DataType type, String name) {
 		super(node, Types.getDataColor(type), Types.getDataColor(type).darker());
 		this.node = node;
+		this.id = id;
 		this.type = type;
 		this.name = name;
 		radius = 0.1;
 	}
+	
+	abstract Object getValue();
 
 	public Vector2D getPos() {
 		return node.getPortPos(this);
@@ -54,6 +58,10 @@ public abstract class Port extends GuiElement {
 	
 	public Node getNode() {
 		return node;
+	}
+	
+	public int getId() {
+		return id;
 	}
 
 	@Override

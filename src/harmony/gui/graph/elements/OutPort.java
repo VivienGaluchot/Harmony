@@ -23,11 +23,20 @@ import java.awt.geom.Rectangle2D;
 import harmony.gui.Types;
 import harmony.math.Vector2D;
 import harmony.processcore.data.DataType;
+import harmony.processcore.process.ProcessOutput;
 
 public class OutPort extends Port {
 
-	public OutPort(Node node, DataType dataType, String name) {
-		super(node, dataType, name);
+	public OutPort(Node node, int id, DataType dataType, String name) {
+		super(node, id, dataType, name);
+	}
+	
+	public ProcessOutput getProcessOutput() {
+		return getNode().getProcess().getOutput(getId());
+	}
+	
+	public Object getValue() {
+		return node.getProcess().getValue(getId());
 	}
 
 	@Override
@@ -43,9 +52,9 @@ public class OutPort extends Port {
 		g2d.drawString(name, (float) pos.x - 0.2f - (float) nameRect.getWidth(), (float) pos.y + 0.07f);
 
 		if (isHovered()) {
-			Object data = "_";
-			if (data != null) {
-				String dispMsg = Types.getDataString(data);
+			Object value = getValue();
+			if (value != null) {
+				String dispMsg = Types.getDataString(value);
 				Vector2D mspPos = pos.clone();
 				g2d.drawString(dispMsg, (float) (mspPos.x + this.radius + 0.05f), (float) (mspPos.y - radius) + 0.05f);
 			}

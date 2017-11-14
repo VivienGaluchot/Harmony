@@ -102,8 +102,8 @@ public class SpaceController {
 
 	public void addNode() {
 		List<Object> choices = new ArrayList<>();
-		choices.add(new Node(space, new HrmProcess("add", new Add())));
-		choices.add(new Node(space, new HrmProcess("sub", new Sub())));
+		choices.add(new NodeWrapper(new Node(space, new HrmProcess("add", new Add()))));
+		choices.add(new NodeWrapper(new Node(space, new HrmProcess("sub", new Sub()))));
 		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(space, "Node to add : ", choices);
 		if (nw != null) {
 			space.addNode(nw.n);

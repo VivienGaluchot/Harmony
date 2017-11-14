@@ -26,18 +26,29 @@ import harmony.processcore.data.DataType;
 public class InPort extends Port {
 	private Link link;
 
-	public InPort(Node node, DataType dataType, String name) {
-		super(node, dataType, name);
+	public InPort(Node node, int id, DataType dataType, String name) {
+		super(node, id, dataType, name);
 		link = null;
 	}
 
 	public void setLink(Link link) {
 		assert link == null || link.type.equals(this.type) : "wrong link type";
+		if (link != null)
+			getNode().getProcess().setDependencie(getId(), link.getOutPort().getProcessOutput());
+		else
+			getNode().getProcess().resetDependencie(getId());
 		this.link = link;
 	}
 
 	public Link getLink() {
 		return link;
+	}
+
+	public Object getValue() {
+		if (link != null)
+			return link.getOutPort().getValue();
+		else
+			return null;
 	}
 
 	@Override
@@ -51,9 +62,9 @@ public class InPort extends Port {
 		g2d.drawString(name, (float) pos.x + 0.2f, (float) pos.y + 0.07f);
 
 		if (isHovered()) {
-			Object data = "_";
-			if (data != null) {
-				String dispMsg = Types.getDataString(data);
+			Object value = getValue();
+			if (value != null) {
+				String dispMsg = Types.getDataString(value);
 				Rectangle2D bound = g2d.getFontMetrics().getStringBounds(dispMsg, g2d);
 				Vector2D mspPos = pos.clone();
 				g2d.drawString(dispMsg, (float) (mspPos.x - bound.getWidth() - this.radius - 0.05f),
