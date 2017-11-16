@@ -21,7 +21,6 @@ import harmony.gui.MainFrame;
 import harmony.sound.SoundGeneratorPanel;
 
 public class MainClass {
-
 	public static void main(String[] args) throws Exception {
 		Ressources.init();
 		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

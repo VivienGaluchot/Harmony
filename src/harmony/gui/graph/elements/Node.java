@@ -61,7 +61,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		DataPattern inPattern = process.getInputPattern();
 		if(inPattern != null) {
 			for(int i = 0; i < inPattern.size(); i++) {
-				inPorts.add(new InPort(this, i, inPattern.getType(i), "i" + i));
+				inPorts.add(new InPort(this, i, inPattern.getType(i), inPattern.getName(i)));
 			}
 		}
 		
@@ -69,7 +69,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		DataPattern outPattern = process.getOutputPattern();
 		if(outPattern != null) {
 			for(int i = 0; i < outPattern.size(); i++) {
-				outPorts.add(new OutPort(this, i, outPattern.getType(i), "o" + i));
+				outPorts.add(new OutPort(this, i, outPattern.getType(i), outPattern.getName(i)));
 			}
 		}
 		

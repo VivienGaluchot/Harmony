@@ -23,9 +23,10 @@ public class SoundGeneratorPanel extends Space {
 
 	public SoundGeneratorPanel() {
 		super();
-		ProceduralUnit soundUnit = new ProceduralUnit("soundUnit", new DataPattern(new DataType[] { DataTypes.Double }),
-				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
-		
+		ProceduralUnit soundUnit = new ProceduralUnit("soundUnit",
+				new DataPattern(new DataType[] { DataTypes.Double }, new String[] { "time" }),
+				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }, new String[] { "R", "L" }));
+
 		ComputeUnit timeUnit = new DefaultComputeUnit("time", null,
 				new DataPattern(new DataType[] { DataTypes.Double })) {
 			@Override
@@ -35,7 +36,7 @@ public class SoundGeneratorPanel extends Space {
 				return timeArray;
 			}
 		};
-		
+
 		process = new HrmProcess("soundProcess", soundUnit);
 		process.setDependencie(0, new HrmProcess("time", timeUnit).getOutput(0));
 

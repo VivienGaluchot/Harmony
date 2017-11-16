@@ -16,37 +16,54 @@
 package harmony.processcore.data;
 
 public class DataPattern {
+	private String[] names;
 	private DataType[] types;
 	private int size;
 
 	public DataPattern() {
+		this.names = null;
 		this.types = null;
 		this.size = 0;
 	}
 
 	public DataPattern(DataType type) {
+		this();
 		if (type != null) {
+			this.names = new String[] { type.toString() };
 			this.types = new DataType[] { type };
 			this.size = 1;
-		} else {
-			this.types = null;
-			this.size = 0;
 		}
 	}
 
 	public DataPattern(DataType[] types) {
+		this();
 		if (types != null) {
-			for (DataType dt : types) {
-				assert dt != null : "type value can't be null";
+			this.names = new String[types.length];
+			this.types = new DataType[types.length];
+			for (int i = 0; i < types.length; i++) {
+				assert types[i] != null : "type value can't be null";
+				this.names[i] = types[i].toString();
+				this.types[i] = types[i];
 			}
-			this.types = types;
 			this.size = types.length;
-		} else {
-			this.types = null;
-			this.size = 0;
 		}
 	}
-
+	
+	public DataPattern(DataType[] types, String[] names) {
+		this();
+		assert (types == null && names == null) || (types.length == names.length) : "inconsistent types and names length";
+		if (types != null) {
+			this.names = new String[names.length];
+			this.types = new DataType[types.length];
+			for (int i = 0; i < types.length; i++) {
+				assert types[i] != null : "type value can't be null";
+				this.names[i] = names[i];
+				this.types[i] = types[i];
+			}
+			this.size = types.length;
+		}
+	}
+ 
 	public boolean isTypeConsistent(int id, DataType type) {
 		return getType(id).includes(type);
 	}
@@ -61,6 +78,10 @@ public class DataPattern {
 
 	public Object getNeuter(int id) {
 		return types[id].getNeuter();
+	}
+	
+	public String getName(int i) {
+		return names[i];
 	}
 
 	public DataType getType(int i) {

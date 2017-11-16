@@ -30,11 +30,11 @@ public class Types {
 	}
 
 	public static Color getDataColor(DataType type) {
-		if (type == DataTypes.Integer)
+		if (type.includes(DataTypes.Integer))
 			return Color.RED;
-		else if (type == DataTypes.Double)
+		else if (type.includes(DataTypes.Double))
 			return DoubleColor;
-		else if (type == DataTypes.Boolean)
+		else if (type.includes(DataTypes.Boolean))
 			return Color.MAGENTA;
 		else
 			throw new IllegalArgumentException("Wrong data type : " + type);
