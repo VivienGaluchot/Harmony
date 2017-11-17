@@ -17,6 +17,7 @@ package harmony.processcore.process;
 
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
+import harmony.processcore.process.units.ComputeUnit;
 
 public class HrmProcess implements ComputeUnit {
 	// info
@@ -48,6 +49,33 @@ public class HrmProcess implements ComputeUnit {
 
 		values = new DataArray(getOutputPattern());
 		valuated = false;
+	}
+
+	// patterns
+	
+	public void replaceComputeUnit(ComputeUnit computeUnit) {
+		assert computeUnit != null : "computeUnit can't be null";
+		DataPattern local = getInputPattern();
+		DataPattern other = computeUnit.getInputPattern();
+		if(local == null) {
+			if(other != null)
+				throw new IllegalArgumentException("non including inputPattern");
+		} else {
+			if (!local.includes(other)) {
+				throw new IllegalArgumentException("non including inputPattern");
+			}
+		}
+		local = getOutputPattern();
+		other = computeUnit.getOutputPattern();
+		if(local == null) {
+			if(other != null)
+				throw new IllegalArgumentException("non including outputPattern");
+		} else {
+			if (!local.includes(other)) {
+				throw new IllegalArgumentException("non including outputPattern");
+			}
+		}
+		this.computeUnit = computeUnit;
 	}
 
 	// Dependencies
@@ -106,7 +134,7 @@ public class HrmProcess implements ComputeUnit {
 				}
 			}
 			values = compute(inputValues);
-			// TODO implement lazy reevaluation
+			// TODO implement lazy evaluation
 			// valuated = true;
 		}
 		return values;

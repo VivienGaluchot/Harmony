@@ -7,10 +7,10 @@ import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 import harmony.processcore.data.DataType;
 import harmony.processcore.data.DataTypes;
-import harmony.processcore.process.ComputeUnit;
 import harmony.processcore.process.DefaultComputeUnit;
 import harmony.processcore.process.HrmProcess;
 import harmony.processcore.process.ProceduralUnit;
+import harmony.processcore.process.units.ComputeUnit;
 import harmony.sound.generation.SampleGenerator;
 
 public class SoundGeneratorPanel extends Space {

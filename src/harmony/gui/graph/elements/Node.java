@@ -27,6 +27,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
+import harmony.gui.Dialog;
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
@@ -38,10 +39,12 @@ import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 import harmony.processcore.data.DataPattern;
+import harmony.processcore.data.DataTypes;
 import harmony.processcore.process.HrmProcess;
+import harmony.processcore.process.units.maths.Constant;
 
 public class Node extends GuiElement implements Recordable, Persistable<Node> {
-	
+
 	private HrmProcess process;
 
 	private ArrayList<InPort> inPorts;
@@ -59,20 +62,20 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 
 		inPorts = new ArrayList<>();
 		DataPattern inPattern = process.getInputPattern();
-		if(inPattern != null) {
-			for(int i = 0; i < inPattern.size(); i++) {
+		if (inPattern != null) {
+			for (int i = 0; i < inPattern.size(); i++) {
 				inPorts.add(new InPort(this, i, inPattern.getType(i), inPattern.getName(i)));
 			}
 		}
-		
+
 		outPorts = new ArrayList<>();
 		DataPattern outPattern = process.getOutputPattern();
-		if(outPattern != null) {
-			for(int i = 0; i < outPattern.size(); i++) {
+		if (outPattern != null) {
+			for (int i = 0; i < outPattern.size(); i++) {
 				outPorts.add(new OutPort(this, i, outPattern.getType(i), outPattern.getName(i)));
 			}
 		}
-		
+
 		adjustSize();
 	}
 
@@ -82,7 +85,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		else
 			return "_";
 	}
-	
+
 	public HrmProcess getProcess() {
 		return process;
 	}
@@ -107,7 +110,8 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 	}
 
 	public void showOpt() {
-		JOptionPane.showMessageDialog(getFatherComponent(), "Empty node");
+		ProcessUpdater updater = new ProcessUpdater(this, process);
+		updater.update();
 	}
 
 	public List<InPort> getInPorts() {

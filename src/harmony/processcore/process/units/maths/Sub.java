@@ -24,8 +24,8 @@ import harmony.processcore.process.DefaultComputeUnit;
 public class Sub extends DefaultComputeUnit {
 
 	public Sub() {
-		super("sub", new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }),
-				new DataPattern(new DataType[] { DataTypes.Double }));
+		super("sub", new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }, new String[] { "a", "b" }),
+				new DataPattern(new DataType[] { DataTypes.Double }, new String[] { "a-b" }));
 	}
 
 	@Override

@@ -48,10 +48,11 @@ public class DataPattern {
 			this.size = types.length;
 		}
 	}
-	
+
 	public DataPattern(DataType[] types, String[] names) {
 		this();
-		assert (types == null && names == null) || (types.length == names.length) : "inconsistent types and names length";
+		assert (types == null && names == null)
+				|| (types.length == names.length) : "inconsistent types and names length";
 		if (types != null) {
 			this.names = new String[names.length];
 			this.types = new DataType[types.length];
@@ -63,13 +64,25 @@ public class DataPattern {
 			this.size = types.length;
 		}
 	}
- 
+
 	public boolean isTypeConsistent(int id, DataType type) {
 		return getType(id).includes(type);
 	}
 
 	public boolean isValueConsistent(int id, Object value) {
 		return types[id].contains(value);
+	}
+
+	public boolean includes(DataPattern other) {
+		if (other == null)
+			return false;
+		if (this.size != other.size)
+			return false;
+		for (int i = 0; i < types.length; i++) {
+			if (!types[i].includes(other.types[i]))
+				return false;
+		}
+		return true;
 	}
 
 	public int size() {
@@ -79,7 +92,7 @@ public class DataPattern {
 	public Object getNeuter(int id) {
 		return types[id].getNeuter();
 	}
-	
+
 	public String getName(int i) {
 		return names[i];
 	}

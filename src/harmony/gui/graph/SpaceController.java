@@ -22,11 +22,15 @@ import java.util.List;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.oracle.jrockit.jfr.DataType;
+
 import harmony.gui.Dialog;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.persist.Persistor;
+import harmony.processcore.data.DataTypes;
 import harmony.processcore.process.HrmProcess;
 import harmony.processcore.process.units.maths.Add;
+import harmony.processcore.process.units.maths.Constant;
 import harmony.processcore.process.units.maths.Sub;
 
 public class SpaceController {
@@ -104,6 +108,7 @@ public class SpaceController {
 		List<Object> choices = new ArrayList<>();
 		choices.add(new NodeWrapper(new Node(space, new HrmProcess("add", new Add()))));
 		choices.add(new NodeWrapper(new Node(space, new HrmProcess("sub", new Sub()))));
+		choices.add(new NodeWrapper(new Node(space, new HrmProcess("constant", new Constant(DataTypes.Double, 0.0)))));
 		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(space, "Node to add : ", choices);
 		if (nw != null) {
 			space.addNode(nw.n);
