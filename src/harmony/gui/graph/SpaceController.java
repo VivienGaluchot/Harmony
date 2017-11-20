@@ -22,8 +22,6 @@ import java.util.List;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.oracle.jrockit.jfr.DataType;
-
 import harmony.gui.Dialog;
 import harmony.gui.graph.elements.Node;
 import harmony.gui.persist.Persistor;

@@ -25,9 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.JOptionPane;
-
-import harmony.gui.Dialog;
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
 import harmony.gui.graph.Space;
@@ -39,9 +36,7 @@ import harmony.gui.record.Recordable;
 import harmony.gui.record.StateRecord;
 import harmony.math.Vector2D;
 import harmony.processcore.data.DataPattern;
-import harmony.processcore.data.DataTypes;
 import harmony.processcore.process.HrmProcess;
-import harmony.processcore.process.units.maths.Constant;
 
 public class Node extends GuiElement implements Recordable, Persistable<Node> {
 

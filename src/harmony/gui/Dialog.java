@@ -40,13 +40,17 @@ public class Dialog {
 
 	public static Double doubleDialog(Component frame, String msg, String defaultValue) {
 		try {
-			Double p = Double.parseDouble((String) JOptionPane.showInputDialog(frame, msg, "Informations",
-					JOptionPane.PLAIN_MESSAGE, null, null, defaultValue));
-			return p;
+			String pStr = (String) JOptionPane.showInputDialog(frame, msg, "Informations", JOptionPane.PLAIN_MESSAGE,
+					null, null, defaultValue);
+			if(pStr != null) {
+				Double p = Double.parseDouble(pStr);
+				return p;
+			}
 		} catch (NumberFormatException e) {
 			displayError(frame, "Input value must be a real number");
 			return null;
 		}
+		return null;
 	}
 
 	public static String stringDialog(Component frame, String msg, String defaultValue) {

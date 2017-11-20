@@ -46,7 +46,7 @@ public class Sample {
 	 * @param right,
 	 *            right audio value, between -1 & 1
 	 */
-	public Sample(double left, double right) {
+	public Sample(double right, double left) {
 		// Saturation
 		if (left > 1)
 			left = 1;
