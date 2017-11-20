@@ -285,10 +285,10 @@ public class Space extends DrawPanel
 
 		DecimalFormat df = new DecimalFormat("#");
 		df.setMaximumFractionDigits(0);
-		g2d.drawString("OverlayToolbar", 50, 20);
+		g2d.drawString("OverlayToolbar", 60, 20);
 		g2d.drawString(df.format(infoGenerator.getCurrentFrameRate()) + "fps", 10, 20);
 		g2d.drawString(getName() + " | " + getHoveredElementInfo(), 10, getHeight() - 10);
-		g2d.drawString("Harmony dev edition 0.0", this.getWidth() - 150, 20);
+		g2d.drawString("Harmony dev edition 0.0", this.getWidth() - 200, 20);
 		g2d.dispose();
 	}
 

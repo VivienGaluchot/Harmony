@@ -42,6 +42,7 @@ public class Types {
 
 	public static String getDataString(Object data) {
 		DecimalFormat df = new DecimalFormat("#");
+		df.setMinimumIntegerDigits(1);
 		df.setMaximumFractionDigits(2);
 		df.setMinimumFractionDigits(2);
 		if (data instanceof Integer)
