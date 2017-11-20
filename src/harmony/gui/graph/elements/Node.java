@@ -45,7 +45,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 	private ArrayList<InPort> inPorts;
 	private ArrayList<OutPort> outPorts;
 
-	public Vector2D pos;
+	private Vector2D pos;
 	private Vector2D size;
 	private Shape currentShape;
 
@@ -79,6 +79,18 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 			return process.getName();
 		else
 			return "_";
+	}
+	
+	public Vector2D getPos() {
+		return pos;
+	}
+	
+	public void setPos(Vector2D pos) {
+		this.pos = pos;
+	}
+	
+	public Vector2D getSize() {
+		return size;
 	}
 
 	public HrmProcess getProcess() {
@@ -136,7 +148,7 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
 
-		Vector2D topLeft = new Vector2D(pos.x - size.x / 2.0, pos.y - size.y / 2.0);
+		Vector2D topLeft = getPos().subtract(getSize().multiply(0.5));
 		currentShape = new Rectangle2D.Double(topLeft.x, topLeft.y, size.x, size.y);
 
 		g2d.setColor(getCurrentBackgroundColor());

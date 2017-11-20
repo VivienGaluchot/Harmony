@@ -103,11 +103,11 @@ public class Space extends DrawPanel
 		this.name = name;
 
 		inputNode = new Node(this, proceduralUnit.getInputProcess());
-		inputNode.pos = inputNode.pos.add(new Vector2D(-5, 0));
+		inputNode.setPos(inputNode.getPos().add(new Vector2D(-5, 0)));
 		recordQueue.addTrackedObject(inputNode);
 
 		outputNode = new Node(this, proceduralUnit.getOutputProcess());
-		outputNode.pos = outputNode.pos.add(new Vector2D(5, 0));
+		outputNode.setPos(outputNode.getPos().add(new Vector2D(5, 0)));
 		recordQueue.addTrackedObject(outputNode);
 
 		recordQueue.addTrackedObject(this);
@@ -267,7 +267,7 @@ public class Space extends DrawPanel
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
-		Font font = new Font("Helvetica", Font.PLAIN, 12);
+		Font font = new Font("Consolas", Font.PLAIN, 12);
 		g2d.setFont(font);
 
 		// draw elements
@@ -284,11 +284,11 @@ public class Space extends DrawPanel
 		// draw overlay
 
 		DecimalFormat df = new DecimalFormat("#");
-		df.setMaximumFractionDigits(1);
+		df.setMaximumFractionDigits(0);
 		g2d.drawString("OverlayToolbar", 50, 20);
-		g2d.drawString(df.format(infoGenerator.getCurrentFrameRate()), 10, 20);
+		g2d.drawString(df.format(infoGenerator.getCurrentFrameRate()) + "fps", 10, 20);
 		g2d.drawString(getName() + " | " + getHoveredElementInfo(), 10, getHeight() - 10);
-		g2d.drawString("Harmony Dev0", this.getWidth() - 100, 20);
+		g2d.drawString("Harmony dev edition 0.0", this.getWidth() - 150, 20);
 		g2d.dispose();
 	}
 
@@ -355,17 +355,17 @@ public class Space extends DrawPanel
 				if (!go.isSelected())
 					setSelected(go);
 				if (initObjPos == null)
-					initObjPos = go.pos.clone();
-				Vector2D currentDrag = go.pos.clone();
-				go.pos = initObjPos.add(vecMouse.subtract(initMousePos));
+					initObjPos = go.getPos().clone();
+				Vector2D currentDrag = go.getPos().clone();
+				go.setPos(initObjPos.add(vecMouse.subtract(initMousePos)));
 				if (alt_key_pressed) {
-					go.pos.x = Math.round(4 * go.pos.x) / 4.;
-					go.pos.y = Math.round(4 * go.pos.y) / 4.;
+					Vector2D rounded = go.getPos().multiply(4).round().multiply(1.0 / 4.0);
+					go.setPos(rounded);
 				}
-				currentDrag = go.pos.subtract(currentDrag);
+				currentDrag = go.getPos().subtract(currentDrag);
 				for (GuiElement el : selecteds) {
 					if (el instanceof Node && el != clicked) {
-						((Node) el).pos = ((Node) el).pos.add(currentDrag);
+						((Node) el).setPos(((Node) el).getPos().add(currentDrag));
 					}
 				}
 			} else if (clicked instanceof InPort) {

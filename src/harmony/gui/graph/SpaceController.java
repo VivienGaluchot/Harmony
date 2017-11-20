@@ -24,6 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import harmony.gui.Dialog;
 import harmony.gui.graph.elements.Node;
+import harmony.gui.graph.elements.nodes.Display;
 import harmony.gui.persist.Persistor;
 import harmony.processcore.data.DataTypes;
 import harmony.processcore.process.HrmProcess;
@@ -107,6 +108,7 @@ public class SpaceController {
 		choices.add(new NodeWrapper(new Node(space, new HrmProcess("add", new Add()))));
 		choices.add(new NodeWrapper(new Node(space, new HrmProcess("sub", new Sub()))));
 		choices.add(new NodeWrapper(new Node(space, new HrmProcess("constant", new Constant(DataTypes.Double, 0.0)))));
+		choices.add(new NodeWrapper(new Display(space)));
 		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(space, "Node to add : ", choices);
 		if (nw != null) {
 			space.addNode(nw.n);

@@ -88,6 +88,10 @@ public class Vector2D implements Serializable {
 		return new Vector2D(x * d, y * d);
 	}
 
+	public Vector2D round() {
+		return new Vector2D(Math.round(x), Math.round(y));
+	}
+
 	public Vector2D add(Vector2D vect) {
 		return new Vector2D(x + vect.x, y + vect.y);
 	}

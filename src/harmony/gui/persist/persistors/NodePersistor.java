@@ -27,8 +27,8 @@ public class NodePersistor extends Persistor<Node> {
 
 	public NodePersistor(Node source) {
 		super(source);
-		posX = source.pos.x;
-		posY = source.pos.y;
+		posX = source.getPos().x;
+		posY = source.getPos().y;
 		name = source.getName();
 	}
 
