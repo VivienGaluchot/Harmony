@@ -20,6 +20,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -52,8 +53,8 @@ public class DrawPanel extends JPanel
 
 	private Vector2D initMousePos;
 
-	private Color mainGridColor = new Color(230, 230, 230);
-	private Color subGridColor = new Color(240, 240, 240);
+	private Color gridColor = new Color(240, 240, 240);
+	private Color gridUnitColor = new Color(150, 150, 150);
 	private Color backgroundColor = new Color(250, 250, 250);
 
 	public DrawPanel() {
@@ -151,51 +152,69 @@ public class DrawPanel extends JPanel
 	protected void drawGrid(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
 		g2d.transform(currentTransform);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		if (displayGrid) {
 			Point2D.Float topLeft = new Point2D.Float(0, 0);
 			Point2D.Float botRight = new Point2D.Float(getWidth(), getHeight());
+			Point2D.Float coords = new Point2D.Float(0, getHeight());
 			try {
 				currentTransform.inverseTransform(topLeft, topLeft);
 				currentTransform.inverseTransform(botRight, botRight);
+				currentTransform.inverseTransform(coords, coords);
 				float x = 0;
 				float y = 0;
 				x = topLeft.x;
 				y = topLeft.y;
 
-				float littleGridSize = gridSize / 5;
+				float littleGridSize = 1;
 				x = topLeft.x;
 				y = topLeft.y;
 				x = Math.round(x / littleGridSize) * littleGridSize;
 				y = Math.round(y / littleGridSize) * littleGridSize;
-				g2d.setColor(subGridColor);
-				g2d.setStroke(new BasicStroke(0.03f));
+				g2d.setColor(gridColor);
 				while (x < botRight.x) {
+					if (x % gridSize == 0)
+						g2d.setStroke(new BasicStroke(0.05f));
+					else
+						g2d.setStroke(new BasicStroke(0.02f));
 					Line2D line = new Line2D.Float(x, topLeft.y, x, botRight.y);
 					g2d.draw(line);
 					x += littleGridSize;
 				}
 				while (y < botRight.y) {
+					if (y % gridSize == 0)
+						g2d.setStroke(new BasicStroke(0.05f));
+					else
+						g2d.setStroke(new BasicStroke(0.03f));
 					Line2D line = new Line2D.Float(topLeft.x, y, botRight.x, y);
 					g2d.draw(line);
 					y += littleGridSize;
 				}
-
 				x = topLeft.x;
 				y = topLeft.y;
-				x = Math.round(x / gridSize) * gridSize;
-				y = Math.round(y / gridSize) * gridSize;
-				g2d.setColor(mainGridColor);
-				g2d.setStroke(new BasicStroke(0.04f));
+				x = Math.round(x / littleGridSize) * littleGridSize;
+				y = Math.round(y / littleGridSize) * littleGridSize;
+				g2d.setColor(gridUnitColor);
+				float currentScale = (float) currentTransform.getScaleX();
+				int increment = Math.max(1, Math.round(littleGridSize / currentScale * 12) * 5);
+				x -= x % increment;
+				y -= y % increment;
 				while (x < botRight.x) {
-					Line2D line = new Line2D.Float(x, topLeft.y, x, botRight.y);
-					g2d.draw(line);
-					x += gridSize;
+					if (x % gridSize == 0)
+						g2d.setFont(g2d.getFont().deriveFont(16f / currentScale));
+					else
+						g2d.setFont(g2d.getFont().deriveFont(12f / currentScale));
+					g2d.drawString(Integer.toString(Math.round(x)), x + 0.1f, coords.y);
+					x += increment;
 				}
 				while (y < botRight.y) {
-					Line2D line = new Line2D.Float(topLeft.x, y, botRight.x, y);
-					g2d.draw(line);
-					y += gridSize;
+					if (y % gridSize == 0)
+						g2d.setFont(g2d.getFont().deriveFont(16f / currentScale));
+					else
+						g2d.setFont(g2d.getFont().deriveFont(12f / currentScale));
+					g2d.drawString(Integer.toString(Math.round(y)), coords.x, y - 0.1f);
+					y += increment;
 				}
 			} catch (NoninvertibleTransformException e) {
 			}
