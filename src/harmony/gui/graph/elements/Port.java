@@ -18,7 +18,6 @@ package harmony.gui.graph.elements;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
 
 import harmony.gui.Types;
 import harmony.gui.Types.Command;
@@ -65,21 +64,15 @@ public abstract class Port extends GuiElement {
 	}
 
 	@Override
-	public boolean contains(Vector2D p) {
-		Vector2D pos = getPos();
-		Double selectionRadius = 1.5 * radius;
-		Ellipse2D el = new Ellipse2D.Double(pos.x - selectionRadius, pos.y - selectionRadius, 2 * selectionRadius,
-				2 * selectionRadius);
-		return el.contains(p.x, p.y);
+	public Shape selectionShape() {
+		return getCenteredCircle(getPos(), radius + 0.05);
 	}
 
 	@Override
 	public void paint(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g.create();
 
-		Vector2D pos = getPos();
-		Shape sp = new Ellipse2D.Double(pos.x - radius, pos.y - radius, 2 * radius, 2 * radius);
-
+		Shape sp = getCenteredCircle(getPos(), radius);
 		g2d.setColor(getCurrentBackgroundColor());
 		g2d.fill(sp);
 		g2d.setColor(getCurrentColor());

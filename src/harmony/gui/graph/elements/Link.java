@@ -16,9 +16,11 @@
 package harmony.gui.graph.elements;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.CubicCurve2D;
 
 import harmony.gui.Types;
@@ -36,9 +38,11 @@ public class Link extends GuiElement {
 	private OutPort outPort;
 	private InPort inPort;
 
-	public DataType type;
+	private DataType type;
 
-	private Shape shape;
+	private Area shape;
+	private boolean showValue;
+	private Double valueRadius;
 
 	public Link(Space space, DataType type, OutPort start, InPort end) {
 		super(space, Types.getDataColor(type), Types.getDataColor(type));
@@ -52,6 +56,12 @@ public class Link extends GuiElement {
 		setInPort(end);
 
 		shape = null;
+		showValue = true;
+		valueRadius = 0.2;
+	}
+
+	public DataType getDataType() {
+		return type;
 	}
 
 	public OutPort getOutPort() {
@@ -59,6 +69,7 @@ public class Link extends GuiElement {
 	}
 
 	public void setOutPort(OutPort start) {
+		assert type.includes(start.getDataType()) : "wrong port type";
 		this.outPort = start;
 	}
 
@@ -67,6 +78,7 @@ public class Link extends GuiElement {
 	}
 
 	public void setInPort(InPort end) {
+		assert type.includes(end.getDataType()) : "wrong port type";
 		this.inPort = end;
 	}
 
@@ -74,9 +86,16 @@ public class Link extends GuiElement {
 		loosePoint = p;
 	}
 
+	public Object getValue() {
+		if (outPort != null)
+			return outPort.getValue();
+		else
+			return null;
+	}
+
 	@Override
-	public boolean contains(Vector2D p) {
-		return shape != null && shape.contains(p.x, p.y);
+	public Shape selectionShape() {
+		return shape;
 	}
 
 	@Override
@@ -104,13 +123,16 @@ public class Link extends GuiElement {
 		g2d.setColor(getCurrentColor());
 		g2d.draw(cubicCurve);
 		g2d.setStroke(new BasicStroke(0.1f));
-		shape = g2d.getStroke().createStrokedShape(cubicCurve);
+		shape = new Area(g2d.getStroke().createStrokedShape(cubicCurve));
 
-		if (isSelected()) {
-			float dash1[] = { 0.1f };
-			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1, 0.0f);
-			g2d.setStroke(dashed);
-			g2d.draw(shape);
+		if (showValue && startPos.subtract(endPos).getLength() > 2 * valueRadius) {
+			Vector2D valuePos = endPos.subtract(startPos).multiply(0.5).add(startPos);
+			Shape sp = getCenteredCircle(valuePos, valueRadius);
+			g2d.setColor(getCurrentBackgroundColor());
+			g2d.fill(sp);
+			g2d.setColor(Color.WHITE);
+			drawResizedHCenteredString(g2d, Types.getDataString(getValue()), valuePos, valueRadius * 1.7);
+			shape.add(new Area(getCenteredCircle(valuePos, valueRadius + 0.05)));
 		}
 
 		g2d.dispose();
@@ -135,5 +157,4 @@ public class Link extends GuiElement {
 	public int hashCode() {
 		return outPort.hashCode() ^ inPort.hashCode();
 	}
-
 }

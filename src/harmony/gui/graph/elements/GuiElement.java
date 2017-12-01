@@ -18,6 +18,10 @@ package harmony.gui.graph.elements;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Ellipse2D;
 
 import harmony.gui.Types;
 import harmony.math.Vector2D;
@@ -101,7 +105,11 @@ public abstract class GuiElement {
 		return el.father_component;
 	}
 
-	public abstract boolean contains(Vector2D p);
+	public boolean contains(Vector2D p) {
+		return selectionShape() != null && selectionShape().contains(p.x, p.y);
+	}
+	
+	public abstract Shape selectionShape();
 
 	public abstract void paint(Graphics g);
 
@@ -195,5 +203,24 @@ public abstract class GuiElement {
 
 	public void setClickedColor(Color clickedColor) {
 		this.clickedColor = clickedColor;
+	}
+
+	// Util
+
+	public static void drawResizedHCenteredString(Graphics2D g, String text, Vector2D pos, double size) {
+		Graphics2D g2d = (Graphics2D) g.create();
+		FontRenderContext frc = new FontRenderContext(g2d.getTransform(), true, true);
+		double textWidth = g2d.getFont().getStringBounds(text, frc).getWidth();
+		if (textWidth > 0) {
+			double scale = size / textWidth;
+			g2d.setFont(g2d.getFont().deriveFont((float) (g2d.getFont().getSize2D() * scale)));
+			double x = pos.x - textWidth * scale / 2;
+			g2d.drawString(text, (float) x, (float) (pos.y + 0.05 * scale));
+		}
+		g2d.dispose();
+	}
+
+	public static Ellipse2D getCenteredCircle(Vector2D pos, double radius) {
+		return new Ellipse2D.Double(pos.x - radius, pos.y - radius, 2 * radius, 2 * radius);
 	}
 }

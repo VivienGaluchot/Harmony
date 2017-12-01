@@ -32,7 +32,7 @@ public class InPort extends Port {
 	}
 
 	public void setLink(Link link) {
-		assert link == null || link.type.equals(this.type) : "wrong link type";
+		assert link == null || link.getDataType().equals(this.type) : "wrong link type";
 		if (link != null)
 			getNode().getProcess().setDependencie(getId(), link.getOutPort().getProcessOutput());
 		else

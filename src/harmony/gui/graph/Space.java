@@ -16,6 +16,7 @@
 package harmony.gui.graph;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -25,6 +26,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Area;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -221,23 +223,33 @@ public class Space extends DrawPanel
 		repaint();
 	}
 
-	private void sequenceNode(Node n, List<GuiElement> list) {
+	private void sequenceNodeLinks(Node n, List<GuiElement> list) {
 		list.add(n);
-		for (InPort dp : n.getInPorts()) {
-			list.add(dp);
+		for (InPort dp : n.getInPorts())
 			if (dp.getLink() != null)
 				list.add(dp.getLink());
-		}
+	}
+
+	private void sequenceNode(Node n, List<GuiElement> list) {
+		list.add(n);
+		for (InPort dp : n.getInPorts())
+			list.add(dp);
 		for (Port dp : n.getOutPorts())
 			list.add(dp);
 	}
 
 	public List<GuiElement> getObjectList() {
 		List<GuiElement> list = new ArrayList<>();
-		if (inputNode != null)
+		if (inputNode != null) {
+			sequenceNodeLinks(inputNode, list);
 			sequenceNode(inputNode, list);
-		if (outputNode != null)
+		}
+		if (outputNode != null) {
+			sequenceNodeLinks(outputNode, list);
 			sequenceNode(outputNode, list);
+		}
+		for (Node n : nodes)
+			sequenceNodeLinks(n, list);
 		for (Node n : nodes)
 			sequenceNode(n, list);
 		return list;
@@ -270,11 +282,22 @@ public class Space extends DrawPanel
 		Font font = new Font("Consolas", Font.PLAIN, 12);
 		g2d.setFont(font);
 
-		// draw elements
 		Graphics2D g2dTrans = (Graphics2D) g2d.create();
-		g2dTrans.setStroke(new BasicStroke(0.03f));
-		g2dTrans.setFont(font.deriveFont(0.2f));
 		g2dTrans.transform(getCurrentTransform());
+		// draw selection
+		if (selecteds.size() > 0) {
+			Area selectionArea = new Area();
+			for (GuiElement element : selecteds)
+				selectionArea.add(new Area(element.selectionShape()));
+			float dash1[] = { 0.05f };
+			BasicStroke dashed = new BasicStroke(0.005f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1, 0.0f);
+			g2dTrans.setStroke(dashed);
+			g2dTrans.setColor(Color.black);
+			g2dTrans.draw(selectionArea);
+		}
+		// draw elements
+		g2dTrans.setFont(font.deriveFont(0.2f));
+		g2dTrans.setStroke(new BasicStroke(0.03f));
 		for (GuiElement hcs : getObjectList())
 			hcs.paint(g2dTrans);
 		if (draggedLink != null)
@@ -282,7 +305,6 @@ public class Space extends DrawPanel
 		g2dTrans.dispose();
 
 		// draw overlay
-
 		DecimalFormat df = new DecimalFormat("#");
 		df.setMaximumFractionDigits(0);
 		g2d.drawString("OverlayToolbar", 60, 20);
@@ -446,13 +468,13 @@ public class Space extends DrawPanel
 		if (draggedLink != null) {
 			if (el != null && el instanceof InPort) {
 				InPort inPort = (InPort) el;
-				if (draggedLink.getInPort() == null && inPort.getDataType() == draggedLink.type)
+				if (draggedLink.getInPort() == null && inPort.getDataType() == draggedLink.getDataType())
 					draggedLink.setInPort(inPort);
 				else
 					Dialog.displayError(null, "Incompatible port types. The new link can't be added.");
 			} else if (el != null && el instanceof OutPort) {
 				OutPort outPort = (OutPort) el;
-				if (draggedLink.getOutPort() == null && outPort.getDataType() == draggedLink.type)
+				if (draggedLink.getOutPort() == null && outPort.getDataType() == draggedLink.getDataType())
 					draggedLink.setOutPort(outPort);
 				else
 					Dialog.displayError(null, "Incompatible port types. The new link can't be added.");

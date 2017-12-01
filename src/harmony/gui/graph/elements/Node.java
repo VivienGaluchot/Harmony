@@ -15,11 +15,11 @@
 
 package harmony.gui.graph.elements;
 
-import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,13 +107,16 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		setClicked(false);
 		((Space) getFatherComponent()).removeNode(this);
 	}
-
+	
 	@Override
-	public boolean contains(Vector2D p) {
-		if (currentShape != null)
-			return currentShape.contains(p.x, p.y);
-		else
-			return false;
+	public Shape selectionShape() {
+		Vector2D topLeft = getPos().subtract(getSize().multiply(0.5));
+		Area a = new Area(new Rectangle2D.Double(topLeft.x - 0.05, topLeft.y - 0.05, size.x + 0.1, size.y + 0.1));
+		for (GuiElement el : inPorts)
+			a.add(new Area(el.selectionShape()));
+		for (GuiElement el : outPorts)
+			a.add(new Area(el.selectionShape()));
+		return a;
 	}
 
 	public void showOpt() {
@@ -161,12 +164,6 @@ public class Node extends GuiElement implements Recordable, Persistable<Node> {
 		Font newFont = currentFont.deriveFont(0.3f);
 		g2d.setFont(newFont);
 		g2d.drawString(getName(), (float) topLeft.x + 0.1f, (float) topLeft.y + 0.4f);
-		if (isSelected()) {
-			float dash1[] = { 0.1f };
-			BasicStroke dashed = new BasicStroke(0.01f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, dash1, 0.0f);
-			g2d.setStroke(dashed);
-			g2d.draw(new Rectangle2D.Double(topLeft.x - 0.1, topLeft.y - 0.1, size.x + 0.2, size.y + 0.2));
-		}
 
 		g2d.dispose();
 	}
