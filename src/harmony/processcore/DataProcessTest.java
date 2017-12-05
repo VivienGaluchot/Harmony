@@ -17,7 +17,7 @@ package harmony.processcore;
 
 import java.io.PrintWriter;
 
-import harmony.processcore.code.ProcessWriter;
+import harmony.processcore.code.SimpleProcessWriter;
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 import harmony.processcore.data.DataType;
@@ -295,7 +295,7 @@ public class DataProcessTest {
 		
 		
 		// ProcessWriter
-		ProcessWriter testWriter = new ProcessWriter(new PrintWriter(System.out));
+		SimpleProcessWriter testWriter = new SimpleProcessWriter(new PrintWriter(System.out));
 		HrmProcess A = new HrmProcess("A", new Constant(DataTypes.Double, 10.0));
 		System.out.println("--------------");
 		testWriter.write(A);

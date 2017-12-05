@@ -24,7 +24,7 @@ public class Constant extends DefaultComputeUnit {
 	private DataArray dataArray;
 
 	public Constant(DataType type, Object value) {
-		super("[" + value.toString() + "]", null, new DataPattern(type));
+		super("constant", null, new DataPattern(type));
 		dataArray = new DataArray(getOutputPattern());
 		dataArray.setValue(0, value);
 	}

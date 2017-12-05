@@ -30,6 +30,7 @@ import harmony.processcore.data.DataTypes;
 import harmony.processcore.process.HrmProcess;
 import harmony.processcore.process.units.maths.Add;
 import harmony.processcore.process.units.maths.Constant;
+import harmony.processcore.process.units.maths.Multiply;
 import harmony.processcore.process.units.maths.Sub;
 
 public class SpaceController {
@@ -105,9 +106,10 @@ public class SpaceController {
 
 	public void addNode() {
 		List<Object> choices = new ArrayList<>();
-		choices.add(new NodeWrapper(new Node(space, new HrmProcess("add", new Add()))));
-		choices.add(new NodeWrapper(new Node(space, new HrmProcess("sub", new Sub()))));
-		choices.add(new NodeWrapper(new Node(space, new HrmProcess("constant", new Constant(DataTypes.Double, 0.0)))));
+		choices.add(new NodeWrapper(new Node(space, new HrmProcess(new Add()))));
+		choices.add(new NodeWrapper(new Node(space, new HrmProcess(new Sub()))));
+		choices.add(new NodeWrapper(new Node(space, new HrmProcess(new Multiply()))));
+		choices.add(new NodeWrapper(new Node(space, new HrmProcess(new Constant(DataTypes.Double, 0.0)))));
 		choices.add(new NodeWrapper(new Display(space)));
 		NodeWrapper nw = (NodeWrapper) Dialog.listDialog(space, "Node to add : ", choices);
 		if (nw != null) {

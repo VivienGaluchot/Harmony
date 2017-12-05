@@ -33,6 +33,10 @@ public class HrmProcess implements ComputeUnit {
 	private boolean valuated;
 	private DataArray values;
 
+	public HrmProcess(ComputeUnit computeUnit) {
+		this(computeUnit.getName(), computeUnit);
+	}
+
 	public HrmProcess(String name, ComputeUnit computeUnit) {
 		assert name != null : "name can't be null";
 		assert computeUnit != null : "computeUnit can't be null";

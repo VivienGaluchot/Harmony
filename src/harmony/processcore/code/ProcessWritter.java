@@ -15,6 +15,12 @@
 
 package harmony.processcore.code;
 
-public class ProcessReader {
-	// TODO
+import java.io.IOException;
+
+import harmony.processcore.process.HrmProcess;
+
+public interface ProcessWritter {
+	
+	public void write(HrmProcess process) throws IOException;
+	
 }

@@ -23,11 +23,11 @@ import java.util.Set;
 import harmony.processcore.process.HrmProcess;
 import harmony.processcore.process.ProcessOutput;
 
-public class ProcessWriter {
+public class SimpleProcessWriter implements ProcessWritter {
 	
 	private final Writer out;
 	
-	public ProcessWriter(Writer out) {
+	public SimpleProcessWriter(Writer out) {
 		this.out = out;
 	}
 	
@@ -63,6 +63,5 @@ public class ProcessWriter {
 			processWritten.add(process);
 		}
 	}
-	
 	
 }
