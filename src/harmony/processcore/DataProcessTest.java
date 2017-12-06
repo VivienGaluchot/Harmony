@@ -15,6 +15,7 @@
 
 package harmony.processcore;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import harmony.processcore.code.SimpleProcessWriter;
@@ -212,7 +213,7 @@ public class DataProcessTest {
 		complex1.getOutputProcess().setDependencie(0, add4.getOutput(0));
 		complex1.getOutputProcess().setDependencie(1, sub4.getOutput(0));
 		System.out.println(complex1);
-		
+
 		ProceduralUnit complex2 = new ProceduralUnit("complex1",
 				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }),
 				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
@@ -245,12 +246,12 @@ public class DataProcessTest {
 		complexProcess2.setDependencie(1, new HrmProcess("d", new Constant(DataTypes.Double, 17.5)).getOutput(0));
 		System.out.println(complexProcess2);
 		System.out.println(complexProcess2.getValues());
-		
+
 		// complexProcess1_2 -> complexProcess1
 		complexProcess1.setDependencie(0, complexProcess1_2.getOutput(0));
 		System.out.println(complexProcess1);
 		System.out.println(complexProcess1.getValues());
-		
+
 		// complexProcess2 -> complexProcess1
 		complexProcess1.setDependencie(1, complexProcess2.getOutput(0));
 		System.out.println(complexProcess1);
@@ -264,7 +265,7 @@ public class DataProcessTest {
 			System.out.println(e);
 			System.out.println("ok");
 		}
-		
+
 		try {
 			complex1.getOutputProcess().setDependencie(0, complexProcess1_2.getOutput(0));
 			throw new RuntimeException("Error");
@@ -272,7 +273,7 @@ public class DataProcessTest {
 			System.out.println(e);
 			System.out.println("ok");
 		}
-		
+
 		try {
 			complex1.getOutputProcess().setDependencie(0, complexProcess2.getOutput(0));
 			throw new RuntimeException("Error");
@@ -280,7 +281,7 @@ public class DataProcessTest {
 			System.out.println(e);
 			System.out.println("ok");
 		}
-		
+
 		try {
 			sub4_2.setDependencie(0, complexProcess1_2.getOutput(0));
 			throw new RuntimeException("Error");
@@ -288,25 +289,45 @@ public class DataProcessTest {
 			System.out.println(e);
 			System.out.println("ok");
 		}
-		
+
 		// TODO fix
 		// System.out.println(complexProcess1.getValues());
 		// System.out.println(complexProcess2.getValues());
-		
-		
-		// ProcessWriter
-		SimpleProcessWriter testWriter = new SimpleProcessWriter(new PrintWriter(System.out));
-		HrmProcess A = new HrmProcess("A", new Constant(DataTypes.Double, 10.0));
-		System.out.println("--------------");
-		testWriter.write(A);
-		System.out.println("--------------");
-		HrmProcess add5 = new HrmProcess("add5", new Add());
-		add5.setDependencie(0, A.getOutput(0));
-		add5.setDependencie(1, A.getOutput(0));
-		testWriter.write(add5);
-		System.out.println("--------------");
-		testWriter.write(complexProcess1);
-		System.out.println("--------------");
 
+		testProcessWritter();
+	}
+
+	static void testProcessWritter() {
+		try {
+			SimpleProcessWriter testWriter = new SimpleProcessWriter(new PrintWriter(System.out));
+			HrmProcess A = new HrmProcess("A", new Constant(DataTypes.Double, 10.0));
+			
+			System.out.println("--------------");
+			testWriter.write(A);
+			
+			System.out.println("--------------");
+			HrmProcess add5 = new HrmProcess("add5", new Add());
+			add5.setDependencie(0, A.getOutput(0));
+			add5.setDependencie(1, A.getOutput(0));
+			testWriter.write(add5);
+			
+			System.out.println("--------------");
+			ProceduralUnit functionF = new ProceduralUnit("f",
+					new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }),
+					new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }));
+			HrmProcess add = new HrmProcess(new Add());
+			add.setDependencie(0, functionF.getInputProcess().getOutput(0));
+			add.setDependencie(1, functionF.getInputProcess().getOutput(1));
+			HrmProcess sub = new HrmProcess(new Sub());
+			sub.setDependencie(0, functionF.getInputProcess().getOutput(0));
+			sub.setDependencie(1, functionF.getInputProcess().getOutput(1));
+			functionF.getOutputProcess().setDependencie(0, add.getOutput(0));
+			functionF.getOutputProcess().setDependencie(1, sub.getOutput(0));
+			testWriter.write(functionF);
+			
+			System.out.println("--------------");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

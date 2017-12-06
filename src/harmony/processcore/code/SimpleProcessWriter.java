@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import harmony.processcore.process.HrmProcess;
+import harmony.processcore.process.ProceduralUnit;
 import harmony.processcore.process.ProcessOutput;
 
 public class SimpleProcessWriter implements ProcessWritter {
@@ -31,13 +32,25 @@ public class SimpleProcessWriter implements ProcessWritter {
 		this.out = out;
 	}
 	
+	public void write(ProceduralUnit unit) throws IOException {
+		out.write("# ProceduralUnit '");
+		out.write(unit.getName());
+		out.write("'\n");
+		out.write(unit.toString());
+		out.write(" = {\n");
+		write(unit.getOutputProcess(), new HashSet<HrmProcess>());
+		out.write("}\n");
+		out.flush();
+	}
+	
 	public void write(HrmProcess process) throws IOException {
 		out.write("# Process '");
 		out.write(process.getName());
 		out.write("'\n");
-		
+		out.write(process.getComputeUnit().toString());
+		out.write(" = {\n");
 		write(process, new HashSet<HrmProcess>());
-		
+		out.write("}\n");
 		out.flush();
 	}
 	
@@ -49,6 +62,7 @@ public class SimpleProcessWriter implements ProcessWritter {
 		assert process != null : "process can't be null";
 		
 		if (!processWritten.contains(process)) {
+			processWritten.add(process);
 			if (process.getInputPattern() != null) {
 				for(int i =0; i < process.getInputPattern().size(); i++) {
 					ProcessOutput dep = process.getDependencie(i);
@@ -58,9 +72,7 @@ public class SimpleProcessWriter implements ProcessWritter {
 				}
 			}
 			out.write(process.toString());
-			out.write("\n");
-			
-			processWritten.add(process);
+			out.write(";\n");
 		}
 	}
 	

@@ -32,9 +32,9 @@ public class ProceduralUnit extends DefaultComputeUnit {
 	public ProceduralUnit(String name, DataPattern inputPattern, DataPattern outputPattern) {
 		super(name, inputPattern, outputPattern);
 		inputBuffer = new InputBuffer(inputPattern);
-		inputProcess = new HrmProcess("input", inputBuffer);
+		inputProcess = new HrmProcess(name + ".input", inputBuffer);
 		outputBuffer = new OutputBuffer(outputPattern);
-		outputProcess = new HrmProcess("output", outputBuffer);
+		outputProcess = new HrmProcess(name + ".output", outputBuffer);
 	}
 
 	// Allows to build-up intern compute process

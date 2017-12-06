@@ -188,6 +188,7 @@ public class Space extends DrawPanel
 			}
 		}
 		nodes.remove(n);
+		// TODO remove from selectes hovered
 		recordQueue.removeTrackedObject(n);
 		repaint();
 	}
@@ -220,6 +221,7 @@ public class Space extends DrawPanel
 		l.getInPort().setLink(null);
 		// Remove
 		links.remove(l);
+		// TODO remove from selectes hovered
 		repaint();
 	}
 
