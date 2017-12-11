@@ -18,28 +18,22 @@ package harmony.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-import harmony.Ressources;
+import harmony.gui.base.HarmonyFrame;
 import harmony.gui.graph.Space;
 import harmony.gui.graph.SpaceController;
 
-public class SpaceEditFrame extends JFrame implements ComponentListener {
+public class SpaceEditFrame extends HarmonyFrame implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 
 	protected AnimationRunner runner;
@@ -56,10 +50,13 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 	protected JMenuItem undo;
 	protected JMenuItem redo;
 	protected JMenuItem addNode;
+	
+	protected CodeFrame codeFrame;
 
 	public SpaceEditFrame(Space space) {
 		super();
 		controller = new SpaceController(space);
+		codeFrame = new CodeFrame(space);
 
 		runner = new AnimationRunner(space);
 		runner.start();
@@ -77,23 +74,19 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		initMenu();
 		addComponentListener(this);
 
-		List<Image> icons = new ArrayList<Image>();
-		icons.add(Ressources.icon16.getImage());
-		icons.add(Ressources.icon32.getImage());
-		icons.add(Ressources.icon64.getImage());
-		icons.add(Ressources.icon128.getImage());
-		icons.add(Ressources.icon256.getImage());
-		setIconImages(icons);
-
-		setLayout(new GridBagLayout());
 		getContentPane().setBackground(Color.white);
-
 		add(space, new GridBagConstraints(0, 0, 1, 1, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
 
 		setSize(new Dimension(800, 600));
 		setVisible(true);
 		setLocationRelativeTo(null);
+	}
+	
+	private void showCodeWindow() {
+		codeFrame.update();
+		codeFrame.setVisible(true);
+		codeFrame.requestFocus();
 	}
 
 	protected void initMenu() {
@@ -180,22 +173,32 @@ public class SpaceEditFrame extends JFrame implements ComponentListener {
 		});
 		edit.add(addNode);
 
+		edit.addSeparator();
+
+		addNode = new JMenuItem("Open code");
+		addNode.setAccelerator(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.Event.ALT_MASK));
+		addNode.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				showCodeWindow();
+			}
+		});
+		edit.add(addNode);
+
 		menuBar.add(edit);
 
 		setJMenuBar(menuBar);
 	}
 
 	private void updateTitle() {
-		String mainTitle = "Harmony";
 		if (controller != null) {
 			File currentFile = controller.getCurrentFile();
 			if (currentFile != null) {
-				setTitle(mainTitle + " - " + currentFile.toString());
+				updateTitle(currentFile.toString());
 				return;
 			}
 		}
-
-		setTitle(mainTitle);
+		updateTitle(null);
 	}
 
 	// ComponentListener

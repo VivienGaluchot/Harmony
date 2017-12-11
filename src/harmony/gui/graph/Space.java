@@ -60,6 +60,8 @@ public class Space extends DrawPanel
 	private static final long serialVersionUID = 1L;
 
 	private String name = null;
+	
+	private ProceduralUnit proceduralUnit = null;
 
 	private Node inputNode = null;
 	private Node outputNode = null;
@@ -103,6 +105,7 @@ public class Space extends DrawPanel
 
 	protected void init(String name, ProceduralUnit proceduralUnit) {
 		this.name = name;
+		this.proceduralUnit = proceduralUnit;
 
 		inputNode = new Node(this, proceduralUnit.getInputProcess());
 		inputNode.setPos(inputNode.getPos().add(new Vector2D(-5, 0)));
@@ -113,6 +116,10 @@ public class Space extends DrawPanel
 		recordQueue.addTrackedObject(outputNode);
 
 		recordQueue.addTrackedObject(this);
+	}
+	
+	public ProceduralUnit getProceduralUnit() {
+		return proceduralUnit;
 	}
 
 	@Override

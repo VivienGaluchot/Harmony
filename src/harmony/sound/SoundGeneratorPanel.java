@@ -23,7 +23,7 @@ public class SoundGeneratorPanel extends Space {
 
 	public SoundGeneratorPanel() {
 		super();
-		ProceduralUnit soundUnit = new ProceduralUnit("soundUnit",
+		ProceduralUnit soundUnit = new ProceduralUnit("sound",
 				new DataPattern(new DataType[] { DataTypes.Double }, new String[] { "time" }),
 				new DataPattern(new DataType[] { DataTypes.Double, DataTypes.Double }, new String[] { "R", "L" }));
 
@@ -37,7 +37,7 @@ public class SoundGeneratorPanel extends Space {
 			}
 		};
 
-		process = new HrmProcess("soundProcess", soundUnit);
+		process = new HrmProcess("sound", soundUnit);
 		process.setDependencie(0, new HrmProcess("time", timeUnit).getOutput(0));
 
 		init("SoundGenerator", soundUnit);

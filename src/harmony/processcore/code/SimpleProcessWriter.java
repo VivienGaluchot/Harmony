@@ -24,7 +24,7 @@ import harmony.processcore.process.HrmProcess;
 import harmony.processcore.process.ProceduralUnit;
 import harmony.processcore.process.ProcessOutput;
 
-public class SimpleProcessWriter implements ProcessWritter {
+public class SimpleProcessWriter implements ProcessWriter {
 	
 	private final Writer out;
 	
