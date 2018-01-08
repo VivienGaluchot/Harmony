@@ -20,8 +20,11 @@ import harmony.processcore.data.DataPattern;
 import harmony.processcore.process.units.ComputeUnit;
 
 public class HrmProcess implements ComputeUnit {
+	private static int count = 0;
+	
 	// info
 	private String name;
+	private final int id;
 
 	// inputs
 	private ProcessOutput[] inputDependencies;
@@ -40,7 +43,8 @@ public class HrmProcess implements ComputeUnit {
 	public HrmProcess(String name, ComputeUnit computeUnit) {
 		assert name != null : "name can't be null";
 		assert computeUnit != null : "computeUnit can't be null";
-
+		
+		this.id = count++;
 		this.name = name;
 		this.computeUnit = computeUnit;
 
@@ -161,6 +165,11 @@ public class HrmProcess implements ComputeUnit {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public int getId() {
+		return id;
+	}
 
 	@Override
 	public DataPattern getInputPattern() {
@@ -188,6 +197,8 @@ public class HrmProcess implements ComputeUnit {
 	public String toString() {
 		StringBuffer buff = new StringBuffer();
 		buff.append(getName());
+		buff.append("-");
+		buff.append(getId());
 		buff.append(" = ");
 		buff.append(computeUnit.getName());
 		if (inputDependencies.length > 0) {

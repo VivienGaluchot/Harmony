@@ -17,12 +17,16 @@ package harmony.processcore.process.units.utils;
 
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
+import harmony.processcore.process.DefaultComputeUnit;
 import harmony.processcore.process.units.ComputeUnit;
 
-public class OutputBuffer extends DataArray implements ComputeUnit {
+public class OutputBuffer extends DefaultComputeUnit {
+
+	private DataArray buffer;
 
 	public OutputBuffer(DataPattern pattern) {
-		super(pattern);
+		super("buffer", null, null);
+		buffer = new DataArray(pattern);
 	}
 
 	@Override
@@ -32,18 +36,17 @@ public class OutputBuffer extends DataArray implements ComputeUnit {
 
 	@Override
 	public DataPattern getInputPattern() {
-		return getPattern();
-	}
-
-	@Override
-	public DataPattern getOutputPattern() {
-		return null;
+		return buffer.getPattern();
 	}
 
 	@Override
 	public DataArray compute(DataArray inputValues) {
-		this.setValues(inputValues);
+		buffer.setValues(inputValues);
 		return null;
+	}
+
+	public DataArray getContent() {
+		return buffer.clone();
 	}
 
 	@Override
@@ -61,6 +64,10 @@ public class OutputBuffer extends DataArray implements ComputeUnit {
 		else
 			buff.append('_');
 		return buff.toString();
+	}
+
+	public Object getValue(int i) {
+		return buffer.getValue(i);
 	}
 
 }

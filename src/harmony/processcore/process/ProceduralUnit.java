@@ -32,9 +32,9 @@ public class ProceduralUnit extends DefaultComputeUnit {
 	public ProceduralUnit(String name, DataPattern inputPattern, DataPattern outputPattern) {
 		super(name, inputPattern, outputPattern);
 		inputBuffer = new InputBuffer(inputPattern);
-		inputProcess = new HrmProcess(name + ".input", inputBuffer);
+		inputProcess = new HrmProcess(getName() + "-" + getId() + ".input", inputBuffer);
 		outputBuffer = new OutputBuffer(outputPattern);
-		outputProcess = new HrmProcess(name + ".output", outputBuffer);
+		outputProcess = new HrmProcess(getName() + "-" + getId()  + ".output", outputBuffer);
 	}
 
 	// Allows to build-up intern compute process
@@ -62,7 +62,7 @@ public class ProceduralUnit extends DefaultComputeUnit {
 		outputProcess.getValues();
 
 		// extract values from output buffer
-		DataArray outputValues = outputBuffer.clone();
+		DataArray outputValues = outputBuffer.getContent();
 
 		assert outputValues.getPattern().equals(getOutputPattern()) : "inconsistent output values type";
 		return outputValues;

@@ -21,14 +21,19 @@ import harmony.processcore.process.units.ComputeUnit;
 
 public abstract class DefaultComputeUnit implements ComputeUnit {
 	
-	// infos
+	private static int count = 0;
+	
+	// info
 	private String name;
+	private final int id;
+
 	// inputs
 	private DataPattern inputPattern;
 	// outputs
 	private DataPattern outputPattern;
 	
 	public DefaultComputeUnit(String name, DataPattern inputPattern, DataPattern outputPattern) {
+		this.id = count++;
 		this.name = name;
 		this.inputPattern = inputPattern;
 		this.outputPattern = outputPattern;
@@ -39,6 +44,11 @@ public abstract class DefaultComputeUnit implements ComputeUnit {
 	@Override
 	public String getName() {
 		return name;
+	}
+	
+	@Override
+	public int getId() {
+		return id;
 	}
 
 	@Override
@@ -60,6 +70,8 @@ public abstract class DefaultComputeUnit implements ComputeUnit {
 	public String toString() {
 		StringBuffer buff = new StringBuffer();
 		buff.append(getName());
+		buff.append("-");
+		buff.append(getId());
 		buff.append(" : ");
 		if (getInputPattern() != null)
 			buff.append(getInputPattern());

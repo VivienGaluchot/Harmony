@@ -39,6 +39,10 @@ public class DataProcessTest {
 			public String getName() {
 				return "c";
 			}
+			
+			public int getId() {
+				return 0;
+			}
 
 			@Override
 			public DataPattern getInputPattern() {
@@ -68,6 +72,11 @@ public class DataProcessTest {
 			public String getName() {
 				return "add";
 			}
+			
+			public int getId() {
+				return 0;
+			}
+
 
 			@Override
 			public DataPattern getInputPattern() {

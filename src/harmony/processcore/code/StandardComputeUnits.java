@@ -13,19 +13,24 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package harmony.processcore.process.units;
+package harmony.processcore.code;
 
-import harmony.processcore.data.DataArray;
-import harmony.processcore.data.DataPattern;
+import harmony.processcore.process.units.ComputeUnit;
+import harmony.processcore.process.units.maths.Add;
+import harmony.processcore.process.units.maths.Multiply;
+import harmony.processcore.process.units.maths.Sub;
 
-public interface ComputeUnit {
-	public String getName();
+public class StandardComputeUnits {
+
+	public final static ComputeUnit[] computeUnits = {new Add(), new Sub(), new Multiply()};
 	
-	public int getId();
-
-	public DataPattern getInputPattern();
-
-	public DataPattern getOutputPattern();
-
-	public DataArray compute(DataArray inputValues);
+	public final static ComputeUnit getStandardComputeUnit(String name) {
+		for (ComputeUnit computeUnit : computeUnits) {
+			if (computeUnit.getName() == name) {
+				return computeUnit;
+			}
+		}
+		throw new IllegalArgumentException("Can't find standard compute unit with name \'" + name + "\'");
+	}
+	
 }
