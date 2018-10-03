@@ -18,7 +18,6 @@ package harmony.processcore.process.units.utils;
 import harmony.processcore.data.DataArray;
 import harmony.processcore.data.DataPattern;
 import harmony.processcore.process.DefaultComputeUnit;
-import harmony.processcore.process.units.ComputeUnit;
 
 public class OutputBuffer extends DefaultComputeUnit {
 
